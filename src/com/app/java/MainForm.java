@@ -1,6 +1,6 @@
 package com.app.java;
 
-import com.app.util.Release;
+import com.app.java.util.Release;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

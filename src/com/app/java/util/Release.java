@@ -1,4 +1,4 @@
-package com.app.util;
+package com.app.java.util;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -14,18 +14,6 @@ import java.net.URL;
 public class Release {
 
     private final String USER_AGENT = "Mozilla/5.0";
-
-//    public static void main(String[] args) throws Exception {
-//
-//        Release http = new Release();
-//
-//        System.out.println("Testing 1 - Send Http GET request");
-//        http.sendGet();
-//
-//        //System.out.println("\nTesting 2 - Send Http POST request");
-//        //http.sendPost();
-//
-//    }
 
     // HTTP GET request
     public void sendGet() throws Exception {
@@ -66,7 +54,6 @@ public class Release {
         in.close();
 
         System.out.println(response.toString());
-
 
         File file;
         FileOutputStream fop;
