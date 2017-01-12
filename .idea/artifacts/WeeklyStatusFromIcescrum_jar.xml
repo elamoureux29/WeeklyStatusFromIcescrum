@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="WeeklyStatusFromIcescrum:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/WeeklyStatusFromIcescrum_jar</output-path>
+    <root id="archive" name="WeeklyStatusFromIcescrum.jar">
+      <element id="module-output" name="WeeklyStatusFromIcescrum" />
+    </root>
+  </artifact>
+</component>

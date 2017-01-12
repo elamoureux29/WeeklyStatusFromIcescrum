@@ -158,8 +158,8 @@ public class Release {
     // HTTP POST request
 //    private void sendPost() throws Exception {
 //
-//        String url = "https://selfsolve.apple.com/wcResults.do";
-//        URL obj = new URL(url);
+//        String URL = "https://selfsolve.apple.com/wcResults.do";
+//        URL obj = new URL(URL);
 //        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 //
 //        //add request header
@@ -177,7 +177,7 @@ public class Release {
 //        wr.close();
 //
 //        int responseCode = con.getResponseCode();
-//        System.out.println("\nSending 'POST' request to URL : " + url);
+//        System.out.println("\nSending 'POST' request to URL : " + URL);
 //        System.out.println("Post parameters : " + urlParameters);
 //        System.out.println("Response Code : " + responseCode);
 //

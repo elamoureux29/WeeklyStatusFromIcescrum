@@ -1,6 +1,8 @@
 package com.app.java;
 
-import com.app.java.util.Release;
+import com.app.java.model.ISReleaseAPI;
+import com.app.java.model.ISRestApi;
+import com.app.java.util.XmlResponse;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -18,10 +20,11 @@ public class MainForm {
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Release http = new Release();
-                System.out.println("Testing 1 - Send Http GET request");
+                ISRestApi release = new ISReleaseAPI();
+
                 try {
-                    http.sendGet();
+//                    XmlResponse.DisplayInConsole(release.getAll());
+                    XmlResponse.SaveToFile(release.getAll(), release.getFileName());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
