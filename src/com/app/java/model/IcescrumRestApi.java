@@ -5,7 +5,7 @@ import java.io.IOException;
 /**
  * Created by elamoureux on 1/11/2017.
  */
-public abstract class ISRestApi {
+public abstract class IcescrumRestApi {
     public final String USER_AGENT = "Mozilla/5.0";
     public final String RESPONSE_FORMAT = "application/xml";
     public final String URL = "https://www.icescrum.com/a/ws/p/";
@@ -23,5 +23,5 @@ public abstract class ISRestApi {
 
     public abstract StringBuffer getAll() throws IOException;
 
-    public abstract StringBuffer getA(int id) throws IOException;
+    public abstract StringBuffer getItem(int id) throws IOException;
 }

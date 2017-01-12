@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * Created by elamoureux on 1/11/2017.
  */
-public class ISReleaseAPI extends ISRestApi {
+public class IcescrumReleaseAPI extends IcescrumRestApi {
     private final String URL_BASE_COMMAND = "/release";
 
     @Override
@@ -19,8 +19,8 @@ public class ISReleaseAPI extends ISRestApi {
     }
 
     @Override
-    public StringBuffer getA(int id) throws IOException {
-        String fullUrl = URL + PROJECT + URL_BASE_COMMAND;
+    public StringBuffer getItem(int id) throws IOException {
+        String fullUrl = URL + PROJECT + URL_BASE_COMMAND + "/" + id;
         fileName = "Icescrum_Release_" + id;
 
         return ReadRequest.send(USER_AGENT, RESPONSE_FORMAT, fullUrl);
