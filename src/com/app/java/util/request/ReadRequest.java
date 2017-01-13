@@ -1,4 +1,6 @@
-package com.app.java.util;
+package com.app.java.util.request;
+
+import com.app.java.util.Authentication;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;

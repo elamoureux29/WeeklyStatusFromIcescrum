@@ -1,4 +1,4 @@
-package com.app.java.util;
+package com.app.java.util.request;
 
 /**
  * Created by elamoureux on 1/11/2017.

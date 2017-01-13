@@ -1,6 +1,6 @@
 package com.app.java;
 
-import com.app.java.model.IcescrumActorAPI;
+import com.app.java.model.api.*;
 import com.app.java.util.XmlResponse;
 
 import javax.swing.*;
@@ -19,15 +19,15 @@ public class MainForm {
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                IcescrumReleaseAPI release = new IcescrumReleaseAPI();
-//                IcescrumSprintAPI sprint = new IcescrumSprintAPI();
-//                IcescrumStoryAPI story = new IcescrumStoryAPI();
-//                IcescrumTaskAPI task = new IcescrumTaskAPI();
-//                IcescrumFeatureAPI feature = new IcescrumFeatureAPI();
-                IcescrumActorAPI actor = new IcescrumActorAPI();
+                IcescrumRelease release = new IcescrumRelease();
+                IcescrumSprint sprint = new IcescrumSprint();
+                IcescrumStory story = new IcescrumStory();
+                IcescrumTask task = new IcescrumTask();
+                IcescrumFeature feature = new IcescrumFeature();
+                IcescrumActor actor = new IcescrumActor();
 
                 try {
-//                    XmlResponse.DisplayInConsole(release.getAll());
+                    XmlResponse.DisplayInConsole(release.getAll());
 //                    XmlResponse.SaveToFile(release.getAll(), release.getFileName());
 //                    XmlResponse.DisplayInConsole(release.getItem(76926));
 //                    XmlResponse.SaveToFile(release.getItem(76926), release.getFileName());
@@ -58,7 +58,18 @@ public class MainForm {
 //                    XmlResponse.DisplayInConsole(actor.getAll());
 //                    XmlResponse.SaveToFile(actor.getAll(), actor.getFileName());
 //                    XmlResponse.DisplayInConsole(actor.getItem(2264));
-                    XmlResponse.SaveToFile(actor.getItem(2264), actor.getFileName());
+//                    XmlResponse.SaveToFile(actor.getItem(2264), actor.getFileName());
+
+
+//                    ReleaseHandler releaseHandler = new ReleaseHandler();
+//                    XMLReader myReader = XMLReaderFactory.createXMLReader();
+//                    myReader.setContentHandler(releaseHandler);
+//
+//                    InputSource is = new InputSource(con.getInputStream());
+//                    is.setEncoding("UTF-8");
+//
+//                    myReader.parse(is);
+
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

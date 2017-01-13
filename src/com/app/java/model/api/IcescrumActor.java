@@ -1,13 +1,13 @@
-package com.app.java.model;
+package com.app.java.model.api;
 
-import com.app.java.util.ReadRequest;
+import com.app.java.util.request.ReadRequest;
 
 import java.io.IOException;
 
 /**
  * Created by elamoureux on 1/11/2017.
  */
-public class IcescrumActorAPI extends IcescrumRestApi {
+public class IcescrumActor extends IcescrumRest {
     private final String URL_BASE_COMMAND = "/actor";
 
     @Override
