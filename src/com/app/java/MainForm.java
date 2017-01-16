@@ -1,19 +1,27 @@
 package com.app.java;
 
+import com.app.java.model.Release;
 import com.app.java.model.api.*;
-import com.app.java.util.XmlResponse;
+import com.app.java.util.handler.ReleaseHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.StringReader;
+import java.util.ArrayList;
 
 /**
  * Created by elamoureux on 1/6/2017.
  */
 public class MainForm {
+    public ArrayList<Release> myReleases = new ArrayList<>();
     private JButton button1;
     private JLabel label1;
     private JPanel panel1;
+
 
     public MainForm() {
         button1.addActionListener(new ActionListener() {
@@ -27,7 +35,7 @@ public class MainForm {
                 IcescrumActor actor = new IcescrumActor();
 
                 try {
-                    XmlResponse.DisplayInConsole(release.getAll());
+//                    XmlResponse.DisplayInConsole(release.getAll());
 //                    XmlResponse.SaveToFile(release.getAll(), release.getFileName());
 //                    XmlResponse.DisplayInConsole(release.getItem(76926));
 //                    XmlResponse.SaveToFile(release.getItem(76926), release.getFileName());
@@ -61,15 +69,19 @@ public class MainForm {
 //                    XmlResponse.SaveToFile(actor.getItem(2264), actor.getFileName());
 
 
-//                    ReleaseHandler releaseHandler = new ReleaseHandler();
-//                    XMLReader myReader = XMLReaderFactory.createXMLReader();
-//                    myReader.setContentHandler(releaseHandler);
-//
-//                    InputSource is = new InputSource(con.getInputStream());
-//                    is.setEncoding("UTF-8");
-//
-//                    myReader.parse(is);
+                    ReleaseHandler releaseHandler = new ReleaseHandler(myReleases);
+                    XMLReader myReader = XMLReaderFactory.createXMLReader();
+                    myReader.setContentHandler(releaseHandler);
 
+                    InputSource is = new InputSource(new StringReader(release.getItem(76926).toString()));
+                    is.setEncoding("UTF-8");
+
+                    myReader.parse(is);
+
+                    System.out.println("Patate");
+                    System.out.println("Patate");
+                    System.out.println("Patate");
+                    System.out.println(myReleases.get(0).getReleaseId());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
