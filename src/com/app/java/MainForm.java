@@ -1,5 +1,6 @@
 package com.app.java;
 
+import com.app.java.model.Projects;
 import com.app.java.model.Release;
 import com.app.java.model.api.*;
 import com.app.java.util.handler.ReleaseHandler;
@@ -11,28 +12,39 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.StringReader;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by elamoureux on 1/6/2017.
  */
 public class MainForm {
-    public ArrayList<Release> myReleases = new ArrayList<>();
+    public HashMap<Integer, Release> myReleases = new HashMap<>();
+    private IcescrumRelease release = new IcescrumRelease();
+    private IcescrumSprint sprint = new IcescrumSprint();
+    private IcescrumStory story = new IcescrumStory();
+    private IcescrumTask task = new IcescrumTask();
+    private IcescrumFeature feature = new IcescrumFeature();
+    private IcescrumActor actor = new IcescrumActor();
     private JButton button1;
     private JLabel label1;
     private JPanel panel1;
+    private JComboBox comboBox1;
+    private JProgressBar progressBar1;
+    private JButton getCButton;
 
 
     public MainForm() {
+        comboBox1.addItem("Please select");
+        for (Projects p : Projects.values()) {
+            comboBox1.addItem(p);
+        }
+
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                IcescrumRelease release = new IcescrumRelease();
-                IcescrumSprint sprint = new IcescrumSprint();
-                IcescrumStory story = new IcescrumStory();
-                IcescrumTask task = new IcescrumTask();
-                IcescrumFeature feature = new IcescrumFeature();
-                IcescrumActor actor = new IcescrumActor();
 
                 try {
 //                    XmlResponse.DisplayInConsole(release.getAll());
@@ -73,15 +85,19 @@ public class MainForm {
                     XMLReader myReader = XMLReaderFactory.createXMLReader();
                     myReader.setContentHandler(releaseHandler);
 
-                    InputSource is = new InputSource(new StringReader(release.getItem(76926).toString()));
+//                    InputSource is = new InputSource(new StringReader(release.getItem(76926).toString()));
+                    InputSource is = new InputSource(new StringReader(release.getAll().toString()));
                     is.setEncoding("UTF-8");
 
                     myReader.parse(is);
 
-                    System.out.println("Patate");
-                    System.out.println("Patate");
-                    System.out.println("Patate");
-                    System.out.println(myReleases.get(0).getReleaseId());
+                    /* Display content using Iterator*/
+                    Set set = myReleases.entrySet();
+                    Iterator iterator = set.iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry<Integer, Release> mentry = (Map.Entry) iterator.next();
+                        System.out.println(mentry.getValue().getName());
+                    }
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

@@ -1,28 +1,30 @@
 package com.app.java.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by elamoureux on 1/16/2017.
  */
 public class Release {
-    private String releaseId;
-    private String endDate;
-    private String[] features;
-    private String goal;
-    private String lastUpdated;
-    private String name;
-    private String orderNumber;
-    private String parentProduct;
-    private String releaseVelocity;
-    private String[] sprints;
-    private String startDate;
-    private String state;
-    private String vision;
+    private int releaseId;
+    private String endDate = "";
+    private ArrayList<Integer> features = new ArrayList<>();
+    private String goal = "";
+    private String lastUpdated = "";
+    private String name = "";
+    private String orderNumber = "";
+    private int parentProduct;
+    private String releaseVelocity = "";
+    private ArrayList<Integer> sprints = new ArrayList<>();
+    private String startDate = "";
+    private String state = "";
+    private String vision = "";
 
-    public String getReleaseId() {
+    public int getReleaseId() {
         return releaseId;
     }
 
-    public void setReleaseId(String releaseId) {
+    public void setReleaseId(int releaseId) {
         this.releaseId = releaseId;
     }
 
@@ -34,11 +36,11 @@ public class Release {
         this.endDate = endDate;
     }
 
-    public String[] getFeatures() {
+    public ArrayList<Integer> getFeatures() {
         return features;
     }
 
-    public void setFeatures(String[] features) {
+    public void setFeatures(ArrayList<Integer> features) {
         this.features = features;
     }
 
@@ -74,11 +76,11 @@ public class Release {
         this.orderNumber = orderNumber;
     }
 
-    public String getParentProduct() {
+    public int getParentProduct() {
         return parentProduct;
     }
 
-    public void setParentProduct(String parentProduct) {
+    public void setParentProduct(int parentProduct) {
         this.parentProduct = parentProduct;
     }
 
@@ -90,11 +92,11 @@ public class Release {
         this.releaseVelocity = releaseVelocity;
     }
 
-    public String[] getSprints() {
+    public ArrayList<Integer> getSprints() {
         return sprints;
     }
 
-    public void setSprints(String[] sprints) {
+    public void setSprints(ArrayList<Integer> sprints) {
         this.sprints = sprints;
     }
 

@@ -6,13 +6,15 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by elamoureux on 1/13/2017.
  */
 public class ReleaseHandler extends DefaultHandler {
-    private ArrayList<Release> releaseArrayList;
-    //    private boolean brelease;
+    private HashMap<Integer, Release> releaseHashMap;
+    private int currentMapKey;
+    private boolean brelease;
     private boolean bendDate;
     //    private boolean bfeature;
     private boolean bgoal;
@@ -26,27 +28,28 @@ public class ReleaseHandler extends DefaultHandler {
     private boolean bstate;
     private boolean bvision;
 
-    public ReleaseHandler(ArrayList<Release> releaseArrayList) {
-        this.releaseArrayList = releaseArrayList;
+    public ReleaseHandler(HashMap<Integer, Release> releaseHashMap) {
+        this.releaseHashMap = releaseHashMap;
     }
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-//        System.out.println("Start Element :" + qName);
-
         switch (qName) {
             case "release":
-//                brelease = true;
+                brelease = true;
+                currentMapKey = Integer.parseInt(attributes.getValue("id"));
                 Release release = new Release();
-                release.setReleaseId(attributes.getValue("id"));
-//                System.out.println("Release ID: " + attributes.getValue("id"));
-                releaseArrayList.add(release);
+                release.setReleaseId(currentMapKey);
+                releaseHashMap.put(currentMapKey, release);
                 break;
             case "endDate":
                 bendDate = true;
                 break;
             case "feature":
 //                bfeature = true;
-                System.out.println("Feature ID: " + attributes.getValue("id"));
+                ArrayList<Integer> features;
+                features = releaseHashMap.get(currentMapKey).getFeatures();
+                features.add(Integer.parseInt(attributes.getValue("id")));
+                releaseHashMap.get(currentMapKey).setFeatures(features);
                 break;
             case "goal":
                 bgoal = true;
@@ -62,14 +65,17 @@ public class ReleaseHandler extends DefaultHandler {
                 break;
             case "parentProduct":
 //                bparentProduct = true;
-                System.out.println("Parent Product ID: " + attributes.getValue("id"));
+                releaseHashMap.get(currentMapKey).setParentProduct(Integer.parseInt(attributes.getValue("id")));
                 break;
             case "releaseVelocity":
                 breleaseVelocity = true;
                 break;
             case "sprint":
 //                bsprint = true;
-                System.out.println("Sprint ID: " + attributes.getValue("id"));
+                ArrayList<Integer> sprints;
+                sprints = releaseHashMap.get(currentMapKey).getSprints();
+                sprints.add(Integer.parseInt(attributes.getValue("id")));
+                releaseHashMap.get(currentMapKey).setSprints(sprints);
                 break;
             case "startDate":
                 bstartDate = true;
@@ -84,60 +90,59 @@ public class ReleaseHandler extends DefaultHandler {
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
-//        System.out.println("End Element :" + qName);
-
+        /*
+        * Do something if Xml tag is empty except for the release case
+        * which is for re initializing the currentMapKey variable.
+        */
         switch (qName) {
+            case "release":
+                if (brelease) {
+                    currentMapKey = 0;
+                    brelease = false;
+                }
+                break;
             case "endDate":
                 if (bendDate) {
-                    System.out.println("Empty");
                     bendDate = false;
                 }
                 break;
             case "goal":
                 if (bgoal) {
-                    System.out.println("Empty");
                     bgoal = false;
                 }
                 break;
             case "lastUpdated":
                 if (blastUpdated) {
-                    System.out.println("Empty");
                     blastUpdated = false;
                 }
                 break;
             case "name":
                 if (bname) {
-                    System.out.println("Empty");
                     bname = false;
                 }
                 break;
             case "orderNumber":
                 if (borderNumber) {
-                    System.out.println("Empty");
                     borderNumber = false;
                 }
                 break;
             case "releaseVelocity":
                 if (breleaseVelocity) {
-                    System.out.println("Empty");
                     breleaseVelocity = false;
                 }
                 break;
             case "startDate":
                 if (bstartDate) {
-                    System.out.println("Empty");
                     bstartDate = false;
                 }
                 break;
             case "state":
                 if (bstate) {
-                    System.out.println("Empty");
                     bstate = false;
                 }
                 break;
             case "vision":
                 if (bvision) {
-                    System.out.println("Empty");
                     bvision = false;
                 }
                 break;
@@ -145,34 +150,32 @@ public class ReleaseHandler extends DefaultHandler {
     }
 
     public void characters(char ch[], int start, int length) throws SAXException {
-//        System.out.println(new String(ch, start, length));
-
         if (bendDate) {
-            System.out.println(new String(ch, start, length));
+            releaseHashMap.get(currentMapKey).setEndDate(new String(ch, start, length));
             bendDate = false;
         } else if (bgoal) {
-            System.out.println(new String(ch, start, length));
+            releaseHashMap.get(currentMapKey).setGoal(new String(ch, start, length));
             bgoal = false;
         } else if (blastUpdated) {
-            System.out.println(new String(ch, start, length));
+            releaseHashMap.get(currentMapKey).setLastUpdated(new String(ch, start, length));
             blastUpdated = false;
         } else if (bname) {
-            System.out.println(new String(ch, start, length));
+            releaseHashMap.get(currentMapKey).setName(new String(ch, start, length));
             bname = false;
         } else if (borderNumber) {
-            System.out.println(new String(ch, start, length));
+            releaseHashMap.get(currentMapKey).setOrderNumber(new String(ch, start, length));
             borderNumber = false;
         } else if (breleaseVelocity) {
-            System.out.println(new String(ch, start, length));
+            releaseHashMap.get(currentMapKey).setReleaseVelocity(new String(ch, start, length));
             breleaseVelocity = false;
         } else if (bstartDate) {
-            System.out.println(new String(ch, start, length));
+            releaseHashMap.get(currentMapKey).setStartDate(new String(ch, start, length));
             bstartDate = false;
         } else if (bstate) {
-            System.out.println(new String(ch, start, length));
+            releaseHashMap.get(currentMapKey).setState(new String(ch, start, length));
             bstate = false;
         } else if (bvision) {
-            System.out.println(new String(ch, start, length));
+            releaseHashMap.get(currentMapKey).setVision(new String(ch, start, length));
             bvision = false;
         }
     }
