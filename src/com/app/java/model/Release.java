@@ -8,14 +8,14 @@ import java.util.ArrayList;
 public class Release {
     private int releaseId;
     private String endDate = "";
-    private ArrayList<Integer> features = new ArrayList<>();
+    private ArrayList<Integer> featuresId = new ArrayList<>();
     private String goal = "";
     private String lastUpdated = "";
     private String name = "";
     private String orderNumber = "";
-    private int parentProduct;
+    private int parentProductId;
     private String releaseVelocity = "";
-    private ArrayList<Integer> sprints = new ArrayList<>();
+    private ArrayList<Integer> sprintsId = new ArrayList<>();
     private String startDate = "";
     private String state = "";
     private String vision = "";
@@ -36,12 +36,12 @@ public class Release {
         this.endDate = endDate;
     }
 
-    public ArrayList<Integer> getFeatures() {
-        return features;
+    public ArrayList<Integer> getFeaturesId() {
+        return featuresId;
     }
 
-    public void setFeatures(ArrayList<Integer> features) {
-        this.features = features;
+    public void setFeaturesId(ArrayList<Integer> featuresId) {
+        this.featuresId = featuresId;
     }
 
     public String getGoal() {
@@ -77,11 +77,11 @@ public class Release {
     }
 
     public int getParentProduct() {
-        return parentProduct;
+        return parentProductId;
     }
 
     public void setParentProduct(int parentProduct) {
-        this.parentProduct = parentProduct;
+        this.parentProductId = parentProduct;
     }
 
     public String getReleaseVelocity() {
@@ -92,12 +92,12 @@ public class Release {
         this.releaseVelocity = releaseVelocity;
     }
 
-    public ArrayList<Integer> getSprints() {
-        return sprints;
+    public ArrayList<Integer> getSprintsId() {
+        return sprintsId;
     }
 
-    public void setSprints(ArrayList<Integer> sprints) {
-        this.sprints = sprints;
+    public void setSprintsId(ArrayList<Integer> sprintsId) {
+        this.sprintsId = sprintsId;
     }
 
     public String getStartDate() {
@@ -123,5 +123,4 @@ public class Release {
     public void setVision(String vision) {
         this.vision = vision;
     }
-
 }

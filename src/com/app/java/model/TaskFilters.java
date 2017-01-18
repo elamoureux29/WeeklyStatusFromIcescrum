@@ -6,13 +6,13 @@ package com.app.java.model;
 public enum TaskFilters {
     CURRENT_USER("user"), FREE("free");
 
-    private String identifier;
+    private String filter;
 
     TaskFilters(String s) {
-        identifier = s;
+        filter = s;
     }
 
-    public String getIdentifier() {
-        return identifier;
+    public String getFilter() {
+        return filter;
     }
 }

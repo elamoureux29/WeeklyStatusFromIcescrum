@@ -14,16 +14,16 @@ import java.util.HashMap;
 public class ReleaseHandler extends DefaultHandler {
     private HashMap<Integer, Release> releaseHashMap;
     private int currentMapKey;
-    private boolean brelease;
+    private boolean breleaseId;
     private boolean bendDate;
-    //    private boolean bfeature;
+    //    private boolean bfeaturesId;
     private boolean bgoal;
     private boolean blastUpdated;
     private boolean bname;
     private boolean borderNumber;
-    //    private boolean bparentProduct;
+    //    private boolean bparentProductId;
     private boolean breleaseVelocity;
-    //    private boolean bsprint;
+    //    private boolean bsprintsId;
     private boolean bstartDate;
     private boolean bstate;
     private boolean bvision;
@@ -35,7 +35,7 @@ public class ReleaseHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         switch (qName) {
             case "release":
-                brelease = true;
+                breleaseId = true;
                 currentMapKey = Integer.parseInt(attributes.getValue("id"));
                 Release release = new Release();
                 release.setReleaseId(currentMapKey);
@@ -45,11 +45,11 @@ public class ReleaseHandler extends DefaultHandler {
                 bendDate = true;
                 break;
             case "feature":
-//                bfeature = true;
+//                bfeaturesId = true;
                 ArrayList<Integer> features;
-                features = releaseHashMap.get(currentMapKey).getFeatures();
+                features = releaseHashMap.get(currentMapKey).getFeaturesId();
                 features.add(Integer.parseInt(attributes.getValue("id")));
-                releaseHashMap.get(currentMapKey).setFeatures(features);
+                releaseHashMap.get(currentMapKey).setFeaturesId(features);
                 break;
             case "goal":
                 bgoal = true;
@@ -64,18 +64,18 @@ public class ReleaseHandler extends DefaultHandler {
                 borderNumber = true;
                 break;
             case "parentProduct":
-//                bparentProduct = true;
+//                bparentProductId = true;
                 releaseHashMap.get(currentMapKey).setParentProduct(Integer.parseInt(attributes.getValue("id")));
                 break;
             case "releaseVelocity":
                 breleaseVelocity = true;
                 break;
             case "sprint":
-//                bsprint = true;
+//                bsprintsId = true;
                 ArrayList<Integer> sprints;
-                sprints = releaseHashMap.get(currentMapKey).getSprints();
+                sprints = releaseHashMap.get(currentMapKey).getSprintsId();
                 sprints.add(Integer.parseInt(attributes.getValue("id")));
-                releaseHashMap.get(currentMapKey).setSprints(sprints);
+                releaseHashMap.get(currentMapKey).setSprintsId(sprints);
                 break;
             case "startDate":
                 bstartDate = true;
@@ -96,9 +96,9 @@ public class ReleaseHandler extends DefaultHandler {
         */
         switch (qName) {
             case "release":
-                if (brelease) {
+                if (breleaseId) {
                     currentMapKey = 0;
-                    brelease = false;
+                    breleaseId = false;
                 }
                 break;
             case "endDate":
