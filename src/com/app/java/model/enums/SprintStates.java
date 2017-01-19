@@ -1,14 +1,14 @@
-package com.app.java.model;
+package com.app.java.model.enums;
 
 /**
  * Created by elamoureux on 1/11/2017.
  */
-public enum StoryTypes {
-    USER_STORY("0"), DEFECT("2"), TECHNICAL_STORY("3");
+public enum SprintStates {
+    TODO("1"), IN_PROGRESS("2"), DONE("3");
 
     private String identifier;
 
-    StoryTypes(String s) {
+    SprintStates(String s) {
         identifier = s;
     }
 

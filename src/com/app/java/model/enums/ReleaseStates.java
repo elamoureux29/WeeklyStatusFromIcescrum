@@ -1,4 +1,4 @@
-package com.app.java.model;
+package com.app.java.model.enums;
 
 import java.util.HashMap;
 

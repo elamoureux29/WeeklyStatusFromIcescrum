@@ -1,14 +1,14 @@
-package com.app.java.model;
+package com.app.java.model.enums;
 
 /**
  * Created by elamoureux on 1/11/2017.
  */
-public enum SprintStates {
-    TODO("1"), IN_PROGRESS("2"), DONE("3");
+public enum TaskTypes {
+    RECURRENT("10"), URGENT("11");
 
     private String identifier;
 
-    SprintStates(String s) {
+    TaskTypes(String s) {
         identifier = s;
     }
 

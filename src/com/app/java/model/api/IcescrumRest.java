@@ -1,6 +1,6 @@
 package com.app.java.model.api;
 
-import com.app.java.model.Projects;
+import com.app.java.model.enums.Projects;
 
 import java.io.IOException;
 

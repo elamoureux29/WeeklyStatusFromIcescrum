@@ -1,20 +1,27 @@
 package com.app.java;
 
-import com.app.java.model.Projects;
 import com.app.java.model.Release;
 import com.app.java.model.Sprint;
 import com.app.java.model.Task;
 import com.app.java.model.api.*;
+import com.app.java.model.enums.Projects;
 import com.app.java.util.handler.ReleaseHandler;
 import com.app.java.util.handler.SprintHandler;
 import com.app.java.util.handler.TaskHandler;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,6 +47,13 @@ public class MainForm {
     private JProgressBar progressBar1;
     private JButton getAllSprintsInButton;
     private JButton getAllTasksInButton;
+    private JTabbedPane tabbedPane1;
+    private JPanel tabPanel1;
+    private JPanel tabPanel2;
+    private JPanel panel2;
+    private JTable table1;
+    private JButton exportButton;
+    private JButton populateButton;
 
 
     public MainForm() {
@@ -123,6 +137,96 @@ public class MainForm {
                 }
             }
         });
+        exportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                XSSFWorkbook workbook = new XSSFWorkbook();
+                XSSFSheet sheet = workbook.createSheet("Java Books");
+
+                Object[][] bookData = {
+                        {"Head First Java", "Kathy Serria", 79},
+                        {"Effective Java", "Joshua Bloch", 36},
+                        {"Clean Code", "Robert martin", 42},
+                        {"Thinking in Java", "Bruce Eckel", 35},
+                };
+
+                int rowCount = 0;
+
+                for (Object[] aBook : bookData) {
+                    Row row = sheet.createRow(++rowCount);
+
+                    int columnCount = 0;
+
+                    for (Object field : aBook) {
+                        Cell cell = row.createCell(++columnCount);
+                        if (field instanceof String) {
+                            cell.setCellValue((String) field);
+                        } else if (field instanceof Integer) {
+                            cell.setCellValue((Integer) field);
+                        }
+                    }
+
+                }
+
+                try {
+                    File file;
+                    FileOutputStream fos = null;
+                    String fileName = "Patate";
+
+                    file = new File("c:/" + fileName + ".xlsx");
+                    fos = new FileOutputStream(file);
+
+                    // if file doesnt exists, then create it
+                    if (!file.exists()) {
+                        file.createNewFile();
+                    }
+
+                    workbook.write(fos);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+
+                try {
+                    XSSFWorkbook fWorkbook = new XSSFWorkbook();
+                    XSSFSheet fSheet = fWorkbook.createSheet("new Sheet");
+                    XSSFFont sheetTitleFont = fWorkbook.createFont();
+                    String fileName2 = "Patate2";
+
+                    File file2 = new File("c:/" + fileName2 + ".xlsx");
+                    XSSFCellStyle cellStyle = fWorkbook.createCellStyle();
+
+                    sheetTitleFont.setBold(true);
+                    //sheetTitleFont.setColor();
+                    TableModel model = table1.getModel();
+
+
+                    for (int i = 0; i < model.getRowCount(); i++) {
+                        XSSFRow fRow = fSheet.createRow((short) i);
+                        for (int j = 0; j < model.getColumnCount(); j++) {
+                            XSSFCell cell = fRow.createCell((short) j);
+                            cell.setCellValue(model.getValueAt(i, j).toString());
+                            cell.setCellStyle(cellStyle);
+
+                        }
+
+                    }
+                    FileOutputStream fileOutputStream;
+                    fileOutputStream = new FileOutputStream(file2);
+                    BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
+                    fWorkbook.write(bos);
+                    bos.close();
+                    fileOutputStream.close();
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
+            }
+        });
+        populateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 //                    XmlResponse.DisplayInConsole(release.getAll());
 //                    XmlResponse.SaveToFile(release.getAll(), release.getFileName());
@@ -167,7 +271,7 @@ public class MainForm {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("MainForm");
-        frame.setContentPane(new MainForm().panel1);
+        frame.setContentPane(new MainForm().tabbedPane1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);

@@ -1,4 +1,4 @@
-package com.app.java.model;
+package com.app.java.model.enums;
 
 /**
  * Created by elamoureux on 1/11/2017.

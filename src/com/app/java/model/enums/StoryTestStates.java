@@ -1,14 +1,14 @@
-package com.app.java.model;
+package com.app.java.model.enums;
 
 /**
  * Created by elamoureux on 1/11/2017.
  */
-public enum Projects {
-    ENTRAPASS("KT760055"), QA_IMPROVEMENT("PROJ12118");
+public enum StoryTestStates {
+    NO_TEST("0"), TO_CHECK("1"), FAILED("5"), SUCCESS("10");
 
     private String identifier;
 
-    Projects(String s) {
+    StoryTestStates(String s) {
         identifier = s;
     }
 

@@ -1,14 +1,14 @@
-package com.app.java.model;
+package com.app.java.model.enums;
 
 /**
  * Created by elamoureux on 1/11/2017.
  */
-public enum StoryTestStates {
-    NO_TEST("0"), TO_CHECK("1"), FAILED("5"), SUCCESS("10");
+public enum TaskStates {
+    TODO("0"), IN_PROGRESS("1"), DONE("2");
 
     private String identifier;
 
-    StoryTestStates(String s) {
+    TaskStates(String s) {
         identifier = s;
     }
 

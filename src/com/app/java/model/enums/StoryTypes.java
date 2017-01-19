@@ -1,14 +1,14 @@
-package com.app.java.model;
+package com.app.java.model.enums;
 
 /**
  * Created by elamoureux on 1/11/2017.
  */
-public enum TaskTypes {
-    RECURRENT("10"), URGENT("11");
+public enum StoryTypes {
+    USER_STORY("0"), DEFECT("2"), TECHNICAL_STORY("3");
 
     private String identifier;
 
-    TaskTypes(String s) {
+    StoryTypes(String s) {
         identifier = s;
     }
 
