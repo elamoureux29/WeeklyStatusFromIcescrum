@@ -21,7 +21,7 @@ public class StoryHandler extends DefaultHandler {
     private boolean baffectVersion;
     private boolean bcreationDate;
     //    private boolean bcreatorId;
-    private boolean bdependsOn;
+    //    private boolean bdependsOnId;
     private boolean bdescription;
     private boolean bdoneDate;
     private boolean beffort;
@@ -42,9 +42,11 @@ public class StoryHandler extends DefaultHandler {
     private boolean btype;
     private boolean buid;
     //    private boolean btagsId;
-//    private boolean bdependencesId;
+    private boolean bdependencesId;
     private boolean btestState;
 //    private boolean bcommentsId;
+private boolean notDependencesTags = true;
+    private int recursionLevel;
 
     public StoryHandler(HashMap<Integer, Story> storyHashMap) {
         this.storyHashMap = storyHashMap;
@@ -53,132 +55,199 @@ public class StoryHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         switch (qName) {
             case "story":
-                bstoryId = true;
-                currentMapKey = Integer.parseInt(attributes.getValue("id"));
-                Story story = new Story();
-                story.setStoryId(currentMapKey);
-                storyHashMap.put(currentMapKey, story);
+                if (bdependencesId) {
+                    notDependencesTags = false;
+                    recursionLevel++;
+                } else {
+                    bstoryId = true;
+                    currentMapKey = Integer.parseInt(attributes.getValue("id"));
+                    Story story = new Story();
+                    story.setStoryId(currentMapKey);
+                    storyHashMap.put(currentMapKey, story);
+                }
                 break;
             case "acceptanceTest":
+                if (notDependencesTags) {
 //                bacceptanceTestsId = true;
-                ArrayList<Integer> acceptanceTests;
-                acceptanceTests = storyHashMap.get(currentMapKey).getNotesId();
-                acceptanceTests.add(Integer.parseInt(attributes.getValue("id")));
-                storyHashMap.get(currentMapKey).setNotesId(acceptanceTests);
+                    ArrayList<Integer> acceptanceTests;
+                    acceptanceTests = storyHashMap.get(currentMapKey).getNotesId();
+                    acceptanceTests.add(Integer.parseInt(attributes.getValue("id")));
+                    storyHashMap.get(currentMapKey).setNotesId(acceptanceTests);
+                }
                 break;
             case "acceptedDate":
-                bacceptedDate = true;
+                if (notDependencesTags) {
+                    bacceptedDate = true;
+                }
                 break;
             case "actor":
-                bactor = true;
+                if (notDependencesTags) {
+                    bactor = true;
+                }
                 break;
             case "affectVersion":
-                baffectVersion = true;
+                if (notDependencesTags) {
+                    baffectVersion = true;
+                }
                 break;
             case "creationDate":
-                bcreationDate = true;
+                if (notDependencesTags) {
+                    bcreationDate = true;
+                }
                 break;
             case "creator":
+                if (notDependencesTags) {
 //                bcreatorId = true;
-                storyHashMap.get(currentMapKey).setCreatorId(Integer.parseInt(attributes.getValue("id")));
+                    storyHashMap.get(currentMapKey).setCreatorId(Integer.parseInt(attributes.getValue("id")));
+                }
                 break;
             case "dependsOn":
-                bdependsOn = true;
+                if (notDependencesTags) {
+//                bdependsOnId = true;
+                    if (attributes.getValue("id") != null) {
+                        storyHashMap.get(currentMapKey).setDependsOnId(Integer.parseInt(attributes.getValue("id")));
+                    }
+                }
                 break;
             case "description":
-                bdescription = true;
+                if (notDependencesTags) {
+                    bdescription = true;
+                }
                 break;
             case "doneDate":
-                bdoneDate = true;
+                if (notDependencesTags) {
+                    bdoneDate = true;
+                }
                 break;
             case "effort":
-                beffort = true;
+                if (notDependencesTags) {
+                    beffort = true;
+                }
                 break;
             case "estimatedDate":
-                bestimatedDate = true;
+                if (notDependencesTags) {
+                    bestimatedDate = true;
+                }
                 break;
             case "executionFrequency":
-                bexecutionFrequency = true;
+                if (notDependencesTags) {
+                    bexecutionFrequency = true;
+                }
                 break;
             case "feature":
+                if (notDependencesTags) {
 //                bfeatureId = true;
-                if (attributes.getValue("id") != null) {
-                    storyHashMap.get(currentMapKey).setFeatureId(Integer.parseInt(attributes.getValue("id")));
+                    if (attributes.getValue("id") != null) {
+                        storyHashMap.get(currentMapKey).setFeatureId(Integer.parseInt(attributes.getValue("id")));
+                    }
                 }
                 break;
             case "inProgressDate":
-                binProgressDate = true;
+                if (notDependencesTags) {
+                    binProgressDate = true;
+                }
                 break;
             case "lastUpdated":
-                blastUpdated = true;
+                if (notDependencesTags) {
+                    blastUpdated = true;
+                }
                 break;
             case "name":
-                bname = true;
+                if (notDependencesTags) {
+                    bname = true;
+                }
                 break;
             case "note":
+                if (notDependencesTags) {
 //                bnotesId = true;
-                ArrayList<Integer> notes;
-                notes = storyHashMap.get(currentMapKey).getNotesId();
-                notes.add(Integer.parseInt(attributes.getValue("id")));
-                storyHashMap.get(currentMapKey).setNotesId(notes);
+                    ArrayList<Integer> notes;
+                    notes = storyHashMap.get(currentMapKey).getNotesId();
+                    notes.add(Integer.parseInt(attributes.getValue("id")));
+                    storyHashMap.get(currentMapKey).setNotesId(notes);
+                }
                 break;
             case "origin":
-                borigin = true;
+                if (notDependencesTags) {
+                    borigin = true;
+                }
                 break;
             case "parentSprint":
+                if (notDependencesTags) {
 //                bparentSprintId = true;
-                if (attributes.getValue("id") != null) {
-                    storyHashMap.get(currentMapKey).setParentSprintId(Integer.parseInt(attributes.getValue("id")));
+                    if (attributes.getValue("id") != null) {
+                        storyHashMap.get(currentMapKey).setParentSprintId(Integer.parseInt(attributes.getValue("id")));
+                    }
                 }
                 break;
             case "plannedDate":
-                bplannedDate = true;
+                if (notDependencesTags) {
+                    bplannedDate = true;
+                }
                 break;
             case "rank":
-                brank = true;
+                if (notDependencesTags) {
+                    brank = true;
+                }
                 break;
             case "state":
-                bstate = true;
+                if (notDependencesTags) {
+                    bstate = true;
+                }
                 break;
             case "suggestedDate":
-                bsuggestedDate = true;
+                if (notDependencesTags) {
+                    bsuggestedDate = true;
+                }
                 break;
             case "task":
+                if (notDependencesTags) {
 //                btasksId = true;
-                ArrayList<Integer> tasks;
-                tasks = storyHashMap.get(currentMapKey).getTasksId();
-                tasks.add(Integer.parseInt(attributes.getValue("id")));
-                storyHashMap.get(currentMapKey).setTasksId(tasks);
+                    ArrayList<Integer> tasks;
+                    tasks = storyHashMap.get(currentMapKey).getTasksId();
+                    tasks.add(Integer.parseInt(attributes.getValue("id")));
+                    storyHashMap.get(currentMapKey).setTasksId(tasks);
+                }
                 break;
             case "type":
-                btype = true;
+                if (notDependencesTags) {
+                    btype = true;
+                }
                 break;
             case "uid":
-                buid = true;
+                if (notDependencesTags) {
+                    buid = true;
+                }
                 break;
             case "tag":
+                if (notDependencesTags) {
 //                btagsId = true;
-                ArrayList<Integer> tags;
-                tags = storyHashMap.get(currentMapKey).getTagsId();
-                tags.add(Integer.parseInt(attributes.getValue("id")));
-                storyHashMap.get(currentMapKey).setTagsId(tags);
+                    ArrayList<Integer> tags;
+                    tags = storyHashMap.get(currentMapKey).getTagsId();
+                    tags.add(Integer.parseInt(attributes.getValue("id")));
+                    storyHashMap.get(currentMapKey).setTagsId(tags);
+                }
                 break;
-            case "dependence":
-//                bdependencesId = true;
-                ArrayList<Integer> dependences;
-                dependences = storyHashMap.get(currentMapKey).getDependencesId();
-                dependences.add(Integer.parseInt(attributes.getValue("id")));
-                storyHashMap.get(currentMapKey).setDependencesId(dependences);
+            case "dependences":
+                bdependencesId = true;
+                recursionLevel++;
+//                ArrayList<Integer> dependences;
+//                dependences = storyHashMap.get(currentMapKey).getDependencesId();
+//                dependences.add(Integer.parseInt(attributes.getValue("id")));
+//                storyHashMap.get(currentMapKey).setDependencesId(dependences);
                 break;
             case "testState":
-                btestState = true;
+                if (notDependencesTags) {
+                    btestState = true;
+                }
                 break;
             case "comment":
+                if (notDependencesTags) {
 //                bcommentsId = true;
-                ArrayList<Integer> comments;
-                comments = storyHashMap.get(currentMapKey).getCommentsId();
-                comments.add(Integer.parseInt(attributes.getValue("id")));
-                storyHashMap.get(currentMapKey).setCommentsId(comments);
+                    ArrayList<Integer> comments;
+                    comments = storyHashMap.get(currentMapKey).getCommentsId();
+                    comments.add(Integer.parseInt(attributes.getValue("id")));
+                    storyHashMap.get(currentMapKey).setCommentsId(comments);
+                }
                 break;
         }
     }
@@ -190,9 +259,15 @@ public class StoryHandler extends DefaultHandler {
         */
         switch (qName) {
             case "story":
-                if (bstoryId) {
-                    currentMapKey = 0;
-                    bstoryId = false;
+                if (notDependencesTags) {
+                    if (bstoryId) {
+                        currentMapKey = 0;
+                        bstoryId = false;
+                    }
+                } else if (recursionLevel > 1) {
+                    recursionLevel--;
+                } else {
+                    notDependencesTags = true;
                 }
                 break;
             case "acceptedDate":
@@ -213,11 +288,6 @@ public class StoryHandler extends DefaultHandler {
             case "creationDate":
                 if (bcreationDate) {
                     bcreationDate = false;
-                }
-                break;
-            case "dependsOn":
-                if (bdependsOn) {
-                    bdependsOn = false;
                 }
                 break;
             case "description":
@@ -295,6 +365,11 @@ public class StoryHandler extends DefaultHandler {
                     buid = false;
                 }
                 break;
+            case "dependences":
+                if (bdependencesId) {
+                    bdependencesId = false;
+                }
+                break;
             case "testState":
                 if (btestState) {
                     btestState = false;
@@ -316,9 +391,6 @@ public class StoryHandler extends DefaultHandler {
         } else if (bcreationDate) {
             storyHashMap.get(currentMapKey).setCreationDate(new String(ch, start, length));
             bcreationDate = false;
-        } else if (bdependsOn) {
-            storyHashMap.get(currentMapKey).setDependsOn(new String(ch, start, length));
-            bdependsOn = false;
         } else if (bdescription) {
             storyHashMap.get(currentMapKey).setDescription(new String(ch, start, length));
             bdescription = false;

@@ -183,25 +183,8 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-//                    XmlResponse.DisplayInConsole(story.getItem(185054));
-                    XmlResponse.SaveToFile(story.getItem(185054), story.getFileName());
-
-                    StoryHandler storyHandler = new StoryHandler(allStoriesInCurrentRelease);
-                    XMLReader myReader = XMLReaderFactory.createXMLReader();
-                    myReader.setContentHandler(storyHandler);
-
-                    InputSource is = new InputSource(new StringReader(story.getItem(185054).toString()));
-                    is.setEncoding("UTF-8");
-
-                    myReader.parse(is);
-
-                    /* Display content using Iterator*/
-                    Set set = allStoriesInCurrentRelease.entrySet();
-                    Iterator iterator = set.iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
-                        System.out.println(mentry.getValue().getName());
-                    }
+                    XmlResponse.DisplayInConsole(story.getItem(185136));
+//                    XmlResponse.SaveToFile(story.getItem(185054), story.getFileName());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

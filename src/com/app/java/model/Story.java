@@ -13,7 +13,7 @@ public class Story {
     private String affectVersion = "";
     private String creationDate = "";
     private int creatorId;
-    private String dependsOn = "";
+    private int dependsOnId;
     private String description = "";
     private String doneDate = "";
     private String effort = "";
@@ -94,12 +94,12 @@ public class Story {
         this.creatorId = creatorId;
     }
 
-    public String getDependsOn() {
-        return dependsOn;
+    public int getDependsOnId() {
+        return dependsOnId;
     }
 
-    public void setDependsOn(String dependsOn) {
-        this.dependsOn = dependsOn;
+    public void setDependsOnId(int dependsOnId) {
+        this.dependsOnId = dependsOnId;
     }
 
     public String getDescription() {
