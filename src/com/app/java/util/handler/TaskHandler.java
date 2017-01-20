@@ -151,7 +151,6 @@ public class TaskHandler extends DefaultHandler {
         */
         switch (qName) {
             case "task":
-                btaskId = true;
                 if (btaskId) {
                     currentMapKey = 0;
                     btaskId = false;

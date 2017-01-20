@@ -15,7 +15,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="27dc6" binding="panel1" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="27dc6" binding="panel1" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="20" left="20" bottom="20" right="20"/>
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
@@ -51,7 +51,7 @@
               </component>
               <component id="e1bb5" class="javax.swing.JProgressBar" binding="progressBar1" default-binding="true">
                 <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <indeterminate value="false"/>
@@ -59,12 +59,20 @@
               </component>
               <component id="bfb4e" class="javax.swing.JButton" binding="getAllTasksInButton" default-binding="true">
                 <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="204" height="32"/>
                   </grid>
                 </constraints>
                 <properties>
                   <text value="Get All Tasks In Current Sprint"/>
+                </properties>
+              </component>
+              <component id="ef7e9" class="javax.swing.JButton" binding="getAllStoriesInButton" default-binding="true">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Get All Stories In Current Sprint"/>
                 </properties>
               </component>
             </children>

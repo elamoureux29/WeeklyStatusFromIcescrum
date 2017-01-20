@@ -2,11 +2,16 @@ package com.app.java;
 
 import com.app.java.model.Release;
 import com.app.java.model.Sprint;
+import com.app.java.model.Story;
 import com.app.java.model.Task;
 import com.app.java.model.api.*;
 import com.app.java.model.enums.Projects;
+import com.app.java.model.enums.ReleaseStates;
+import com.app.java.model.enums.SprintStates;
+import com.app.java.util.XmlResponse;
 import com.app.java.util.handler.ReleaseHandler;
 import com.app.java.util.handler.SprintHandler;
+import com.app.java.util.handler.StoryHandler;
 import com.app.java.util.handler.TaskHandler;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -34,7 +39,10 @@ import java.util.Set;
 public class MainForm {
     public HashMap<Integer, Release> allReleases = new HashMap<>();
     public HashMap<Integer, Sprint> allSprintInCurrentRelease = new HashMap<>();
+    public HashMap<Integer, Story> allStoriesInCurrentRelease = new HashMap<>();
     public HashMap<Integer, Task> allTasksInCurrentSprint = new HashMap<>();
+    private int currentReleaseId;
+    private int currentSprintId;
     private IcescrumRelease release = new IcescrumRelease();
     private IcescrumSprint sprint = new IcescrumSprint();
     private IcescrumStory story = new IcescrumStory();
@@ -54,6 +62,7 @@ public class MainForm {
     private JTable table1;
     private JButton exportButton;
     private JButton populateButton;
+    private JButton getAllStoriesInButton;
 
 
     public MainForm() {
@@ -81,6 +90,9 @@ public class MainForm {
                     while (iterator.hasNext()) {
                         Map.Entry<Integer, Release> mentry = (Map.Entry) iterator.next();
                         System.out.println(mentry.getValue().getName());
+                        if (mentry.getValue().getState().equalsIgnoreCase(ReleaseStates.IN_PROGRESS.getIdentifier())) {
+                            currentReleaseId = mentry.getValue().getReleaseId();
+                        }
                     }
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -106,6 +118,36 @@ public class MainForm {
                     while (iterator.hasNext()) {
                         Map.Entry<Integer, Sprint> mentry = (Map.Entry) iterator.next();
                         System.out.println(mentry.getValue().getGoal() + mentry.getValue().getOrderNumber());
+                        if (mentry.getValue().getState().equalsIgnoreCase(SprintStates.IN_PROGRESS.getIdentifier())) {
+                            currentSprintId = mentry.getValue().getSprintId();
+                        }
+                    }
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        getAllStoriesInButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    StoryHandler storyHandler = new StoryHandler(allStoriesInCurrentRelease);
+                    XMLReader myReader = XMLReaderFactory.createXMLReader();
+                    myReader.setContentHandler(storyHandler);
+
+                    for (int storyId : allSprintInCurrentRelease.get(currentSprintId).getStories()) {
+                        InputSource is = new InputSource(new StringReader(story.getItem(storyId).toString()));
+                        is.setEncoding("UTF-8");
+
+                        myReader.parse(is);
+                    }
+
+                    /* Display content using Iterator*/
+                    Set set = allStoriesInCurrentRelease.entrySet();
+                    Iterator iterator = set.iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
+                        System.out.println(mentry.getValue().getName());
                     }
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -130,6 +172,34 @@ public class MainForm {
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
                         Map.Entry<Integer, Task> mentry = (Map.Entry) iterator.next();
+                        System.out.println(mentry.getValue().getName());
+                    }
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        populateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+//                    XmlResponse.DisplayInConsole(story.getItem(185054));
+                    XmlResponse.SaveToFile(story.getItem(185054), story.getFileName());
+
+                    StoryHandler storyHandler = new StoryHandler(allStoriesInCurrentRelease);
+                    XMLReader myReader = XMLReaderFactory.createXMLReader();
+                    myReader.setContentHandler(storyHandler);
+
+                    InputSource is = new InputSource(new StringReader(story.getItem(185054).toString()));
+                    is.setEncoding("UTF-8");
+
+                    myReader.parse(is);
+
+                    /* Display content using Iterator*/
+                    Set set = allStoriesInCurrentRelease.entrySet();
+                    Iterator iterator = set.iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
                         System.out.println(mentry.getValue().getName());
                     }
                 } catch (Exception e1) {
@@ -219,12 +289,6 @@ public class MainForm {
                 } catch (Exception e2) {
                     e2.printStackTrace();
                 }
-            }
-        });
-        populateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
             }
         });
     }
