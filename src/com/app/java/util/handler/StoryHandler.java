@@ -55,10 +55,13 @@ private boolean notDependencesTags = true;
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         switch (qName) {
             case "story":
-                if (bdependencesId) {
+                if (bdependencesId && recursionLevel == 1) {
+                    ArrayList<Integer> dependences;
+                    dependences = storyHashMap.get(currentMapKey).getDependencesId();
+                    dependences.add(Integer.parseInt(attributes.getValue("id")));
+                    storyHashMap.get(currentMapKey).setDependencesId(dependences);
                     notDependencesTags = false;
-                    recursionLevel++;
-                } else {
+                } else if (recursionLevel < 1) {
                     bstoryId = true;
                     currentMapKey = Integer.parseInt(attributes.getValue("id"));
                     Story story = new Story();
@@ -70,9 +73,9 @@ private boolean notDependencesTags = true;
                 if (notDependencesTags) {
 //                bacceptanceTestsId = true;
                     ArrayList<Integer> acceptanceTests;
-                    acceptanceTests = storyHashMap.get(currentMapKey).getNotesId();
+                    acceptanceTests = storyHashMap.get(currentMapKey).getAcceptanceTestsId();
                     acceptanceTests.add(Integer.parseInt(attributes.getValue("id")));
-                    storyHashMap.get(currentMapKey).setNotesId(acceptanceTests);
+                    storyHashMap.get(currentMapKey).setAcceptanceTestsId(acceptanceTests);
                 }
                 break;
             case "acceptedDate":
@@ -230,10 +233,6 @@ private boolean notDependencesTags = true;
             case "dependences":
                 bdependencesId = true;
                 recursionLevel++;
-//                ArrayList<Integer> dependences;
-//                dependences = storyHashMap.get(currentMapKey).getDependencesId();
-//                dependences.add(Integer.parseInt(attributes.getValue("id")));
-//                storyHashMap.get(currentMapKey).setDependencesId(dependences);
                 break;
             case "testState":
                 if (notDependencesTags) {
@@ -264,10 +263,6 @@ private boolean notDependencesTags = true;
                         currentMapKey = 0;
                         bstoryId = false;
                     }
-                } else if (recursionLevel > 1) {
-                    recursionLevel--;
-                } else {
-                    notDependencesTags = true;
                 }
                 break;
             case "acceptedDate":
@@ -367,7 +362,13 @@ private boolean notDependencesTags = true;
                 break;
             case "dependences":
                 if (bdependencesId) {
-                    bdependencesId = false;
+                    if (recursionLevel > 1) {
+                        recursionLevel--;
+                    } else {
+                        recursionLevel--;
+                        notDependencesTags = true;
+                        bdependencesId = false;
+                    }
                 }
                 break;
             case "testState":

@@ -28,10 +28,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by elamoureux on 1/6/2017.
@@ -39,7 +36,7 @@ import java.util.Set;
 public class MainForm {
     public HashMap<Integer, Release> allReleases = new HashMap<>();
     public HashMap<Integer, Sprint> allSprintInCurrentRelease = new HashMap<>();
-    public HashMap<Integer, Story> allStoriesInCurrentRelease = new HashMap<>();
+    public HashMap<Integer, Story> allStoriesInCurrentSprint = new HashMap<>();
     public HashMap<Integer, Task> allTasksInCurrentSprint = new HashMap<>();
     private int currentReleaseId;
     private int currentSprintId;
@@ -85,7 +82,8 @@ public class MainForm {
                     myReader.parse(is);
 
                     /* Display content using Iterator*/
-                    Set set = allReleases.entrySet();
+                    Map<Integer, Release> map = sortByValues(allReleases);
+                    Set set = map.entrySet();
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
                         Map.Entry<Integer, Release> mentry = (Map.Entry) iterator.next();
@@ -113,7 +111,8 @@ public class MainForm {
                     myReader.parse(is);
 
                     /* Display content using Iterator*/
-                    Set set = allSprintInCurrentRelease.entrySet();
+                    Map<Integer, Sprint> map = new TreeMap<>(allSprintInCurrentRelease);
+                    Set set = map.entrySet();
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
                         Map.Entry<Integer, Sprint> mentry = (Map.Entry) iterator.next();
@@ -131,7 +130,7 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    StoryHandler storyHandler = new StoryHandler(allStoriesInCurrentRelease);
+                    StoryHandler storyHandler = new StoryHandler(allStoriesInCurrentSprint);
                     XMLReader myReader = XMLReaderFactory.createXMLReader();
                     myReader.setContentHandler(storyHandler);
 
@@ -143,11 +142,11 @@ public class MainForm {
                     }
 
                     /* Display content using Iterator*/
-                    Set set = allStoriesInCurrentRelease.entrySet();
+                    Set set = allStoriesInCurrentSprint.entrySet();
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
                         Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
-                        System.out.println(mentry.getValue().getName());
+                        System.out.println(mentry.getValue().getStoryId() + ": " + mentry.getValue().getName());
                     }
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -183,7 +182,7 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    XmlResponse.DisplayInConsole(story.getItem(185136));
+                    XmlResponse.DisplayInConsole(story.getItem(185054));
 //                    XmlResponse.SaveToFile(story.getItem(185054), story.getFileName());
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -315,6 +314,29 @@ public class MainForm {
 //
 //        }
 //    }
+
+    private static HashMap<Integer, Release> sortByValues(HashMap<Integer, Release> map) {
+        List list = new LinkedList(map.entrySet());
+        // Defined Custom Comparator here
+        Collections.sort(list, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                String s1 = ((Map.Entry<Integer, Release>) (o1)).getValue().getOrderNumber();
+                String s2 = ((Map.Entry<Integer, Release>) (o2)).getValue().getOrderNumber();
+
+                return ((Comparable) Integer.parseInt(s1))
+                        .compareTo(Integer.parseInt(s2));
+            }
+        });
+
+        // Here I am copying the sorted list in HashMap
+        // using LinkedHashMap to preserve the insertion order
+        HashMap<Integer, Release> sortedHashMap = new LinkedHashMap<>();
+        for (Iterator it = list.iterator(); it.hasNext(); ) {
+            Map.Entry<Integer, Release> entry = (Map.Entry) it.next();
+            sortedHashMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedHashMap;
+    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("MainForm");
