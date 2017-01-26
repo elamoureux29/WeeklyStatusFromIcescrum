@@ -12,14 +12,14 @@ public class IcescrumSprint extends IcescrumRest {
 
     @Override
     public StringBuffer getAll() throws IOException {
-        String fullUrl = URL + PROJECT + URL_BASE_COMMAND;
+        String fullUrl = URL + project + URL_BASE_COMMAND;
         fileName = "Icescrum_All_Sprints_In_Current_Release";
 
         return ReadRequest.send(USER_AGENT, RESPONSE_FORMAT, fullUrl);
     }
 
     public StringBuffer getAllInRelease(int id) throws IOException {
-        String fullUrl = URL + PROJECT + "/" + id + URL_BASE_COMMAND;
+        String fullUrl = URL + project + "/" + id + URL_BASE_COMMAND;
         fileName = "Icescrum_All_Sprints_In_Release_" + id;
 
         return ReadRequest.send(USER_AGENT, RESPONSE_FORMAT, fullUrl);
@@ -27,7 +27,7 @@ public class IcescrumSprint extends IcescrumRest {
 
     @Override
     public StringBuffer getItem(int id) throws IOException {
-        String fullUrl = URL + PROJECT + URL_BASE_COMMAND + "/" + id;
+        String fullUrl = URL + project + URL_BASE_COMMAND + "/" + id;
         fileName = "Icescrum_Sprint_" + id;
 
         return ReadRequest.send(USER_AGENT, RESPONSE_FORMAT, fullUrl);

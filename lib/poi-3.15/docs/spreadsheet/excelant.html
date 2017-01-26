@@ -278,7 +278,7 @@ if (VERSION > 3) {
                         <p>
                             Where excelant.path refers to the classpath with POI jars.
                             Using this approach the provided extensions will live in the default namespace. Note that
-                            the default task/typenames (evaluate, test) may be too generic and should either be
+                            the default taskItem/typenames (evaluate, test) may be too generic and should either be
                             explicitly overridden or used with a namespace.
                         </p>
 
@@ -343,7 +343,7 @@ if (VERSION > 3) {
                             xls.file. Then it creates a 'test' named 'checkValue'. Finally it tries
                             to evaluate the B4 on the sheet named 'MortgageCalculator'. There are some assumptions
                             here that are worth explaining. For starters, ExcelAnt is focused on the testing
-                            numerically oriented sheets. The &lt;evaluate&gt; task is actually evaluating the
+                            numerically oriented sheets. The &lt;evaluate&gt; taskItem is actually evaluating the
                             cell as a formula using a FormulaEvaluator instance from POI. Therefore it will fail
                             if you point it to a cell that doesn't contain a formula or a test a plain old number.</p>
 
@@ -378,7 +378,7 @@ Total time: 391 milliseconds
 
 
                         <p>To verify that we can manipulate cell values, we need a way in ExcelAnt to set a value.
-                            This is provided by the following task types:</p>
+                            This is provided by the following taskItem types:</p>
 
                         <ul>
 
@@ -391,7 +391,7 @@ Total time: 391 milliseconds
                         </ul>
 
 
-                        <p>For the purposes of this example we'll use the &lt;setDouble&gt; task. Let's
+                        <p>For the purposes of this example we'll use the &lt;setDouble&gt; taskItem. Let's
                             start with a $240,000, 30 year loan at 11% (let's pretend it's like 1984). Here
                             is how we will set that up:</p>
 
@@ -449,7 +449,7 @@ Total time: 406 milliseconds
                             is obviously useful but it gets cumbersome. It would be better if there were a way
                             that we could specify a global precision - and there is. There is a &lt;precision&gt;
                             tag that you can specify as a child of the &lt;excelant&gt; tag. Let's go back to
-                            our original task we set up earlier and modify it:</p>
+                            our original taskItem we set up earlier and modify it:</p>
 
 
                         <pre class="code">
@@ -467,10 +467,10 @@ Total time: 406 milliseconds
 
 
                         <p>In this example we have set the global precision to 1.0e-3. This means that
-                            in the absence of something more stringent, all tests in the task will use
+                            in the absence of something more stringent, all tests in the taskItem will use
                             the global precision. We can still override this by specifying the
-                            precision attribute of all of our &lt;evaluate&gt; task. Let's first run
-                            this task with the global precision and the -verbose flag:</p>
+                            precision attribute of all of our &lt;evaluate&gt; taskItem. Let's first run
+                            this taskItem with the global precision and the -verbose flag:</p>
 
 
                         <pre class="code">
@@ -489,7 +489,7 @@ simpleTest:
                             the global precision. Additionally, it tells us we're going to use that
                             more stringent global value. Now suppose that for this test we want
                             to use a more stringent precision, say 1.0e-4. We can do that by adding
-                            the precision attribute back to the &lt;evaluate&gt; task:</p>
+                            the precision attribute back to the &lt;evaluate&gt; taskItem:</p>
 
 
                         <pre class="code">
@@ -532,7 +532,7 @@ Total time: 390 milliseconds
                             that allows you to write Java code that will be used in place of custom VB
                             code or macros is a spreadsheet. If you have read the documentation and written
                             your own FreeRefFunction implmentations, ExcelAnt can make use of this code.
-                            For each &lt;excelant&gt; task you define you can nest a &lt;udf&gt; tag
+                            For each &lt;excelant&gt; taskItem you define you can nest a &lt;udf&gt; tag
                             which allows you to specify the function alias and the class name.</p>
 
 

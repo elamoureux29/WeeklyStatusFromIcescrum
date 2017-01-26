@@ -1,6 +1,6 @@
 package com.app.java.util.handler;
 
-import com.app.java.model.Task;
+import com.app.java.model.TaskItem;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -12,7 +12,7 @@ import java.util.HashMap;
  * Created by elamoureux on 1/13/2017.
  */
 public class TaskHandler extends DefaultHandler {
-    private HashMap<Integer, Task> taskHashMap;
+    private HashMap<Integer, TaskItem> taskHashMap;
     private int currentMapKey;
     private boolean btaskId;
     //    private boolean bbacklogId;
@@ -38,7 +38,7 @@ public class TaskHandler extends DefaultHandler {
 //    private boolean btagsId;
 //    private boolean bcommentsId;
 
-    public TaskHandler(HashMap<Integer, Task> taskHashMap) {
+    public TaskHandler(HashMap<Integer, TaskItem> taskHashMap) {
         this.taskHashMap = taskHashMap;
     }
 
@@ -47,13 +47,15 @@ public class TaskHandler extends DefaultHandler {
             case "task":
                 btaskId = true;
                 currentMapKey = Integer.parseInt(attributes.getValue("id"));
-                Task task = new Task();
-                task.setTaskId(currentMapKey);
-                taskHashMap.put(currentMapKey, task);
+                TaskItem taskItem = new TaskItem();
+                taskItem.setTaskId(currentMapKey);
+                taskHashMap.put(currentMapKey, taskItem);
                 break;
             case "backlog":
 //                bbacklogId = true;
-                taskHashMap.get(currentMapKey).setBacklogId(Integer.parseInt(attributes.getValue("id")));
+                if (attributes.getValue("id") != null) {
+                    taskHashMap.get(currentMapKey).setBacklogId(Integer.parseInt(attributes.getValue("id")));
+                }
                 break;
             case "blocked":
                 bblocked = true;

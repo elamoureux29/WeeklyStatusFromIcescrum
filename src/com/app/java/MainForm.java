@@ -3,16 +3,19 @@ package com.app.java;
 import com.app.java.model.Release;
 import com.app.java.model.Sprint;
 import com.app.java.model.Story;
-import com.app.java.model.Task;
+import com.app.java.model.TaskItem;
 import com.app.java.model.api.*;
 import com.app.java.model.enums.Projects;
 import com.app.java.model.enums.ReleaseStates;
 import com.app.java.model.enums.SprintStates;
+import com.app.java.util.HashMapSort;
 import com.app.java.util.XmlResponse;
 import com.app.java.util.handler.ReleaseHandler;
 import com.app.java.util.handler.SprintHandler;
 import com.app.java.util.handler.StoryHandler;
 import com.app.java.util.handler.TaskHandler;
+import com.app.java.util.task.AllData;
+import com.app.java.util.task.TaskWorker;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.*;
@@ -34,39 +37,42 @@ import java.util.*;
  * Created by elamoureux on 1/6/2017.
  */
 public class MainForm {
-    public HashMap<Integer, Release> allReleases = new HashMap<>();
-    public HashMap<Integer, Sprint> allSprintInCurrentRelease = new HashMap<>();
-    public HashMap<Integer, Story> allStoriesInCurrentSprint = new HashMap<>();
-    public HashMap<Integer, Task> allTasksInCurrentSprint = new HashMap<>();
-    private int currentReleaseId;
-    private int currentSprintId;
-    private IcescrumRelease release = new IcescrumRelease();
-    private IcescrumSprint sprint = new IcescrumSprint();
-    private IcescrumStory story = new IcescrumStory();
-    private IcescrumTask task = new IcescrumTask();
-    private IcescrumFeature feature = new IcescrumFeature();
-    private IcescrumActor actor = new IcescrumActor();
-    private JButton getAllReleasesButton;
-    private JPanel panel1;
-    private JComboBox comboBox1;
-    private JProgressBar progressBar1;
-    private JButton getAllSprintsInButton;
-    private JButton getAllTasksInButton;
+    public static HashMap<Integer, Release> allReleases = new HashMap<>();
+    public static HashMap<Integer, Sprint> allSprintInCurrentRelease = new HashMap<>();
+    public static HashMap<Integer, Story> allStoriesInCurrentSprint = new HashMap<>();
+    public static HashMap<Integer, TaskItem> allTasksInCurrentSprint = new HashMap<>();
+    public static int currentReleaseId;
+    public static int currentSprintId;
+    public static IcescrumRelease release = new IcescrumRelease();
+    public static IcescrumSprint sprint = new IcescrumSprint();
+    public static IcescrumStory story = new IcescrumStory();
+    public static IcescrumTask taskItem = new IcescrumTask();
+    public static IcescrumFeature feature = new IcescrumFeature();
+    public static IcescrumActor actor = new IcescrumActor();
     private JTabbedPane tabbedPane1;
     private JPanel tabPanel1;
+    private JPanel panel1;
     private JPanel tabPanel2;
     private JPanel panel2;
+    private JProgressBar progressBar1;
+    private JComboBox comboBox1;
+    private JButton getAllReleasesButton;
+    private JButton getAllSprintsInButton;
+    private JButton getAllStoriesInButton;
+    private JButton getAllTasksInButton;
     private JTable table1;
     private JButton exportButton;
     private JButton populateButton;
-    private JButton getAllStoriesInButton;
+    private JButton getDataButton;
+    private JPanel buttonPanel;
 
 
     public MainForm() {
         comboBox1.addItem("Please select");
         for (Projects p : Projects.values()) {
-            comboBox1.addItem(p);
+            comboBox1.addItem(p.getPrjName());
         }
+        buttonPanel.setVisible(false);
 
         getAllReleasesButton.addActionListener(new ActionListener() {
             @Override
@@ -82,7 +88,7 @@ public class MainForm {
                     myReader.parse(is);
 
                     /* Display content using Iterator*/
-                    Map<Integer, Release> map = sortByValues(allReleases);
+                    Map<Integer, Release> map = HashMapSort.sortByValues(allReleases);
                     Set set = map.entrySet();
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
@@ -161,7 +167,7 @@ public class MainForm {
                     XMLReader myReader = XMLReaderFactory.createXMLReader();
                     myReader.setContentHandler(taskHandler);
 
-                    InputSource is = new InputSource(new StringReader(task.getAll().toString()));
+                    InputSource is = new InputSource(new StringReader(taskItem.getAll().toString()));
                     is.setEncoding("UTF-8");
 
                     myReader.parse(is);
@@ -170,12 +176,21 @@ public class MainForm {
                     Set set = allTasksInCurrentSprint.entrySet();
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
-                        Map.Entry<Integer, Task> mentry = (Map.Entry) iterator.next();
+                        Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
                         System.out.println(mentry.getValue().getName());
                     }
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
+            }
+        });
+        getDataButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Instances of javax.swing.SwingWorker are not reusable, so
+                //we create new instances as needed.
+                TaskWorker allDataTW = new AllData(progressBar1, tabbedPane1);
+                allDataTW.execute();
             }
         });
         populateButton.addActionListener(new ActionListener() {
@@ -273,7 +288,28 @@ public class MainForm {
                 }
             }
         });
+        comboBox1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (comboBox1.getSelectedIndex() > 0) {
+                    for (Projects p : Projects.values()) {
+                        if (comboBox1.getSelectedItem().toString().equalsIgnoreCase(p.getPrjName())) {
+                            release.setProject(p.getIdentifier());
+                            sprint.setProject(p.getIdentifier());
+                            story.setProject(p.getIdentifier());
+                            taskItem.setProject(p.getIdentifier());
+                            feature.setProject(p.getIdentifier());
+                            actor.setProject(p.getIdentifier());
+                        }
+                    }
+                    buttonPanel.setVisible(true);
+                } else {
+                    buttonPanel.setVisible(false);
+                }
+            }
+        });
     }
+
 //                    XmlResponse.DisplayInConsole(release.getAll());
 //                    XmlResponse.SaveToFile(release.getAll(), release.getFileName());
 //                    XmlResponse.DisplayInConsole(release.getItem(76926));
@@ -288,16 +324,16 @@ public class MainForm {
 //                    XmlResponse.SaveToFile(story.getAll(), story.getFileName());
 //                    XmlResponse.DisplayInConsole(story.getItem(185155));
 //                    XmlResponse.SaveToFile(story.getItem(185155), story.getFileName());
-//                    XmlResponse.DisplayInConsole(task.getAll());
-//                    XmlResponse.SaveToFile(task.getAll(), task.getFileName());
-//                    XmlResponse.DisplayInConsole(task.getAllFiltered(TaskFilters.CURRENT_USER.getFilter()));
-//                    XmlResponse.SaveToFile(task.getAllFiltered(TaskFilters.CURRENT_USER.getFilter()), task.getFileName());
-//                    XmlResponse.DisplayInConsole(task.getAllInSprint(77848));
-//                    XmlResponse.SaveToFile(task.getAllInSprint(77848), task.getFileName());
-//                    XmlResponse.DisplayInConsole(task.getAllFilteredInSprint(77848, TaskFilters.CURRENT_USER.getFilter()));
-//                    XmlResponse.SaveToFile(task.getAllFilteredInSprint(77848, TaskFilters.CURRENT_USER.getFilter()), task.getFileName());
-//                    XmlResponse.DisplayInConsole(task.getItem(171074));
-//                    XmlResponse.SaveToFile(task.getItem(171074), task.getFileName());
+//                    XmlResponse.DisplayInConsole(taskItem.getAll());
+//                    XmlResponse.SaveToFile(taskItem.getAll(), taskItem.getFileName());
+//                    XmlResponse.DisplayInConsole(taskItem.getAllFiltered(TaskFilters.CURRENT_USER.getFilter()));
+//                    XmlResponse.SaveToFile(taskItem.getAllFiltered(TaskFilters.CURRENT_USER.getFilter()), taskItem.getFileName());
+//                    XmlResponse.DisplayInConsole(taskItem.getAllInSprint(77848));
+//                    XmlResponse.SaveToFile(taskItem.getAllInSprint(77848), taskItem.getFileName());
+//                    XmlResponse.DisplayInConsole(taskItem.getAllFilteredInSprint(77848, TaskFilters.CURRENT_USER.getFilter()));
+//                    XmlResponse.SaveToFile(taskItem.getAllFilteredInSprint(77848, TaskFilters.CURRENT_USER.getFilter()), taskItem.getFileName());
+//                    XmlResponse.DisplayInConsole(taskItem.getItem(171074));
+//                    XmlResponse.SaveToFile(taskItem.getItem(171074), taskItem.getFileName());
 //                    XmlResponse.DisplayInConsole(feature.getAll());
 //                    XmlResponse.SaveToFile(feature.getAll(), feature.getFileName());
 //                    XmlResponse.DisplayInConsole(feature.getItem(14714));
@@ -314,29 +350,6 @@ public class MainForm {
 //
 //        }
 //    }
-
-    private static HashMap<Integer, Release> sortByValues(HashMap<Integer, Release> map) {
-        List list = new LinkedList(map.entrySet());
-        // Defined Custom Comparator here
-        Collections.sort(list, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                String s1 = ((Map.Entry<Integer, Release>) (o1)).getValue().getOrderNumber();
-                String s2 = ((Map.Entry<Integer, Release>) (o2)).getValue().getOrderNumber();
-
-                return ((Comparable) Integer.parseInt(s1))
-                        .compareTo(Integer.parseInt(s2));
-            }
-        });
-
-        // Here I am copying the sorted list in HashMap
-        // using LinkedHashMap to preserve the insertion order
-        HashMap<Integer, Release> sortedHashMap = new LinkedHashMap<>();
-        for (Iterator it = list.iterator(); it.hasNext(); ) {
-            Map.Entry<Integer, Release> entry = (Map.Entry) it.next();
-            sortedHashMap.put(entry.getKey(), entry.getValue());
-        }
-        return sortedHashMap;
-    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("MainForm");

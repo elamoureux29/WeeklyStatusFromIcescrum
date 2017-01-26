@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by elamoureux on 1/16/2017.
  */
-public class Task {
+public class TaskItem {
     private int taskId;
     private int backlogId;
     private String blocked = "";
