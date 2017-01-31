@@ -3,8 +3,6 @@ package com.app.java.util.task;
 import com.app.java.MainForm;
 import com.app.java.model.Release;
 import com.app.java.model.Sprint;
-import com.app.java.model.Story;
-import com.app.java.model.TaskItem;
 import com.app.java.model.enums.ReleaseStates;
 import com.app.java.model.enums.SprintStates;
 import com.app.java.util.HashMapSort;
@@ -37,8 +35,10 @@ public class AllData extends TaskWorker {
     */
     @Override
     public Void doInBackground() {
-        jProgressBar.setIndeterminate(true);
+//        jProgressBar.setIndeterminate(true);
         jTabbedPane.setCursor((Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)));
+        jProgressBar.setStringPainted(true);
+        jProgressBar.setValue(0);
 
         try {
             ReleaseHandler releaseHandler = new ReleaseHandler(MainForm.allReleases);
@@ -56,7 +56,7 @@ public class AllData extends TaskWorker {
             Iterator iterator = set.iterator();
             while (iterator.hasNext()) {
                 Map.Entry<Integer, Release> mentry = (Map.Entry) iterator.next();
-                System.out.println(mentry.getValue().getName());
+//                System.out.println(mentry.getValue().getName());
                 if (mentry.getValue().getState().equalsIgnoreCase(ReleaseStates.IN_PROGRESS.getIdentifier())) {
                     MainForm.currentReleaseId = mentry.getValue().getReleaseId();
                 }
@@ -64,6 +64,8 @@ public class AllData extends TaskWorker {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        jProgressBar.setValue(25);
 
         try {
             SprintHandler sprintHandler = new SprintHandler(MainForm.allSprintInCurrentRelease);
@@ -81,7 +83,7 @@ public class AllData extends TaskWorker {
             Iterator iterator = set.iterator();
             while (iterator.hasNext()) {
                 Map.Entry<Integer, Sprint> mentry = (Map.Entry) iterator.next();
-                System.out.println(mentry.getValue().getGoal() + mentry.getValue().getOrderNumber());
+//                System.out.println(mentry.getValue().getGoal() + mentry.getValue().getOrderNumber());
                 if (mentry.getValue().getState().equalsIgnoreCase(SprintStates.IN_PROGRESS.getIdentifier())) {
                     MainForm.currentSprintId = mentry.getValue().getSprintId();
                 }
@@ -89,6 +91,8 @@ public class AllData extends TaskWorker {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        jProgressBar.setValue(50);
 
         try {
             StoryHandler storyHandler = new StoryHandler(MainForm.allStoriesInCurrentSprint);
@@ -103,15 +107,17 @@ public class AllData extends TaskWorker {
             }
 
                     /* Display content using Iterator*/
-            Set set = MainForm.allStoriesInCurrentSprint.entrySet();
-            Iterator iterator = set.iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
-                System.out.println(mentry.getValue().getStoryId() + ": " + mentry.getValue().getName());
-            }
+//            Set set = MainForm.allStoriesInCurrentSprint.entrySet();
+//            Iterator iterator = set.iterator();
+//            while (iterator.hasNext()) {
+//                Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
+//                System.out.println(mentry.getValue().getStoryId() + ": " + mentry.getValue().getName());
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        jProgressBar.setValue(75);
 
         try {
             TaskHandler taskHandler = new TaskHandler(MainForm.allTasksInCurrentSprint);
@@ -124,15 +130,17 @@ public class AllData extends TaskWorker {
             myReader.parse(is);
 
                     /* Display content using Iterator*/
-            Set set = MainForm.allTasksInCurrentSprint.entrySet();
-            Iterator iterator = set.iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
-                System.out.println(mentry.getValue().getName());
-            }
+//            Set set = MainForm.allTasksInCurrentSprint.entrySet();
+//            Iterator iterator = set.iterator();
+//            while (iterator.hasNext()) {
+//                Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
+//                System.out.println(mentry.getValue().getName());
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        jProgressBar.setValue(100);
 
         return null;
     }

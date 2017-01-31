@@ -93,7 +93,7 @@ public class MainForm {
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
                         Map.Entry<Integer, Release> mentry = (Map.Entry) iterator.next();
-                        System.out.println(mentry.getValue().getName());
+//                        System.out.println(mentry.getValue().getName());
                         if (mentry.getValue().getState().equalsIgnoreCase(ReleaseStates.IN_PROGRESS.getIdentifier())) {
                             currentReleaseId = mentry.getValue().getReleaseId();
                         }
@@ -122,7 +122,7 @@ public class MainForm {
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
                         Map.Entry<Integer, Sprint> mentry = (Map.Entry) iterator.next();
-                        System.out.println(mentry.getValue().getGoal() + mentry.getValue().getOrderNumber());
+//                        System.out.println(mentry.getValue().getGoal() + mentry.getValue().getOrderNumber());
                         if (mentry.getValue().getState().equalsIgnoreCase(SprintStates.IN_PROGRESS.getIdentifier())) {
                             currentSprintId = mentry.getValue().getSprintId();
                         }
@@ -148,12 +148,12 @@ public class MainForm {
                     }
 
                     /* Display content using Iterator*/
-                    Set set = allStoriesInCurrentSprint.entrySet();
-                    Iterator iterator = set.iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
-                        System.out.println(mentry.getValue().getStoryId() + ": " + mentry.getValue().getName());
-                    }
+//                    Set set = allStoriesInCurrentSprint.entrySet();
+//                    Iterator iterator = set.iterator();
+//                    while (iterator.hasNext()) {
+//                        Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
+//                        System.out.println(mentry.getValue().getStoryId() + ": " + mentry.getValue().getName());
+//                    }
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -173,12 +173,12 @@ public class MainForm {
                     myReader.parse(is);
 
                     /* Display content using Iterator*/
-                    Set set = allTasksInCurrentSprint.entrySet();
-                    Iterator iterator = set.iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
-                        System.out.println(mentry.getValue().getName());
-                    }
+//                    Set set = allTasksInCurrentSprint.entrySet();
+//                    Iterator iterator = set.iterator();
+//                    while (iterator.hasNext()) {
+//                        Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
+//                        System.out.println(mentry.getValue().getName());
+//                    }
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -199,6 +199,8 @@ public class MainForm {
                 try {
                     XmlResponse.DisplayInConsole(story.getItem(185054));
 //                    XmlResponse.SaveToFile(story.getItem(185054), story.getFileName());
+
+
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
