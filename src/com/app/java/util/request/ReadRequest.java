@@ -34,8 +34,8 @@ public class ReadRequest {
 
             responseCode = con.getResponseCode();
 
-            System.out.println("\nSending request to URL : " + url);
-            System.out.println("Response Code : " + responseCode);
+//            System.out.println("\nSending request to URL : " + url);
+//            System.out.println("Response Code : " + responseCode);
 
             in = new BufferedReader(
                     new InputStreamReader(con.getInputStream()));
