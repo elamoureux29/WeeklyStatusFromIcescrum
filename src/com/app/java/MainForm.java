@@ -49,6 +49,7 @@ public class MainForm {
     public static IcescrumTask taskItem = new IcescrumTask();
     public static IcescrumFeature feature = new IcescrumFeature();
     public static IcescrumActor actor = new IcescrumActor();
+    public static IcescrumAvailability availability = new IcescrumAvailability();
     private JTabbedPane tabbedPane1;
     private JPanel tabPanel1;
     private JPanel panel1;
@@ -197,7 +198,7 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    XmlResponse.DisplayInConsole(story.getItem(185054));
+                    XmlResponse.DisplayInConsole(availability.getAll());
 //                    XmlResponse.SaveToFile(story.getItem(185054), story.getFileName());
                 } catch (Exception e1) {
                     e1.printStackTrace();
