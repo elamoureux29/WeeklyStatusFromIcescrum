@@ -1,35 +1,26 @@
 package com.app.java;
 
-import com.app.java.model.Release;
-import com.app.java.model.Sprint;
-import com.app.java.model.Story;
-import com.app.java.model.TaskItem;
+import com.app.java.model.*;
 import com.app.java.model.api.*;
 import com.app.java.model.enums.Projects;
 import com.app.java.model.enums.ReleaseStates;
 import com.app.java.model.enums.SprintStates;
+import com.app.java.util.ExcelUtil;
 import com.app.java.util.HashMapSort;
-import com.app.java.util.XmlResponse;
 import com.app.java.util.handler.ReleaseHandler;
 import com.app.java.util.handler.SprintHandler;
 import com.app.java.util.handler.StoryHandler;
 import com.app.java.util.handler.TaskHandler;
 import com.app.java.util.task.AllData;
 import com.app.java.util.task.TaskWorker;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import javax.swing.*;
-import javax.swing.table.TableModel;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.StringReader;
 import java.util.*;
 
@@ -41,6 +32,7 @@ public class MainForm {
     public static HashMap<Integer, Sprint> allSprintInCurrentRelease = new HashMap<>();
     public static HashMap<Integer, Story> allStoriesInCurrentSprint = new HashMap<>();
     public static HashMap<Integer, TaskItem> allTasksInCurrentSprint = new HashMap<>();
+    public static String currentProjectId;
     public static int currentReleaseId;
     public static int currentSprintId;
     public static IcescrumRelease release = new IcescrumRelease();
@@ -198,10 +190,8 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    XmlResponse.DisplayInConsole(availability.getAll());
-//                    XmlResponse.SaveToFile(story.getItem(185054), story.getFileName());
-
-
+                    DefaultTableModel model = StatusTableModel.buildTableModel();
+                    table1.setModel(model);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -210,85 +200,7 @@ public class MainForm {
         exportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                XSSFWorkbook workbook = new XSSFWorkbook();
-                XSSFSheet sheet = workbook.createSheet("Java Books");
-
-                Object[][] bookData = {
-                        {"Head First Java", "Kathy Serria", 79},
-                        {"Effective Java", "Joshua Bloch", 36},
-                        {"Clean Code", "Robert martin", 42},
-                        {"Thinking in Java", "Bruce Eckel", 35},
-                };
-
-                int rowCount = 0;
-
-                for (Object[] aBook : bookData) {
-                    Row row = sheet.createRow(++rowCount);
-
-                    int columnCount = 0;
-
-                    for (Object field : aBook) {
-                        Cell cell = row.createCell(++columnCount);
-                        if (field instanceof String) {
-                            cell.setCellValue((String) field);
-                        } else if (field instanceof Integer) {
-                            cell.setCellValue((Integer) field);
-                        }
-                    }
-
-                }
-
-                try {
-                    File file;
-                    FileOutputStream fos = null;
-                    String fileName = "Patate";
-
-                    file = new File("c:/" + fileName + ".xlsx");
-                    fos = new FileOutputStream(file);
-
-                    // if file doesnt exists, then create it
-                    if (!file.exists()) {
-                        file.createNewFile();
-                    }
-
-                    workbook.write(fos);
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-
-                try {
-                    XSSFWorkbook fWorkbook = new XSSFWorkbook();
-                    XSSFSheet fSheet = fWorkbook.createSheet("new Sheet");
-                    XSSFFont sheetTitleFont = fWorkbook.createFont();
-                    String fileName2 = "Patate2";
-
-                    File file2 = new File("c:/" + fileName2 + ".xlsx");
-                    XSSFCellStyle cellStyle = fWorkbook.createCellStyle();
-
-                    sheetTitleFont.setBold(true);
-                    //sheetTitleFont.setColor();
-                    TableModel model = table1.getModel();
-
-
-                    for (int i = 0; i < model.getRowCount(); i++) {
-                        XSSFRow fRow = fSheet.createRow((short) i);
-                        for (int j = 0; j < model.getColumnCount(); j++) {
-                            XSSFCell cell = fRow.createCell((short) j);
-                            cell.setCellValue(model.getValueAt(i, j).toString());
-                            cell.setCellStyle(cellStyle);
-
-                        }
-
-                    }
-                    FileOutputStream fileOutputStream;
-                    fileOutputStream = new FileOutputStream(file2);
-                    BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
-                    fWorkbook.write(bos);
-                    bos.close();
-                    fileOutputStream.close();
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                }
+                ExcelUtil.ExportToFile();
             }
         });
         comboBox1.addActionListener(new ActionListener() {
@@ -297,12 +209,14 @@ public class MainForm {
                 if (comboBox1.getSelectedIndex() > 0) {
                     for (Projects p : Projects.values()) {
                         if (comboBox1.getSelectedItem().toString().equalsIgnoreCase(p.getPrjName())) {
-                            release.setProject(p.getIdentifier());
-                            sprint.setProject(p.getIdentifier());
-                            story.setProject(p.getIdentifier());
-                            taskItem.setProject(p.getIdentifier());
-                            feature.setProject(p.getIdentifier());
-                            actor.setProject(p.getIdentifier());
+                            currentProjectId = p.getIdentifier();
+                            release.setProject(currentProjectId);
+                            sprint.setProject(currentProjectId);
+                            story.setProject(currentProjectId);
+                            taskItem.setProject(currentProjectId);
+                            feature.setProject(currentProjectId);
+                            actor.setProject(currentProjectId);
+                            availability.setProject(currentProjectId);
                         }
                     }
                     buttonPanel.setVisible(true);
