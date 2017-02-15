@@ -28,25 +28,38 @@ public class ExcelUtil {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Status");
 
-        Row titleRow = sheet.createRow(0);
+        int rowStartPoint = 0;
+        int bordersRowStartPoint1 = 0;
+        int bordersRowStartPoint2 = 0;
+        int bordersRowStartPoint3 = 0;
+        int firstCol = 0;
+        int lastCol = 8;
+
+        Row titleRow = sheet.createRow(rowStartPoint);
         Cell a1 = titleRow.createCell(0);
         a1.setCellValue("Weekly Projects Status");
         CellUtil.setAlignment(a1, HorizontalAlignment.CENTER);
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8));
+        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol));
 
-        Row projectRow = sheet.createRow(2);
+        rowStartPoint += 2;
+        bordersRowStartPoint1 = rowStartPoint;
+
+        Row projectRow = sheet.createRow(rowStartPoint);
         Cell a3 = projectRow.createCell(0);
         for (Projects p : Projects.values()) {
             if (currentProjectId.equalsIgnoreCase(p.getIdentifier())) {
                 a3.setCellValue(p.getPrjName());
             }
         }
-        sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 8));
+        CellUtil.setAlignment(a3, HorizontalAlignment.CENTER);
+        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol));
 
-        Row releaseRow = sheet.createRow(4);
-        Cell a5 = releaseRow.createCell(0);
-        a5.setCellValue(allReleases.get(currentReleaseId).getName());
-        Cell i5 = releaseRow.createCell(8);
+        rowStartPoint += 1;
+
+        Row releaseRow = sheet.createRow(rowStartPoint);
+        Cell a4 = releaseRow.createCell(0);
+        a4.setCellValue(allReleases.get(currentReleaseId).getName());
+        Cell i4 = releaseRow.createCell(8);
         try {
             SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S zzz");
             Date date = parser.parse(allReleases.get(currentReleaseId).getEndDate());
@@ -56,13 +69,16 @@ public class ExcelUtil {
             CreationHelper createHelper = workbook.getCreationHelper();
             cellStyle.setDataFormat(
                     createHelper.createDataFormat().getFormat("d-mmm-yy"));
-            i5.setCellValue(formater.parse(formater.format(date)));
-            i5.setCellStyle(cellStyle);
+            i4.setCellValue(formater.parse(formater.format(date)));
+            i4.setCellStyle(cellStyle);
         } catch (ParseException e1) {
             e1.printStackTrace();
         }
 
-        Row sprintRow = sheet.createRow(6);
+        rowStartPoint += 2;
+        bordersRowStartPoint2 = rowStartPoint;
+
+        Row sprintRow = sheet.createRow(rowStartPoint);
         Cell a7 = sprintRow.createCell(0);
         a7.setCellValue("Current Sprint:");
         Cell c7 = sprintRow.createCell(2);
@@ -88,7 +104,9 @@ public class ExcelUtil {
             e1.printStackTrace();
         }
 
-        Row sprintValueRow = sheet.createRow(7);
+        rowStartPoint += 1;
+
+        Row sprintValueRow = sheet.createRow(rowStartPoint);
         Cell c8 = sprintValueRow.createCell(2);
         c8.setCellValue(allSprintInCurrentRelease.get(currentSprintId).getOrderNumber());
         CellUtil.setAlignment(c8, HorizontalAlignment.CENTER);
@@ -99,7 +117,9 @@ public class ExcelUtil {
         e8.setCellValue(allSprintInCurrentRelease.size());
         CellUtil.setAlignment(e8, HorizontalAlignment.CENTER);
 
-        Row sprintDetailsRow = sheet.createRow(8);
+        rowStartPoint += 1;
+
+        Row sprintDetailsRow = sheet.createRow(rowStartPoint);
         Cell a9 = sprintDetailsRow.createCell(0);
         a9.setCellValue("Capacity");
         Cell c9 = sprintDetailsRow.createCell(2);
@@ -110,8 +130,10 @@ public class ExcelUtil {
         Cell e9 = sprintDetailsRow.createCell(4);
         e9.setCellValue("# Total Stories");
 
+        rowStartPoint += 3;
+        bordersRowStartPoint3 = rowStartPoint;
+
         Set set = allStoriesInCurrentSprint.entrySet();
-        int rowStartPoint = 11;
         int numCompletedStories = 0;
         float completedPoints = 0;
         Iterator iterator = set.iterator();
@@ -131,9 +153,11 @@ public class ExcelUtil {
                 Row storyRow = sheet.createRow(rowStartPoint);
                 Cell storyRowCellA = storyRow.createCell(0);
                 storyRowCellA.setCellValue(mentry.getValue().getName());
-                sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, 0, 8));
+                sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol));
 
-                Row storyRow1 = sheet.createRow(rowStartPoint + 1);
+                rowStartPoint += 1;
+
+                Row storyRow1 = sheet.createRow(rowStartPoint);
                 Cell storyRow1CellA = storyRow1.createCell(0);
                 storyRow1CellA.setCellValue("Effort");
                 Cell storyRow1CellC = storyRow1.createCell(2);
@@ -164,7 +188,9 @@ public class ExcelUtil {
                     }
                 }
 
-                Row storyRow2 = sheet.createRow(rowStartPoint + 2);
+                rowStartPoint += 1;
+
+                Row storyRow2 = sheet.createRow(rowStartPoint);
                 Cell storyRow2CellA = storyRow2.createCell(0);
                 storyRow2CellA.setCellValue(mentry.getValue().getEffort());
                 Cell storyRow2CellC = storyRow2.createCell(2);
@@ -183,7 +209,9 @@ public class ExcelUtil {
                 storyRow2CellG.setCellValue(tasksDone);
                 CellUtil.setAlignment(storyRow2CellG, HorizontalAlignment.CENTER);
 
-                Row storyRow3 = sheet.createRow(rowStartPoint + 3);
+                rowStartPoint += 1;
+
+                Row storyRow3 = sheet.createRow(rowStartPoint);
                 Cell storyRow3CellA = storyRow3.createCell(0);
                 storyRow3CellA.setCellValue("");
                 CellUtil.setVerticalAlignment(storyRow3CellA, VerticalAlignment.CENTER);
@@ -192,11 +220,13 @@ public class ExcelUtil {
                 Set teamSet = teamHashMap.entrySet();
                 Iterator teamIterator = teamSet.iterator();
                 while (teamIterator.hasNext()) {
-                    Map.Entry<Integer, String> teamMentry = (Map.Entry) iterator.next();
+                    Map.Entry<Integer, String> teamMentry = (Map.Entry) teamIterator.next();
                     tasksTeam += teamMentry.getValue() + "\n";
                 }
 
                 storyRow3CellH.setCellValue(tasksTeam);
+
+                sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol - 2));
 
                 CellUtil.setVerticalAlignment(storyRow3CellH, VerticalAlignment.CENTER);
                 CellUtil.setCellStyleProperty(storyRow3CellH, CellUtil.WRAP_TEXT, true);
@@ -216,7 +246,9 @@ public class ExcelUtil {
                     e1.printStackTrace();
                 }
 
-                Row storyRow4 = sheet.createRow(rowStartPoint + 5);
+                rowStartPoint += 1;
+
+                Row storyRow4 = sheet.createRow(rowStartPoint);
                 Cell storyRow4CellI = storyRow4.createCell(8);
                 try {
                     SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S zzz");
@@ -233,28 +265,25 @@ public class ExcelUtil {
                     e1.printStackTrace();
                 }
 
-                sheet.addMergedRegion(new CellRangeAddress(rowStartPoint + 3, rowStartPoint + 3, 0, 6));
 //                        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint + 3,rowStartPoint + 5,0,6));
 //                        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint + 3,rowStartPoint + 5,7,7));
 
                 PropertyTemplate pt = new PropertyTemplate();
-                // #1) these borders will all be medium in default color
-                pt.drawBorders(new CellRangeAddress(1, 3, 1, 3),
-                        BorderStyle.MEDIUM, BorderExtent.ALL);
-                // #2) these cells will have medium outside borders and thin inside borders
-                pt.drawBorders(new CellRangeAddress(5, 7, 1, 3),
+                // these cells will have medium outside borders and thin inside borders
+                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint3, bordersRowStartPoint3 + 4, firstCol, lastCol),
                         BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
-                pt.drawBorders(new CellRangeAddress(5, 7, 1, 3), BorderStyle.THIN,
-                        BorderExtent.INSIDE);
+                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint3, bordersRowStartPoint3 + 4, firstCol, lastCol),
+                        BorderStyle.THIN, BorderExtent.INSIDE);
 
                 // apply borders to sheet
                 pt.applyBorders(sheet);
 
-                rowStartPoint += 7;
+                rowStartPoint += 2;
+                bordersRowStartPoint3 = rowStartPoint;
             }
         }
 
-        Row sprintDetailsValueRow = sheet.createRow(9);
+        Row sprintDetailsValueRow = sheet.createRow(8);
         Cell a10 = sprintDetailsValueRow.createCell(0);
         a10.setCellValue(Math.round(completedPoints) + "/" + Math.round(Float.parseFloat(allSprintInCurrentRelease.get(currentSprintId).getCapacity())));
         Cell c10 = sprintDetailsValueRow.createCell(2);
@@ -266,6 +295,15 @@ public class ExcelUtil {
         Cell e10 = sprintDetailsValueRow.createCell(4);
         e10.setCellValue(allStoriesInCurrentSprint.size());
         CellUtil.setAlignment(e10, HorizontalAlignment.CENTER);
+
+        PropertyTemplate pt1 = new PropertyTemplate();
+        // these cells will have medium outside borders
+        pt1.drawBorders(new CellRangeAddress(bordersRowStartPoint1, bordersRowStartPoint1 + 1, firstCol, lastCol),
+                BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+        pt1.drawBorders(new CellRangeAddress(bordersRowStartPoint2, bordersRowStartPoint2 + 3, firstCol, lastCol),
+                BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+        // apply borders to sheet
+        pt1.applyBorders(sheet);
 
         // Auto size the column widths
         for (int columnIndex = 0; columnIndex < 10; columnIndex++) {
