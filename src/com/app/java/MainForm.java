@@ -33,6 +33,7 @@ public class MainForm {
     public static HashMap<Integer, Story> allStoriesInCurrentSprint = new HashMap<>();
     public static HashMap<Integer, TaskItem> allTasksInCurrentSprint = new HashMap<>();
     public static String currentProjectId;
+    public static String currentProjectName;
     public static int currentReleaseId;
     public static int currentSprintId;
     public static IcescrumRelease release = new IcescrumRelease();
@@ -210,6 +211,8 @@ public class MainForm {
                     for (Projects p : Projects.values()) {
                         if (comboBox1.getSelectedItem().toString().equalsIgnoreCase(p.getPrjName())) {
                             currentProjectId = p.getIdentifier();
+                            currentProjectName = p.getPrjName();
+
                             release.setProject(currentProjectId);
                             sprint.setProject(currentProjectId);
                             story.setProject(currentProjectId);

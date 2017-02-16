@@ -1,7 +1,7 @@
 package com.app.java.util;
 
 import com.app.java.model.Story;
-import com.app.java.model.enums.Projects;
+import com.app.java.model.TaskItem;
 import com.app.java.model.enums.StoryStates;
 import com.app.java.model.enums.TaskStates;
 import com.app.java.model.enums.Users;
@@ -14,8 +14,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.app.java.MainForm.*;
@@ -36,99 +36,76 @@ public class ExcelUtil {
         int lastCol = 8;
 
         Row titleRow = sheet.createRow(rowStartPoint);
-        Cell a1 = titleRow.createCell(0);
-        a1.setCellValue("Weekly Projects Status");
-        CellUtil.setAlignment(a1, HorizontalAlignment.CENTER);
+        Cell titleRowCellA = titleRow.createCell(0);
+        titleRowCellA.setCellValue("Weekly Projects Status");
+        CellUtil.setAlignment(titleRowCellA, HorizontalAlignment.CENTER);
         sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol));
 
         rowStartPoint += 2;
         bordersRowStartPoint1 = rowStartPoint;
 
         Row projectRow = sheet.createRow(rowStartPoint);
-        Cell a3 = projectRow.createCell(0);
-        for (Projects p : Projects.values()) {
-            if (currentProjectId.equalsIgnoreCase(p.getIdentifier())) {
-                a3.setCellValue(p.getPrjName());
-            }
-        }
-        CellUtil.setAlignment(a3, HorizontalAlignment.CENTER);
-        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol));
+        Cell projectRowCellA = projectRow.createCell(0);
+        projectRowCellA.setCellValue(currentProjectName);
+//        CellUtil.setAlignment(projectRowCellA, HorizontalAlignment.CENTER);
+        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol - 1));
+        Cell projectRowCellI = projectRow.createCell(8);
+        projectRowCellI.setCellValue("End Date");
 
         rowStartPoint += 1;
 
         Row releaseRow = sheet.createRow(rowStartPoint);
-        Cell a4 = releaseRow.createCell(0);
-        a4.setCellValue(allReleases.get(currentReleaseId).getName());
-        Cell i4 = releaseRow.createCell(8);
-        try {
-            SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S zzz");
-            Date date = parser.parse(allReleases.get(currentReleaseId).getEndDate());
-            SimpleDateFormat formater = new SimpleDateFormat("M/d/yyyy");
-
-            CellStyle cellStyle = workbook.createCellStyle();
-            CreationHelper createHelper = workbook.getCreationHelper();
-            cellStyle.setDataFormat(
-                    createHelper.createDataFormat().getFormat("d-mmm-yy"));
-            i4.setCellValue(formater.parse(formater.format(date)));
-            i4.setCellStyle(cellStyle);
-        } catch (ParseException e1) {
-            e1.printStackTrace();
-        }
+        Cell releaseRowCellA = releaseRow.createCell(0);
+        releaseRowCellA.setCellValue(allReleases.get(currentReleaseId).getName());
+        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol - 1));
+        Cell releaseRowCellI = releaseRow.createCell(8);
+        releaseRowCellI.setCellValue(DateFormat.ExcelDateFormat(allReleases.get(currentReleaseId).getEndDate()));
+        releaseRowCellI.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
 
         rowStartPoint += 2;
         bordersRowStartPoint2 = rowStartPoint;
 
         Row sprintRow = sheet.createRow(rowStartPoint);
-        Cell a7 = sprintRow.createCell(0);
-        a7.setCellValue("Current Sprint:");
-        Cell c7 = sprintRow.createCell(2);
-        c7.setCellValue("Current #");
-        Cell d7 = sprintRow.createCell(3);
-        d7.setCellValue("/");
-        CellUtil.setAlignment(d7, HorizontalAlignment.CENTER);
-        Cell e7 = sprintRow.createCell(4);
-        e7.setCellValue("Total #");
-        Cell i7 = sprintRow.createCell(8);
-        try {
-            SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S zzz");
-            Date date = parser.parse(allSprintInCurrentRelease.get(currentSprintId).getEndDate());
-            SimpleDateFormat formater = new SimpleDateFormat("M/d/yyyy");
-
-            CellStyle cellStyle = workbook.createCellStyle();
-            CreationHelper createHelper = workbook.getCreationHelper();
-            cellStyle.setDataFormat(
-                    createHelper.createDataFormat().getFormat("d-mmm-yy"));
-            i7.setCellValue(formater.parse(formater.format(date)));
-            i7.setCellStyle(cellStyle);
-        } catch (ParseException e1) {
-            e1.printStackTrace();
-        }
+        Cell sprintRowCellA = sprintRow.createCell(0);
+        sprintRowCellA.setCellValue("Current Sprint:");
+        Cell sprintRowCellC = sprintRow.createCell(2);
+        sprintRowCellC.setCellValue("Current #");
+        Cell sprintRowCellD = sprintRow.createCell(3);
+        sprintRowCellD.setCellValue("/");
+        CellUtil.setAlignment(sprintRowCellD, HorizontalAlignment.CENTER);
+        Cell sprintRowCellE = sprintRow.createCell(4);
+        sprintRowCellE.setCellValue("Total #");
+        Cell sprintRowCellI = sprintRow.createCell(8);
+        sprintRowCellI.setCellValue("End Date");
 
         rowStartPoint += 1;
 
         Row sprintValueRow = sheet.createRow(rowStartPoint);
-        Cell c8 = sprintValueRow.createCell(2);
-        c8.setCellValue(allSprintInCurrentRelease.get(currentSprintId).getOrderNumber());
-        CellUtil.setAlignment(c8, HorizontalAlignment.CENTER);
-        Cell d8 = sprintValueRow.createCell(3);
-        d8.setCellValue("/");
-        CellUtil.setAlignment(d8, HorizontalAlignment.CENTER);
-        Cell e8 = sprintValueRow.createCell(4);
-        e8.setCellValue(allSprintInCurrentRelease.size());
-        CellUtil.setAlignment(e8, HorizontalAlignment.CENTER);
+        Cell sprintValueRowCellC = sprintValueRow.createCell(2);
+        sprintValueRowCellC.setCellValue(allSprintInCurrentRelease.get(currentSprintId).getOrderNumber());
+        CellUtil.setAlignment(sprintValueRowCellC, HorizontalAlignment.CENTER);
+        Cell sprintValueRowCellD = sprintValueRow.createCell(3);
+        sprintValueRowCellD.setCellValue("/");
+        CellUtil.setAlignment(sprintValueRowCellD, HorizontalAlignment.CENTER);
+        Cell sprintValueRowCellE = sprintValueRow.createCell(4);
+        sprintValueRowCellE.setCellValue(allSprintInCurrentRelease.size());
+        CellUtil.setAlignment(sprintValueRowCellE, HorizontalAlignment.CENTER);
+        Cell sprintValueRowCellI = sprintValueRow.createCell(8);
+        sprintValueRowCellI.setCellValue(DateFormat.ExcelDateFormat(allSprintInCurrentRelease.get(currentSprintId).getEndDate()));
+        sprintValueRowCellI.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
 
         rowStartPoint += 1;
 
         Row sprintDetailsRow = sheet.createRow(rowStartPoint);
-        Cell a9 = sprintDetailsRow.createCell(0);
-        a9.setCellValue("Capacity");
-        Cell c9 = sprintDetailsRow.createCell(2);
-        c9.setCellValue("# Completed Stories");
-        Cell d9 = sprintDetailsRow.createCell(3);
-        d9.setCellValue("/");
-        CellUtil.setAlignment(d9, HorizontalAlignment.CENTER);
-        Cell e9 = sprintDetailsRow.createCell(4);
-        e9.setCellValue("# Total Stories");
+        Cell sprintDetailsRowCellA = sprintDetailsRow.createCell(0);
+        sprintDetailsRowCellA.setCellValue("Capacity");
+        Cell sprintDetailsRowCellC = sprintDetailsRow.createCell(2);
+        sprintDetailsRowCellC.setCellValue("# Completed Stories");
+        Cell sprintDetailsRowCellD = sprintDetailsRow.createCell(3);
+        sprintDetailsRowCellD.setCellValue("/");
+        CellUtil.setAlignment(sprintDetailsRowCellD, HorizontalAlignment.CENTER);
+        Cell sprintDetailsRowCellE = sprintDetailsRow.createCell(4);
+        sprintDetailsRowCellE.setCellValue("# Total Stories");
 
         rowStartPoint += 3;
         bordersRowStartPoint3 = rowStartPoint;
@@ -143,13 +120,41 @@ public class ExcelUtil {
             int tasksToDo = 0;
             int tasksInProgress = 0;
             int tasksDone = 0;
+            Boolean missingUpdate = false;
             String tasksTeam = "";
+            Date latestUpdate = DateFormat.DateParse(allReleases.get(currentReleaseId).getStartDate());
             HashMap<Integer, String> teamHashMap = new HashMap<>();
 
             if (mentry.getValue().getState().equalsIgnoreCase(StoryStates.DONE.getIdentifier())) {
                 numCompletedStories++;
                 completedPoints += Float.parseFloat(mentry.getValue().getEffort());
             } else {
+                for (int key : mentry.getValue().getTasksId()) {
+                    TaskItem taskItem = allTasksInCurrentSprint.get(key);
+
+                    if (DateFormat.DateParse(taskItem.getLastUpdated()).compareTo(latestUpdate) > 0) {
+                        latestUpdate = DateFormat.DateParse(taskItem.getLastUpdated());
+                    }
+
+                    if (taskItem.getState().equalsIgnoreCase(TaskStates.TODO.getIdentifier())) {
+                        tasksToDo++;
+                    } else if (taskItem.getState().equalsIgnoreCase(TaskStates.IN_PROGRESS.getIdentifier())) {
+                        tasksInProgress++;
+                    } else if (taskItem.getState().equalsIgnoreCase(TaskStates.DONE.getIdentifier())) {
+                        tasksDone++;
+                    }
+
+                    for (Users u : Users.values()) {
+                        if (taskItem.getResponsibleId() == u.getIdentifier()) {
+                            teamHashMap.put(taskItem.getResponsibleId(), u.getUserName());
+                        }
+                    }
+                }
+
+                if (tasksInProgress + tasksDone == 0) {
+                    missingUpdate = true;
+                }
+
                 Row storyRow = sheet.createRow(rowStartPoint);
                 Cell storyRowCellA = storyRow.createCell(0);
                 storyRowCellA.setCellValue(mentry.getValue().getName());
@@ -172,21 +177,8 @@ public class ExcelUtil {
                 CellUtil.setAlignment(storyRow1CellF, HorizontalAlignment.CENTER);
                 Cell storyRow1CellG = storyRow1.createCell(6);
                 storyRow1CellG.setCellValue("# Tasks Done");
-
-                for (int key : mentry.getValue().getTasksId()) {
-                    if (allTasksInCurrentSprint.get(key).getState().equalsIgnoreCase(TaskStates.TODO.getIdentifier())) {
-                        tasksToDo++;
-                    } else if (allTasksInCurrentSprint.get(key).getState().equalsIgnoreCase(TaskStates.IN_PROGRESS.getIdentifier())) {
-                        tasksInProgress++;
-                    } else if (allTasksInCurrentSprint.get(key).getState().equalsIgnoreCase(TaskStates.DONE.getIdentifier())) {
-                        tasksDone++;
-                    }
-                    for (Users u : Users.values()) {
-                        if (allTasksInCurrentSprint.get(key).getResponsibleId() == u.getIdentifier()) {
-                            teamHashMap.put(allTasksInCurrentSprint.get(key).getResponsibleId(), u.getUserName());
-                        }
-                    }
-                }
+                Cell storyRow1CellI = storyRow1.createCell(8);
+                storyRow1CellI.setCellValue("Last Update");
 
                 rowStartPoint += 1;
 
@@ -208,6 +200,9 @@ public class ExcelUtil {
                 Cell storyRow2CellG = storyRow2.createCell(6);
                 storyRow2CellG.setCellValue(tasksDone);
                 CellUtil.setAlignment(storyRow2CellG, HorizontalAlignment.CENTER);
+                Cell storyRow2CellI = storyRow2.createCell(8);
+                storyRow2CellI.setCellValue(latestUpdate);
+                storyRow2CellI.setCellStyle(DateFormat.ExcelDateColorCellStyle(workbook, latestUpdate, missingUpdate));
 
                 rowStartPoint += 1;
 
@@ -225,45 +220,10 @@ public class ExcelUtil {
                 }
 
                 storyRow3CellH.setCellValue(tasksTeam);
-
-                sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol - 2));
-
                 CellUtil.setVerticalAlignment(storyRow3CellH, VerticalAlignment.CENTER);
                 CellUtil.setCellStyleProperty(storyRow3CellH, CellUtil.WRAP_TEXT, true);
-                Cell storyRow3CellI = storyRow3.createCell(8);
-                try {
-                    SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S zzz");
-                    Date date = parser.parse(mentry.getValue().getLastUpdated());
-                    SimpleDateFormat formater = new SimpleDateFormat("M/d/yyyy");
 
-                    CellStyle cellStyle = workbook.createCellStyle();
-                    CreationHelper createHelper = workbook.getCreationHelper();
-                    cellStyle.setDataFormat(
-                            createHelper.createDataFormat().getFormat("d-mmm-yy"));
-                    storyRow3CellI.setCellValue(formater.parse(formater.format(date)));
-                    storyRow3CellI.setCellStyle(cellStyle);
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-
-                rowStartPoint += 1;
-
-                Row storyRow4 = sheet.createRow(rowStartPoint);
-                Cell storyRow4CellI = storyRow4.createCell(8);
-                try {
-                    SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S zzz");
-                    Date date = parser.parse(mentry.getValue().getLastUpdated());
-                    SimpleDateFormat formater = new SimpleDateFormat("M/d/yyyy");
-
-                    CellStyle cellStyle = workbook.createCellStyle();
-                    CreationHelper createHelper = workbook.getCreationHelper();
-                    cellStyle.setDataFormat(
-                            createHelper.createDataFormat().getFormat("d-mmm-yy"));
-                    storyRow4CellI.setCellValue(formater.parse(formater.format(date)));
-                    storyRow4CellI.setCellStyle(cellStyle);
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
+                sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol - 2));
 
 //                        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint + 3,rowStartPoint + 5,0,6));
 //                        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint + 3,rowStartPoint + 5,7,7));
@@ -313,7 +273,12 @@ public class ExcelUtil {
         try {
             File file;
             FileOutputStream fos = null;
-            String fileName = "Patate";
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localDate = LocalDate.now();
+
+            String fileName = currentProjectName + "_" + allReleases.get(currentReleaseId).getName() + "_WeeklyStatus_"
+                    + dtf.format(localDate);
 
             file = new File("c:/" + fileName + ".xlsx");
             fos = new FileOutputStream(file);

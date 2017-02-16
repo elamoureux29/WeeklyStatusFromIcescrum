@@ -20,9 +20,10 @@ public abstract class TaskWorker extends SwingWorker<Void, Void> {
          */
     public void done() {
 //        jProgressBar.setIndeterminate(false);
-        jTabbedPane.setEnabledAt(1, true);
-        jTabbedPane.setCursor((Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR)));
         jProgressBar.setValue(0);
         jProgressBar.setStringPainted(false);
+        jTabbedPane.setEnabledAt(1, true);
+        jTabbedPane.setSelectedIndex(1);
+        jTabbedPane.setCursor((Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR)));
     }
 }
