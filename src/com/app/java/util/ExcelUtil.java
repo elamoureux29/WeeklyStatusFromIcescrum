@@ -97,7 +97,8 @@ public class ExcelUtil {
         sprintValueRowCellE.setCellValue(allSprintInCurrentRelease.size());
         CellUtil.setAlignment(sprintValueRowCellE, HorizontalAlignment.CENTER);
         Cell sprintValueRowCellI = sprintValueRow.createCell(8);
-        sprintValueRowCellI.setCellValue(DateFormat.ExcelDateFormat(allSprintInCurrentRelease.get(currentSprintId).getEndDate()));
+        sprintValueRowCellI.setCellValue(DateFormat.ExcelDateFormat(
+                allSprintInCurrentRelease.get(currentSprintId).getEndDate()));
         sprintValueRowCellI.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
 
         rowStartPoint += 1;
@@ -157,7 +158,7 @@ public class ExcelUtil {
                     }
                 }
 
-                if (tasksInProgress + tasksDone == 0) {
+                if (tasksInProgress + tasksDone != 0) {
                     missingUpdate = true;
                 }
 
@@ -233,10 +234,10 @@ public class ExcelUtil {
 
                 PropertyTemplate pt = new PropertyTemplate();
                 // these cells will have medium outside borders and thin inside borders
-                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint3, bordersRowStartPoint3 + 3, firstCol, lastCol),
-                        BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
-                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint3, bordersRowStartPoint3 + 3, firstCol, lastCol),
-                        BorderStyle.THIN, BorderExtent.INSIDE);
+                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint3, bordersRowStartPoint3 + 3,
+                        firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint3, bordersRowStartPoint3 + 3,
+                        firstCol, lastCol), BorderStyle.THIN, BorderExtent.INSIDE);
 
                 // apply borders to sheet
                 pt.applyBorders(sheet);
@@ -248,7 +249,8 @@ public class ExcelUtil {
 
         Row sprintDetailsValueRow = sheet.createRow(8);
         Cell sprintDetailsValueRowCellA = sprintDetailsValueRow.createCell(0);
-        sprintDetailsValueRowCellA.setCellValue(Math.round(completedPoints) + "/" + Math.round(Float.parseFloat(allSprintInCurrentRelease.get(currentSprintId).getCapacity())));
+        sprintDetailsValueRowCellA.setCellValue(Math.round(completedPoints) + "/" +
+                Math.round(Float.parseFloat(allSprintInCurrentRelease.get(currentSprintId).getCapacity())));
         Cell sprintDetailsValueRowCellC = sprintDetailsValueRow.createCell(2);
         sprintDetailsValueRowCellC.setCellValue(numCompletedStories);
         CellUtil.setAlignment(sprintDetailsValueRowCellC, HorizontalAlignment.CENTER);
@@ -261,10 +263,10 @@ public class ExcelUtil {
 
         PropertyTemplate pt1 = new PropertyTemplate();
         // these cells will have medium outside borders
-        pt1.drawBorders(new CellRangeAddress(bordersRowStartPoint1, bordersRowStartPoint1 + 1, firstCol, lastCol),
-                BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
-        pt1.drawBorders(new CellRangeAddress(bordersRowStartPoint2, bordersRowStartPoint2 + 3, firstCol, lastCol),
-                BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+        pt1.drawBorders(new CellRangeAddress(bordersRowStartPoint1, bordersRowStartPoint1 + 1,
+                firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+        pt1.drawBorders(new CellRangeAddress(bordersRowStartPoint2, bordersRowStartPoint2 + 3,
+                firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
         // apply borders to sheet
         pt1.applyBorders(sheet);
 
@@ -283,7 +285,8 @@ public class ExcelUtil {
             String fileName = currentProjectName + "_" + allReleases.get(currentReleaseId).getName() + "_WeeklyStatus_"
                     + dtf.format(localDate);
 
-            file = new File("c:/" + fileName + ".xlsx");
+            file = new File(System.getProperty("user.home") + "/" + fileName + ".xlsx");
+//            file = new File("c:/" + fileName + ".xlsx");
             fos = new FileOutputStream(file);
 
             // if file doesnt exists, then create it
