@@ -35,10 +35,17 @@ public class ExcelUtil {
         int firstCol = 0;
         int lastCol = 8;
 
+        Map<String, Object> cellStyleValues = new HashMap<>();
+        cellStyleValues.put(CellUtil.ALIGNMENT, HorizontalAlignment.CENTER);
+        cellStyleValues.put(CellUtil.FILL_BACKGROUND_COLOR, IndexedColors.AUTOMATIC.getIndex());
+        cellStyleValues.put(CellUtil.FILL_FOREGROUND_COLOR, IndexedColors.AUTOMATIC.getIndex());
+        cellStyleValues.put(CellUtil.FILL_PATTERN, FillPatternType.NO_FILL);
+
         Row titleRow = sheet.createRow(rowStartPoint);
         Cell titleRowCellA = titleRow.createCell(0);
         titleRowCellA.setCellValue("Weekly Projects Status");
-        CellUtil.setAlignment(titleRowCellA, HorizontalAlignment.CENTER);
+        CellUtil.setCellStyleProperties(titleRowCellA, cellStyleValues);
+//        CellUtil.setAlignment(titleRowCellA, HorizontalAlignment.CENTER);
         sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol));
 
         rowStartPoint += 2;
@@ -47,7 +54,6 @@ public class ExcelUtil {
         Row projectRow = sheet.createRow(rowStartPoint);
         Cell projectRowCellA = projectRow.createCell(0);
         projectRowCellA.setCellValue(currentProjectName);
-//        CellUtil.setAlignment(projectRowCellA, HorizontalAlignment.CENTER);
         sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol - 1));
         Cell projectRowCellI = projectRow.createCell(8);
         projectRowCellI.setCellValue("End Date");
@@ -225,14 +231,11 @@ public class ExcelUtil {
 
                 sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol - 2));
 
-//                        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint + 3,rowStartPoint + 5,0,6));
-//                        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint + 3,rowStartPoint + 5,7,7));
-
                 PropertyTemplate pt = new PropertyTemplate();
                 // these cells will have medium outside borders and thin inside borders
-                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint3, bordersRowStartPoint3 + 4, firstCol, lastCol),
+                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint3, bordersRowStartPoint3 + 3, firstCol, lastCol),
                         BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
-                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint3, bordersRowStartPoint3 + 4, firstCol, lastCol),
+                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint3, bordersRowStartPoint3 + 3, firstCol, lastCol),
                         BorderStyle.THIN, BorderExtent.INSIDE);
 
                 // apply borders to sheet
@@ -244,17 +247,17 @@ public class ExcelUtil {
         }
 
         Row sprintDetailsValueRow = sheet.createRow(8);
-        Cell a10 = sprintDetailsValueRow.createCell(0);
-        a10.setCellValue(Math.round(completedPoints) + "/" + Math.round(Float.parseFloat(allSprintInCurrentRelease.get(currentSprintId).getCapacity())));
-        Cell c10 = sprintDetailsValueRow.createCell(2);
-        c10.setCellValue(numCompletedStories);
-        CellUtil.setAlignment(c10, HorizontalAlignment.CENTER);
-        Cell d10 = sprintDetailsValueRow.createCell(3);
-        d10.setCellValue("/");
-        CellUtil.setAlignment(d10, HorizontalAlignment.CENTER);
-        Cell e10 = sprintDetailsValueRow.createCell(4);
-        e10.setCellValue(allStoriesInCurrentSprint.size());
-        CellUtil.setAlignment(e10, HorizontalAlignment.CENTER);
+        Cell sprintDetailsValueRowCellA = sprintDetailsValueRow.createCell(0);
+        sprintDetailsValueRowCellA.setCellValue(Math.round(completedPoints) + "/" + Math.round(Float.parseFloat(allSprintInCurrentRelease.get(currentSprintId).getCapacity())));
+        Cell sprintDetailsValueRowCellC = sprintDetailsValueRow.createCell(2);
+        sprintDetailsValueRowCellC.setCellValue(numCompletedStories);
+        CellUtil.setAlignment(sprintDetailsValueRowCellC, HorizontalAlignment.CENTER);
+        Cell sprintDetailsValueRowCellD = sprintDetailsValueRow.createCell(3);
+        sprintDetailsValueRowCellD.setCellValue("/");
+        CellUtil.setAlignment(sprintDetailsValueRowCellD, HorizontalAlignment.CENTER);
+        Cell sprintDetailsValueRowCellE = sprintDetailsValueRow.createCell(4);
+        sprintDetailsValueRowCellE.setCellValue(allStoriesInCurrentSprint.size());
+        CellUtil.setAlignment(sprintDetailsValueRowCellE, HorizontalAlignment.CENTER);
 
         PropertyTemplate pt1 = new PropertyTemplate();
         // these cells will have medium outside borders
