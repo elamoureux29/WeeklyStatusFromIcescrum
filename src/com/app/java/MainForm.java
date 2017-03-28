@@ -82,7 +82,7 @@ public class MainForm {
                     myReader.parse(is);
 
                     /* Display content using Iterator*/
-                    Map<Integer, Release> map = HashMapSort.sortByValues(allReleases);
+                    Map<Integer, Release> map = HashMapSort.sortReleaseByValues(allReleases);
                     Set set = map.entrySet();
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {

@@ -6,6 +6,7 @@ import com.app.java.model.Sprint;
 import com.app.java.model.enums.ReleaseStates;
 import com.app.java.model.enums.SprintStates;
 import com.app.java.util.HashMapSort;
+import com.app.java.util.TaktTimeStories;
 import com.app.java.util.handler.ReleaseHandler;
 import com.app.java.util.handler.SprintHandler;
 import com.app.java.util.handler.StoryHandler;
@@ -17,10 +18,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import javax.swing.*;
 import java.awt.*;
 import java.io.StringReader;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by elamoureux on 1/26/2017.
@@ -51,7 +49,7 @@ public class AllData extends TaskWorker {
             myReader.parse(is);
 
                     /* Display content using Iterator*/
-            Map<Integer, Release> map = HashMapSort.sortByValues(MainForm.allReleases);
+            Map<Integer, Release> map = HashMapSort.sortReleaseByValues(MainForm.allReleases);
             Set set = map.entrySet();
             Iterator iterator = set.iterator();
             while (iterator.hasNext()) {
@@ -136,6 +134,16 @@ public class AllData extends TaskWorker {
 //                Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
 //                System.out.println(mentry.getValue().getName());
 //            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        jProgressBar.setValue(90);
+
+        try {
+            TaktTimeStories taktTimeStories = new TaktTimeStories(MainForm.allReleases);
+            java.util.List<Integer> l = taktTimeStories.getTaktTimeData();
+            System.out.println(l);
         } catch (Exception e) {
             e.printStackTrace();
         }
