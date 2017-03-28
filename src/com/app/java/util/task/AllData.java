@@ -142,8 +142,7 @@ public class AllData extends TaskWorker {
 
         try {
             TaktTimeStories taktTimeStories = new TaktTimeStories(MainForm.allReleases);
-            java.util.List<Integer> l = taktTimeStories.getTaktTimeData();
-            System.out.println(l);
+            MainForm.taktTimeData = taktTimeStories.getTaktTimeData();
         } catch (Exception e) {
             e.printStackTrace();
         }

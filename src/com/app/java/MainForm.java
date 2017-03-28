@@ -43,6 +43,7 @@ public class MainForm {
     public static IcescrumFeature feature = new IcescrumFeature();
     public static IcescrumActor actor = new IcescrumActor();
     public static IcescrumAvailability availability = new IcescrumAvailability();
+    public static List<Integer> taktTimeData = new ArrayList<>();
     private JTabbedPane tabbedPane1;
     private JPanel tabPanel1;
     private JPanel panel1;

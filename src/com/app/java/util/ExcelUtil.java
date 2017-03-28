@@ -1,5 +1,6 @@
 package com.app.java.util;
 
+import com.app.java.MainForm;
 import com.app.java.model.Story;
 import com.app.java.model.TaskItem;
 import com.app.java.model.enums.StoryStates;
@@ -29,6 +30,7 @@ public class ExcelUtil {
         XSSFSheet sheet = workbook.createSheet("Status");
 
         int rowStartPoint = 0;
+        int sheet2RowStartPoint = 0;
         int bordersRowStartPoint1 = 0;
         int bordersRowStartPoint2 = 0;
         int bordersRowStartPoint3 = 0;
@@ -273,6 +275,28 @@ public class ExcelUtil {
         // Auto size the column widths
         for (int columnIndex = 0; columnIndex < 10; columnIndex++) {
             sheet.autoSizeColumn(columnIndex);
+        }
+
+        XSSFSheet sheet2 = workbook.createSheet("TaktData");
+
+        Row sheet2TitleRow = sheet2.createRow(sheet2RowStartPoint);
+        Cell sheet2TitleRowCellA = sheet2TitleRow.createCell(0);
+        sheet2TitleRowCellA.setCellValue("Takt Data");
+        CellUtil.setCellStyleProperties(sheet2TitleRowCellA, cellStyleValues);
+//        CellUtil.setAlignment(titleRowCellA, HorizontalAlignment.CENTER);
+        sheet2.addMergedRegion(new CellRangeAddress(sheet2RowStartPoint, sheet2RowStartPoint, 0, 3));
+
+        sheet2RowStartPoint += 2;
+        int sprintNumber = 1;
+
+        for (int i: MainForm.taktTimeData) {
+            Row row = sheet2.createRow(sheet2RowStartPoint);
+            Cell rowCellA = row.createCell(0);
+            rowCellA.setCellValue("Sprint " + sprintNumber);
+            Cell rowCellB = row.createCell(1);
+            rowCellB.setCellValue(i);
+            sheet2RowStartPoint++;
+            sprintNumber++;
         }
 
         try {
