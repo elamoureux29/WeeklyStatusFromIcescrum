@@ -32,6 +32,8 @@ public class ExcelUtil {
         int bordersRowStartPoint1 = 0;
         int bordersRowStartPoint2 = 0;
         int bordersRowStartPoint3 = 0;
+        int bordersRowStartPoint4 = 0;
+        int bordersRowStartPoint5 = 0;
         int firstCol = 0;
         int lastCol = 8;
 
@@ -116,6 +118,20 @@ public class ExcelUtil {
 
         rowStartPoint += 3;
         bordersRowStartPoint3 = rowStartPoint;
+
+        Row urgentTasksRow = sheet.createRow(rowStartPoint);
+        Cell urgentTasksRowCellA = urgentTasksRow.createCell(0);
+        urgentTasksRowCellA.setCellValue("Urgent Tasks");
+
+        rowStartPoint += 3;
+        bordersRowStartPoint4 = rowStartPoint;
+
+        Row recurrentTasksRow = sheet.createRow(rowStartPoint);
+        Cell recurrentTasksRowCellA = recurrentTasksRow.createCell(0);
+        recurrentTasksRowCellA.setCellValue("Recurrent Tasks");
+
+        rowStartPoint += 3;
+        bordersRowStartPoint5 = rowStartPoint;
 
         Set set = allStoriesInCurrentSprint.entrySet();
         int numCompletedStories = 0;
@@ -234,16 +250,16 @@ public class ExcelUtil {
 
                 PropertyTemplate pt = new PropertyTemplate();
                 // these cells will have medium outside borders and thin inside borders
-                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint3, bordersRowStartPoint3 + 3,
+                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint5, bordersRowStartPoint5 + 3,
                         firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
-                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint3, bordersRowStartPoint3 + 3,
+                pt.drawBorders(new CellRangeAddress(bordersRowStartPoint5, bordersRowStartPoint5 + 3,
                         firstCol, lastCol), BorderStyle.THIN, BorderExtent.INSIDE);
 
                 // apply borders to sheet
                 pt.applyBorders(sheet);
 
                 rowStartPoint += 2;
-                bordersRowStartPoint3 = rowStartPoint;
+                bordersRowStartPoint5 = rowStartPoint;
             }
         }
 
