@@ -43,6 +43,7 @@ public class MainForm {
     public static IcescrumFeature feature = new IcescrumFeature();
     public static IcescrumActor actor = new IcescrumActor();
     public static IcescrumAvailability availability = new IcescrumAvailability();
+    public static List<Integer> taktTimeData = new ArrayList<>();
     private JTabbedPane tabbedPane1;
     private JPanel tabPanel1;
     private JPanel panel1;
@@ -82,7 +83,7 @@ public class MainForm {
                     myReader.parse(is);
 
                     /* Display content using Iterator*/
-                    Map<Integer, Release> map = HashMapSort.sortByValues(allReleases);
+                    Map<Integer, Release> map = HashMapSort.sortReleaseByValues(allReleases);
                     Set set = map.entrySet();
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
