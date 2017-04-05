@@ -124,22 +124,45 @@ public class ExcelUtil {
 
         Row noInProgressTaskRow = sheet.createRow(rowStartPoint);
         Cell noInProgressTaskRowCellA = noInProgressTaskRow.createCell(0);
-        noInProgressTaskRowCellA.setCellValue("Users with no tasks in progress");
+        noInProgressTaskRowCellA.setCellValue("Users with no tasks in progress:");
+        rowStartPoint++;
+        UsersNoInProgressTasks usersNoInProgressTasks = new UsersNoInProgressTasks(allTasksInCurrentSprint);
+        Set usersNoInProgressTasksSet = usersNoInProgressTasks.getUsersList().entrySet();
+        Iterator usersNoInProgressTasksIterator = usersNoInProgressTasksSet.iterator();
+        List list = new ArrayList();
+        while (usersNoInProgressTasksIterator.hasNext()) {
+            Map.Entry<Integer, String> mentry = (Map.Entry) usersNoInProgressTasksIterator.next();
+            list.add(mentry.getValue());
+        }
+        Row noInProgressTaskDetailRow = sheet.createRow(rowStartPoint);
+        noInProgressTaskDetailRow.setHeightInPoints(30);
+        Cell noInProgressTaskDetailRowCellA = noInProgressTaskDetailRow.createCell(0);
+        noInProgressTaskDetailRowCellA.setCellValue(list.toString().replace("[", "")
+                .replace("]", ""));
+        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, 0, 8));
+        CellUtil.setCellStyleProperty(noInProgressTaskDetailRowCellA, CellUtil.WRAP_TEXT, true);
 
-
-        rowStartPoint += 3;
+        rowStartPoint += 2;
         urgentTasksBordersRowStartPoint = rowStartPoint;
+
+        NonStoryTasks nonStoryTasks = new NonStoryTasks(allTasksInCurrentSprint);
 
         Row urgentTasksRow = sheet.createRow(rowStartPoint);
         Cell urgentTasksRowCellA = urgentTasksRow.createCell(0);
-        urgentTasksRowCellA.setCellValue("Urgent Tasks");
+        urgentTasksRowCellA.setCellValue("Urgent Tasks:");
+        rowStartPoint++;
+        Set urgentTasksSet = nonStoryTasks.getUrgentTasksHashMap().entrySet();
+        Iterator urgentTasksIterator = urgentTasksSet.iterator();
 
         rowStartPoint += 3;
         recurrentTasksBordersRowStartPoint = rowStartPoint;
 
         Row recurrentTasksRow = sheet.createRow(rowStartPoint);
         Cell recurrentTasksRowCellA = recurrentTasksRow.createCell(0);
-        recurrentTasksRowCellA.setCellValue("Recurrent Tasks");
+        recurrentTasksRowCellA.setCellValue("Recurrent Tasks:");
+        rowStartPoint++;
+        Set recurrentTasksSet = nonStoryTasks.getRecurrentTasksHashMap().entrySet();
+        Iterator recurrentTasksIterator = recurrentTasksSet.iterator();
 
         rowStartPoint += 3;
         storiesBordersRowStartPoint = rowStartPoint;
@@ -293,6 +316,12 @@ public class ExcelUtil {
         pt1.drawBorders(new CellRangeAddress(projectBordersRowStartPoint, projectBordersRowStartPoint + 1,
                 firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
         pt1.drawBorders(new CellRangeAddress(sprintBordersRowStartPoint, sprintBordersRowStartPoint + 3,
+                firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+        pt1.drawBorders(new CellRangeAddress(noInProgressTaskBordersRowStartPoint, noInProgressTaskBordersRowStartPoint + 1,
+                firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+        pt1.drawBorders(new CellRangeAddress(urgentTasksBordersRowStartPoint, urgentTasksBordersRowStartPoint + 1,
+                firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+        pt1.drawBorders(new CellRangeAddress(recurrentTasksBordersRowStartPoint, recurrentTasksBordersRowStartPoint + 1,
                 firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
         // apply borders to sheet
         pt1.applyBorders(sheet);

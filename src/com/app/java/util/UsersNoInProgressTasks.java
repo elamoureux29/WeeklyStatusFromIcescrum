@@ -17,7 +17,9 @@ public class UsersNoInProgressTasks {
 
     public UsersNoInProgressTasks(HashMap<Integer, TaskItem> tasksMap) {
         for (Users u : Users.values()) {
-            usersList.put(u.getIdentifier(), u.getUserName());
+            if (!u.isManager()){
+                usersList.put(u.getIdentifier(), u.getUserName());
+            }
         }
 
         Set set = tasksMap.entrySet();
