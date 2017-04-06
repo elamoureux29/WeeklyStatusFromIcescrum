@@ -356,10 +356,6 @@ public class ExcelUtil {
 
         PropertyTemplate pt = new PropertyTemplate();
         // these cells will have medium outside borders and thin inside borders
-        pt.drawBorders(new CellRangeAddress(storiesBordersRowStartPoint, storiesBordersRowStartPoint + 3,
-                firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
-        pt.drawBorders(new CellRangeAddress(storiesBordersRowStartPoint, storiesBordersRowStartPoint + 3,
-                firstCol, lastCol), BorderStyle.THIN, BorderExtent.INSIDE);
         pt.drawBorders(new CellRangeAddress(noInProgressTaskBordersRowStartPoint,
                         noInProgressTaskBordersRowStartPoint + 1, firstCol, lastCol),
                 BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
