@@ -35,7 +35,9 @@ public class ExcelUtil {
         int sprintBordersRowStartPoint = 0;
         int noInProgressTaskBordersRowStartPoint = 0;
         int urgentTasksBordersRowStartPoint = 0;
+        int urgentTasksBordersRowStopPoint = 0;
         int recurrentTasksBordersRowStartPoint = 0;
+        int recurrentTasksBordersRowStopPoint = 0;
         int storiesBordersRowStartPoint = 0;
         int firstCol = 0;
         int lastCol = 8;
@@ -78,7 +80,7 @@ public class ExcelUtil {
 
         Row sprintRow = sheet.createRow(rowStartPoint);
         Cell sprintRowCellA = sprintRow.createCell(0);
-        sprintRowCellA.setCellValue("Current Sprint:");
+        sprintRowCellA.setCellValue("Current Sprint");
         Cell sprintRowCellC = sprintRow.createCell(2);
         sprintRowCellC.setCellValue("Current #");
         Cell sprintRowCellD = sprintRow.createCell(3);
@@ -124,7 +126,8 @@ public class ExcelUtil {
 
         Row noInProgressTaskRow = sheet.createRow(rowStartPoint);
         Cell noInProgressTaskRowCellA = noInProgressTaskRow.createCell(0);
-        noInProgressTaskRowCellA.setCellValue("Users with no tasks in progress:");
+        noInProgressTaskRowCellA.setCellValue("Users with no tasks in progress");
+        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, 0, 8));
         rowStartPoint++;
         UsersNoInProgressTasks usersNoInProgressTasks = new UsersNoInProgressTasks(allTasksInCurrentSprint);
         Set usersNoInProgressTasksSet = usersNoInProgressTasks.getUsersList().entrySet();
@@ -149,22 +152,62 @@ public class ExcelUtil {
 
         Row urgentTasksRow = sheet.createRow(rowStartPoint);
         Cell urgentTasksRowCellA = urgentTasksRow.createCell(0);
-        urgentTasksRowCellA.setCellValue("Urgent Tasks:");
-        rowStartPoint++;
+        urgentTasksRowCellA.setCellValue("Urgent Tasks");
+        Cell urgentTasksRowCellI = urgentTasksRow.createCell(8);
+        urgentTasksRowCellI.setCellValue("Status");
+        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, 0, 7));
         Set urgentTasksSet = nonStoryTasks.getUrgentTasksHashMap().entrySet();
         Iterator urgentTasksIterator = urgentTasksSet.iterator();
+        while (urgentTasksIterator.hasNext()) {
+            rowStartPoint++;
+            Map.Entry<Integer, TaskItem> mentry = (Map.Entry) urgentTasksIterator.next();
+            Row urgentTaskDetailRow = sheet.createRow(rowStartPoint);
+            Cell urgentTaskDetailRowCellA = urgentTaskDetailRow.createCell(0);
+            urgentTaskDetailRowCellA.setCellValue(mentry.getValue().getName());
+            sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, 0, 6));
+            Cell urgentTaskDetailRowCellH = urgentTaskDetailRow.createCell(7);
+            for (Users u : Users.values()) {
+                if (mentry.getValue().getResponsibleId() == u.getIdentifier()) {
+                    urgentTaskDetailRowCellH.setCellValue(u.getUserName());
+                }
+            }
+            Cell urgentTaskDetailRowCellI = urgentTaskDetailRow.createCell(8);
+            for (TaskStates ts : TaskStates.values()) {
+                if (mentry.getValue().getState().equalsIgnoreCase(ts.getIdentifier())) {
+                    urgentTaskDetailRowCellI.setCellValue(ts.getText());
+                }
+            }
+        }
+        urgentTasksBordersRowStopPoint = rowStartPoint;
 
-        rowStartPoint += 3;
+        rowStartPoint += 2;
         recurrentTasksBordersRowStartPoint = rowStartPoint;
 
         Row recurrentTasksRow = sheet.createRow(rowStartPoint);
         Cell recurrentTasksRowCellA = recurrentTasksRow.createCell(0);
-        recurrentTasksRowCellA.setCellValue("Recurrent Tasks:");
-        rowStartPoint++;
+        recurrentTasksRowCellA.setCellValue("Recurrent Tasks");
+        Cell recurrentTasksRowCellI = recurrentTasksRow.createCell(8);
+        recurrentTasksRowCellI.setCellValue("Status");
+        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, 0, 7));
         Set recurrentTasksSet = nonStoryTasks.getRecurrentTasksHashMap().entrySet();
         Iterator recurrentTasksIterator = recurrentTasksSet.iterator();
+        while (recurrentTasksIterator.hasNext()) {
+            rowStartPoint++;
+            Map.Entry<Integer, TaskItem> mentry = (Map.Entry) recurrentTasksIterator.next();
+            Row recurrentTaskDetailRow = sheet.createRow(rowStartPoint);
+            Cell recurrentTaskDetailRowCellA = recurrentTaskDetailRow.createCell(0);
+            recurrentTaskDetailRowCellA.setCellValue(mentry.getValue().getName());
+            sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, 0, 6));
+            Cell recurrentTaskDetailRowCellH = recurrentTaskDetailRow.createCell(7);
+            for (Users u : Users.values()) {
+                if (mentry.getValue().getResponsibleId() == u.getIdentifier()) {
+                    recurrentTaskDetailRowCellH.setCellValue(u.getUserName());
+                }
+            }
+        }
+        recurrentTasksBordersRowStopPoint = rowStartPoint;
 
-        rowStartPoint += 3;
+        rowStartPoint += 2;
         storiesBordersRowStartPoint = rowStartPoint;
 
         Set set = allStoriesInCurrentSprint.entrySet();
@@ -311,17 +354,35 @@ public class ExcelUtil {
         sprintDetailsValueRowCellE.setCellValue(allStoriesInCurrentSprint.size());
         CellUtil.setAlignment(sprintDetailsValueRowCellE, HorizontalAlignment.CENTER);
 
+        PropertyTemplate pt = new PropertyTemplate();
+        // these cells will have medium outside borders and thin inside borders
+        pt.drawBorders(new CellRangeAddress(storiesBordersRowStartPoint, storiesBordersRowStartPoint + 3,
+                firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+        pt.drawBorders(new CellRangeAddress(storiesBordersRowStartPoint, storiesBordersRowStartPoint + 3,
+                firstCol, lastCol), BorderStyle.THIN, BorderExtent.INSIDE);
+        pt.drawBorders(new CellRangeAddress(noInProgressTaskBordersRowStartPoint,
+                        noInProgressTaskBordersRowStartPoint + 1, firstCol, lastCol),
+                BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+        pt.drawBorders(new CellRangeAddress(noInProgressTaskBordersRowStartPoint,
+                        noInProgressTaskBordersRowStartPoint + 1, firstCol, lastCol),
+                BorderStyle.THIN, BorderExtent.INSIDE);
+        pt.drawBorders(new CellRangeAddress(urgentTasksBordersRowStartPoint, urgentTasksBordersRowStopPoint,
+                firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+        pt.drawBorders(new CellRangeAddress(urgentTasksBordersRowStartPoint, urgentTasksBordersRowStopPoint,
+                firstCol, lastCol), BorderStyle.THIN, BorderExtent.INSIDE);
+        pt.drawBorders(new CellRangeAddress(recurrentTasksBordersRowStartPoint, recurrentTasksBordersRowStopPoint,
+                firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+        pt.drawBorders(new CellRangeAddress(recurrentTasksBordersRowStartPoint, recurrentTasksBordersRowStopPoint,
+                firstCol, lastCol), BorderStyle.THIN, BorderExtent.INSIDE);
+
+        // apply borders to sheet
+        pt.applyBorders(sheet);
+
         PropertyTemplate pt1 = new PropertyTemplate();
         // these cells will have medium outside borders
         pt1.drawBorders(new CellRangeAddress(projectBordersRowStartPoint, projectBordersRowStartPoint + 1,
                 firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
         pt1.drawBorders(new CellRangeAddress(sprintBordersRowStartPoint, sprintBordersRowStartPoint + 3,
-                firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
-        pt1.drawBorders(new CellRangeAddress(noInProgressTaskBordersRowStartPoint, noInProgressTaskBordersRowStartPoint + 1,
-                firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
-        pt1.drawBorders(new CellRangeAddress(urgentTasksBordersRowStartPoint, urgentTasksBordersRowStartPoint + 1,
-                firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
-        pt1.drawBorders(new CellRangeAddress(recurrentTasksBordersRowStartPoint, recurrentTasksBordersRowStartPoint + 1,
                 firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
         // apply borders to sheet
         pt1.applyBorders(sheet);
