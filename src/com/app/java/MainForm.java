@@ -7,6 +7,7 @@ import com.app.java.model.enums.ReleaseStates;
 import com.app.java.model.enums.SprintStates;
 import com.app.java.util.ExcelUtil;
 import com.app.java.util.HashMapSort;
+import com.app.java.util.XmlResponse;
 import com.app.java.util.handler.ReleaseHandler;
 import com.app.java.util.handler.SprintHandler;
 import com.app.java.util.handler.StoryHandler;
@@ -93,6 +94,8 @@ public class MainForm {
                             currentReleaseId = mentry.getValue().getReleaseId();
                         }
                     }
+//                    XmlResponse.DisplayInConsole(release.getAll());
+                    XmlResponse.SaveToFile(release.getAll(), release.getFileName());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -120,8 +123,11 @@ public class MainForm {
 //                        System.out.println(mentry.getValue().getGoal() + mentry.getValue().getOrderNumber());
                         if (mentry.getValue().getState().equalsIgnoreCase(SprintStates.IN_PROGRESS.getIdentifier())) {
                             currentSprintId = mentry.getValue().getSprintId();
+                            getAllStoriesInButton.setEnabled(true);
                         }
                     }
+//                    XmlResponse.DisplayInConsole(sprint.getAll());
+                    XmlResponse.SaveToFile(sprint.getAll(), sprint.getFileName());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -149,6 +155,9 @@ public class MainForm {
 //                        Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
 //                        System.out.println(mentry.getValue().getStoryId() + ": " + mentry.getValue().getName());
 //                    }
+
+//                    XmlResponse.DisplayInConsole(story.getAll());
+                    XmlResponse.SaveToFile(story.getAll(), story.getFileName());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -174,6 +183,9 @@ public class MainForm {
 //                        Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
 //                        System.out.println(mentry.getValue().getName());
 //                    }
+
+//                    XmlResponse.DisplayInConsole(taskItem.getAll());
+                    XmlResponse.SaveToFile(taskItem.getAll(), taskItem.getFileName());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

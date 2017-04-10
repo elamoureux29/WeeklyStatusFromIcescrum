@@ -1,5 +1,6 @@
 package com.app.java.model.api;
 
+import com.app.java.util.request.CreateRequest;
 import com.app.java.util.request.ReadRequest;
 
 import java.io.IOException;
@@ -45,5 +46,11 @@ public class IcescrumTask extends IcescrumRest {
         fileName = "Icescrum_Task_" + id;
 
         return ReadRequest.send(USER_AGENT, RESPONSE_FORMAT, fullUrl);
+    }
+
+    public StringBuffer createTask(int id, String filter) throws Exception {
+        String fullUrl = URL + project + URL_BASE_COMMAND;
+
+        return CreateRequest.send(USER_AGENT, RESPONSE_FORMAT, fullUrl);
     }
 }

@@ -13,7 +13,7 @@ public class XmlResponse {
         FileOutputStream fos = null;
 
         try {
-            file = new File("c:/" + fileName + ".xml");
+            file = new File(System.getProperty("user.home") + "/" + fileName + ".xml");
             fos = new FileOutputStream(file);
 
             // if file doesnt exists, then create it
