@@ -2,9 +2,7 @@ package com.app.java;
 
 import com.app.java.model.*;
 import com.app.java.model.api.*;
-import com.app.java.model.enums.Projects;
-import com.app.java.model.enums.ReleaseStates;
-import com.app.java.model.enums.SprintStates;
+import com.app.java.model.enums.*;
 import com.app.java.util.ExcelUtil;
 import com.app.java.util.HashMapSort;
 import com.app.java.util.XmlResponse;
@@ -60,7 +58,11 @@ public class MainForm {
     private JButton exportButton;
     private JButton populateButton;
     private JButton getDataButton;
-    private JPanel buttonPanel;
+    private JPanel getButtonPanel;
+    private JPanel testPanel;
+    private JPanel createButtonPanel;
+    private JButton testButton;
+    private JButton createDefaultTasksButton;
 
 
     public MainForm() {
@@ -68,7 +70,9 @@ public class MainForm {
         for (Projects p : Projects.values()) {
             comboBox1.addItem(p.getPrjName());
         }
-        buttonPanel.setVisible(false);
+        getButtonPanel.setVisible(false);
+        createButtonPanel.setVisible(false);
+        testPanel.setVisible(false);
 
         getAllReleasesButton.addActionListener(new ActionListener() {
             @Override
@@ -124,6 +128,7 @@ public class MainForm {
                         if (mentry.getValue().getState().equalsIgnoreCase(SprintStates.IN_PROGRESS.getIdentifier())) {
                             currentSprintId = mentry.getValue().getSprintId();
                             getAllStoriesInButton.setEnabled(true);
+                            createDefaultTasksButton.setEnabled(true);
                         }
                     }
 //                    XmlResponse.DisplayInConsole(sprint.getAll());
@@ -235,10 +240,36 @@ public class MainForm {
                             availability.setProject(currentProjectId);
                         }
                     }
-                    buttonPanel.setVisible(true);
+                    getButtonPanel.setVisible(true);
+                    createButtonPanel.setVisible(true);
+                    testPanel.setVisible(true);
                 } else {
-                    buttonPanel.setVisible(false);
+                    getButtonPanel.setVisible(false);
+                    createButtonPanel.setVisible(false);
+                    testPanel.setVisible(false);
                 }
+            }
+        });
+        createDefaultTasksButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+//                    CreateTaskItem createTaskItem = new CreateTaskItem(currentSprintId, 184989, "Patate");
+                    CreateTaskItem createTaskItem = new CreateTaskItem(currentSprintId, TaskTypes.RECURRENT, "Patate");
+                    createTaskItem.setColor(TaskColors.RED);
+                    createTaskItem.setDescription("This is a description.");
+                    createTaskItem.setEstimation(Float.parseFloat("2.5"));
+                    createTaskItem.setTags("Team1, Team2");
+                    taskItem.createTask(createTaskItem);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        testButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
             }
         });
     }

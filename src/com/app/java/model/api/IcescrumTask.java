@@ -1,5 +1,6 @@
 package com.app.java.model.api;
 
+import com.app.java.model.CreateTaskItem;
 import com.app.java.util.request.CreateRequest;
 import com.app.java.util.request.ReadRequest;
 
@@ -48,9 +49,9 @@ public class IcescrumTask extends IcescrumRest {
         return ReadRequest.send(USER_AGENT, RESPONSE_FORMAT, fullUrl);
     }
 
-    public StringBuffer createTask(int id, String filter) throws Exception {
+    public StringBuffer createTask(CreateTaskItem createTaskItem) throws Exception {
         String fullUrl = URL + project + URL_BASE_COMMAND;
 
-        return CreateRequest.send(USER_AGENT, RESPONSE_FORMAT, fullUrl);
+        return CreateRequest.send(USER_AGENT, RESPONSE_FORMAT, fullUrl, createTaskItem.createDOMSource());
     }
 }
