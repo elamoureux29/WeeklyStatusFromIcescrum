@@ -204,6 +204,13 @@ public class ExcelUtil {
                     recurrentTaskDetailRowCellH.setCellValue(u.getUserName());
                 }
             }
+            Cell recurrentTaskDetailRowCellI = recurrentTaskDetailRow.createCell(8);
+            for (TaskStates ts : TaskStates.values()) {
+                if (mentry.getValue().getState().equalsIgnoreCase(ts.getIdentifier())) {
+                    recurrentTaskDetailRowCellI.setCellValue(ts.getText());
+                }
+            }
+
         }
         recurrentTasksBordersRowStopPoint = rowStartPoint;
 
