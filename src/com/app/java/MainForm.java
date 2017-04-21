@@ -2,7 +2,10 @@ package com.app.java;
 
 import com.app.java.model.*;
 import com.app.java.model.api.*;
-import com.app.java.model.enums.*;
+import com.app.java.model.enums.Projects;
+import com.app.java.model.enums.ReleaseStates;
+import com.app.java.model.enums.SprintStates;
+import com.app.java.util.DefaultTasksCreator;
 import com.app.java.util.ExcelUtil;
 import com.app.java.util.HashMapSort;
 import com.app.java.util.XmlResponse;
@@ -128,7 +131,6 @@ public class MainForm {
                         if (mentry.getValue().getState().equalsIgnoreCase(SprintStates.IN_PROGRESS.getIdentifier())) {
                             currentSprintId = mentry.getValue().getSprintId();
                             getAllStoriesInButton.setEnabled(true);
-                            createDefaultTasksButton.setEnabled(true);
                         }
                     }
 //                    XmlResponse.DisplayInConsole(sprint.getAll());
@@ -163,6 +165,8 @@ public class MainForm {
 
 //                    XmlResponse.DisplayInConsole(story.getAll());
                     XmlResponse.SaveToFile(story.getAll(), story.getFileName());
+
+                    createDefaultTasksButton.setEnabled(true);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -254,13 +258,18 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-//                    CreateTaskItem createTaskItem = new CreateTaskItem(currentSprintId, 184989, "Patate");
-                    CreateTaskItem createTaskItem = new CreateTaskItem(currentSprintId, TaskTypes.RECURRENT, "Patate");
-                    createTaskItem.setColor(TaskColors.RED);
-                    createTaskItem.setDescription("This is a description.");
-                    createTaskItem.setEstimation(Float.parseFloat("2.5"));
-                    createTaskItem.setTags("Team1, Team2");
-                    taskItem.createTask(createTaskItem);
+                    Set set = allStoriesInCurrentSprint.entrySet();
+                    Iterator iterator = set.iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
+                        if (mentry.getValue().getTasksId().isEmpty()) {
+                            ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getStoryDefaultTasks(
+                                    currentSprintId, mentry.getValue().getStoryId());
+                            for (CreateTaskItem defaultTaskItem : defaultTasks) {
+                                taskItem.createTask(defaultTaskItem);
+                            }
+                        }
+                    }
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
