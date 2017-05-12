@@ -5,6 +5,7 @@ import com.app.java.model.api.*;
 import com.app.java.model.enums.Projects;
 import com.app.java.model.enums.ReleaseStates;
 import com.app.java.model.enums.SprintStates;
+import com.app.java.model.enums.StoryTypes;
 import com.app.java.util.DefaultTasksCreator;
 import com.app.java.util.ExcelUtil;
 import com.app.java.util.HashMapSort;
@@ -66,6 +67,8 @@ public class MainForm {
     private JPanel createButtonPanel;
     private JButton testButton;
     private JButton createDefaultTasksButton;
+    private JButton createDefaultTasksInSprintButton;
+    private JTextField textField1;
 
 
     public MainForm() {
@@ -135,6 +138,7 @@ public class MainForm {
                     }
 //                    XmlResponse.DisplayInConsole(sprint.getAll());
                     XmlResponse.SaveToFile(sprint.getAll(), sprint.getFileName());
+                    createDefaultTasksInSprintButton.setEnabled(true);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -263,10 +267,63 @@ public class MainForm {
                     while (iterator.hasNext()) {
                         Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
                         if (mentry.getValue().getTasksId().isEmpty()) {
-                            ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getStoryDefaultTasks(
-                                    currentSprintId, mentry.getValue().getStoryId());
-                            for (CreateTaskItem defaultTaskItem : defaultTasks) {
-                                taskItem.createTask(defaultTaskItem);
+                            if (mentry.getValue().getType().equalsIgnoreCase(StoryTypes.DEFECT.getIdentifier())) {
+                                ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getIssueStoryDefaultTasks(
+                                        currentSprintId, mentry.getValue().getStoryId());
+                                for (CreateTaskItem defaultTaskItem : defaultTasks) {
+                                    taskItem.createTask(defaultTaskItem);
+                                }
+                            } else {
+                                ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getStoryDefaultTasks(
+                                        currentSprintId, mentry.getValue().getStoryId());
+                                for (CreateTaskItem defaultTaskItem : defaultTasks) {
+                                    taskItem.createTask(defaultTaskItem);
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        createDefaultTasksInSprintButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (!textField1.getText().isEmpty()) {
+                        HashMap<Integer, Story> allStoriesInSprint = new HashMap<>();
+                        int sprintID = Integer.parseInt(textField1.getText());
+
+                        StoryHandler storyHandler = new StoryHandler(allStoriesInSprint);
+                        XMLReader myReader = XMLReaderFactory.createXMLReader();
+                        myReader.setContentHandler(storyHandler);
+
+                        for (int storyId : allSprintInCurrentRelease.get(sprintID).getStories()) {
+                            InputSource is = new InputSource(new StringReader(story.getItem(storyId).toString()));
+                            is.setEncoding("UTF-8");
+
+                            myReader.parse(is);
+                        }
+
+                        Set set = allStoriesInSprint.entrySet();
+                        Iterator iterator = set.iterator();
+                        while (iterator.hasNext()) {
+                            Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
+                            if (mentry.getValue().getTasksId().isEmpty()) {
+                                if (mentry.getValue().getType().equalsIgnoreCase(StoryTypes.DEFECT.getIdentifier())) {
+                                    ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getIssueStoryDefaultTasks(
+                                            sprintID, mentry.getValue().getStoryId());
+                                    for (CreateTaskItem defaultTaskItem : defaultTasks) {
+                                        taskItem.createTask(defaultTaskItem);
+                                    }
+                                } else {
+                                    ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getStoryDefaultTasks(
+                                            sprintID, mentry.getValue().getStoryId());
+                                    for (CreateTaskItem defaultTaskItem : defaultTasks) {
+                                        taskItem.createTask(defaultTaskItem);
+                                    }
+                                }
                             }
                         }
                     }
