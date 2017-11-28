@@ -7,8 +7,10 @@ import java.io.IOException;
  */
 public abstract class IcescrumRest {
     public final String USER_AGENT = "Mozilla/5.0";
-    public final String RESPONSE_FORMAT = "application/xml";
-    public final String URL = "https://www.icescrum.com/a/ws/p/";
+    //    public final String RESPONSE_FORMAT = "application/xml";
+    public final String RESPONSE_FORMAT = "application/json";
+    //    public final String URL = "https://www.icescrum.com/a/ws/p/";
+    public final String URL = "https://cloud.icescrum.com/ws/";
 
     protected String project = "";
     protected String fileName = "";
@@ -18,7 +20,8 @@ public abstract class IcescrumRest {
     }
 
     public void setProject(String project) {
-        this.project = project;
+//        this.project = project;
+        this.project = "project/" + project;
     }
 
     public String getFileName() {

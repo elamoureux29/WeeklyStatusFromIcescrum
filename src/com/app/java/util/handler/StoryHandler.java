@@ -54,7 +54,7 @@ private boolean notDependencesTags = true;
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         switch (qName) {
-            case "story":
+            case "icescrumStory":
                 if (bdependencesId && recursionLevel == 1) {
                     ArrayList<Integer> dependences;
                     dependences = storyHashMap.get(currentMapKey).getDependencesId();
@@ -83,7 +83,7 @@ private boolean notDependencesTags = true;
                     bacceptedDate = true;
                 }
                 break;
-            case "actor":
+            case "icescrumActor":
                 if (notDependencesTags) {
                     bactor = true;
                 }
@@ -137,7 +137,7 @@ private boolean notDependencesTags = true;
                     bexecutionFrequency = true;
                 }
                 break;
-            case "feature":
+            case "icescrumFeature":
                 if (notDependencesTags) {
 //                bfeatureId = true;
                     if (attributes.getValue("id") != null) {
@@ -253,11 +253,11 @@ private boolean notDependencesTags = true;
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
         /*
-        * Do something if Xml tag is empty except for the release case
+        * Do something if Xml tag is empty except for the icescrumRelease case
         * which is for re initializing the currentMapKey variable.
         */
         switch (qName) {
-            case "story":
+            case "icescrumStory":
                 if (notDependencesTags) {
                     if (bstoryId) {
                         currentMapKey = 0;
@@ -270,7 +270,7 @@ private boolean notDependencesTags = true;
                     bacceptedDate = false;
                 }
                 break;
-            case "actor":
+            case "icescrumActor":
                 if (bactor) {
                     bactor = false;
                 }

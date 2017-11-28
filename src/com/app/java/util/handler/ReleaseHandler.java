@@ -1,6 +1,6 @@
 package com.app.java.util.handler;
 
-import com.app.java.model.Release;
+import com.app.java.model.xml.XmlRelease;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -12,7 +12,7 @@ import java.util.HashMap;
  * Created by elamoureux on 1/13/2017.
  */
 public class ReleaseHandler extends DefaultHandler {
-    private HashMap<Integer, Release> releaseHashMap;
+    private HashMap<Integer, XmlRelease> releaseHashMap;
     private int currentMapKey;
     private boolean breleaseId;
     private boolean bendDate;
@@ -28,7 +28,7 @@ public class ReleaseHandler extends DefaultHandler {
     private boolean bstate;
     private boolean bvision;
 
-    public ReleaseHandler(HashMap<Integer, Release> releaseHashMap) {
+    public ReleaseHandler(HashMap<Integer, XmlRelease> releaseHashMap) {
         this.releaseHashMap = releaseHashMap;
     }
 
@@ -37,14 +37,14 @@ public class ReleaseHandler extends DefaultHandler {
             case "release":
                 breleaseId = true;
                 currentMapKey = Integer.parseInt(attributes.getValue("id"));
-                Release release = new Release();
-                release.setReleaseId(currentMapKey);
-                releaseHashMap.put(currentMapKey, release);
+                XmlRelease xmlRelease = new XmlRelease();
+                xmlRelease.setReleaseId(currentMapKey);
+                releaseHashMap.put(currentMapKey, xmlRelease);
                 break;
             case "endDate":
                 bendDate = true;
                 break;
-            case "feature":
+            case "icescrumFeature":
 //                bfeaturesId = true;
                 ArrayList<Integer> features;
                 features = releaseHashMap.get(currentMapKey).getFeaturesId();
@@ -70,7 +70,7 @@ public class ReleaseHandler extends DefaultHandler {
             case "releaseVelocity":
                 breleaseVelocity = true;
                 break;
-            case "sprint":
+            case "icescrumSprint":
 //                bsprintsId = true;
                 ArrayList<Integer> sprints;
                 sprints = releaseHashMap.get(currentMapKey).getSprintsId();
@@ -91,7 +91,7 @@ public class ReleaseHandler extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
         /*
-        * Do something if Xml tag is empty except for the release case
+        * Do something if Xml tag is empty except for the icescrumRelease case
         * which is for re initializing the currentMapKey variable.
         */
         switch (qName) {

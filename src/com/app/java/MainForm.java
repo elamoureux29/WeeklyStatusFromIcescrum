@@ -6,16 +6,18 @@ import com.app.java.model.enums.Projects;
 import com.app.java.model.enums.ReleaseStates;
 import com.app.java.model.enums.SprintStates;
 import com.app.java.model.enums.StoryTypes;
+import com.app.java.model.json.Release;
+import com.app.java.model.xml.XmlRelease;
 import com.app.java.util.DefaultTasksCreator;
 import com.app.java.util.ExcelUtil;
-import com.app.java.util.HashMapSort;
-import com.app.java.util.XmlResponse;
-import com.app.java.util.handler.ReleaseHandler;
+import com.app.java.util.ResponseWriter;
 import com.app.java.util.handler.SprintHandler;
 import com.app.java.util.handler.StoryHandler;
 import com.app.java.util.handler.TaskHandler;
 import com.app.java.util.task.AllData;
 import com.app.java.util.task.TaskWorker;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -24,6 +26,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.*;
 
@@ -31,7 +34,7 @@ import java.util.*;
  * Created by elamoureux on 1/6/2017.
  */
 public class MainForm {
-    public static HashMap<Integer, Release> allReleases = new HashMap<>();
+    public static HashMap<Integer, XmlRelease> allReleases = new HashMap<>();
     public static HashMap<Integer, Sprint> allSprintInCurrentRelease = new HashMap<>();
     public static HashMap<Integer, Story> allStoriesInCurrentSprint = new HashMap<>();
     public static HashMap<Integer, TaskItem> allTasksInCurrentSprint = new HashMap<>();
@@ -39,13 +42,13 @@ public class MainForm {
     public static String currentProjectName;
     public static int currentReleaseId;
     public static int currentSprintId;
-    public static IcescrumRelease release = new IcescrumRelease();
-    public static IcescrumSprint sprint = new IcescrumSprint();
-    public static IcescrumStory story = new IcescrumStory();
-    public static IcescrumTask taskItem = new IcescrumTask();
-    public static IcescrumFeature feature = new IcescrumFeature();
-    public static IcescrumActor actor = new IcescrumActor();
-    public static IcescrumAvailability availability = new IcescrumAvailability();
+    public static IcescrumRelease icescrumRelease = new IcescrumRelease();
+    public static IcescrumSprint icescrumSprint = new IcescrumSprint();
+    public static IcescrumStory icescrumStory = new IcescrumStory();
+    public static IcescrumTask icescrumTask = new IcescrumTask();
+    public static IcescrumFeature icescrumFeature = new IcescrumFeature();
+    public static IcescrumActor icescrumActor = new IcescrumActor();
+    public static IcescrumAvailability icescrumAvailability = new IcescrumAvailability();
     public static List<Integer> taktTimeData = new ArrayList<>();
     private JTabbedPane tabbedPane1;
     private JPanel tabPanel1;
@@ -84,28 +87,45 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    ReleaseHandler releaseHandler = new ReleaseHandler(allReleases);
-                    XMLReader myReader = XMLReaderFactory.createXMLReader();
-                    myReader.setContentHandler(releaseHandler);
+                    StringBuffer stringBuffer = icescrumRelease.getAll();
+//                    ReleaseHandler releaseHandler = new ReleaseHandler(allReleases);
+//                    XMLReader myReader = XMLReaderFactory.createXMLReader();
+//                    myReader.setContentHandler(releaseHandler);
 
-                    InputSource is = new InputSource(new StringReader(release.getAll().toString()));
-                    is.setEncoding("UTF-8");
+//                    InputSource is = new InputSource(new StringReader(icescrumRelease.getAll().toString()));
+//                    is.setEncoding("UTF-8");
 
-                    myReader.parse(is);
+//                    System.out.println(is);
+//                    myReader.parse(is);
+
+                    Reader reader = new StringReader(stringBuffer.toString());
+
+                    Gson gson = new GsonBuilder().create();
+                    Release[] releases = gson.fromJson(reader, Release[].class);
+
 
                     /* Display content using Iterator*/
-                    Map<Integer, Release> map = HashMapSort.sortReleaseByValues(allReleases);
-                    Set set = map.entrySet();
-                    Iterator iterator = set.iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry<Integer, Release> mentry = (Map.Entry) iterator.next();
+//                    Map<Integer, XmlRelease> map = HashMapSort.sortReleaseByValues(allReleases);
+//                    Set set = map.entrySet();
+//                    Iterator iterator = set.iterator();
+//                    while (iterator.hasNext()) {
+//                        Map.Entry<Integer, XmlRelease> mentry = (Map.Entry) iterator.next();
 //                        System.out.println(mentry.getValue().getName());
-                        if (mentry.getValue().getState().equalsIgnoreCase(ReleaseStates.IN_PROGRESS.getIdentifier())) {
-                            currentReleaseId = mentry.getValue().getReleaseId();
+//                        if (mentry.getValue().getState().equalsIgnoreCase(ReleaseStates.IN_PROGRESS.getIdentifier())) {
+//                            currentReleaseId = mentry.getValue().getReleaseId();
+//                        }
+//                    }
+
+                    for (Release release : releases) {
+//                        System.out.println(release.getName());
+                        if (release.getState() == ReleaseStates.IN_PROGRESS.getIdentifier()) {
+                            currentReleaseId = release.getId();
                         }
                     }
-//                    XmlResponse.DisplayInConsole(release.getAll());
-                    XmlResponse.SaveToFile(release.getAll(), release.getFileName());
+//                    System.out.println(currentReleaseId);
+
+//                    ResponseWriter.DisplayInConsole(stringBuffer);
+                    ResponseWriter.SaveToFile(stringBuffer, icescrumRelease.getFileName());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -119,7 +139,7 @@ public class MainForm {
                     XMLReader myReader = XMLReaderFactory.createXMLReader();
                     myReader.setContentHandler(sprintHandler);
 
-                    InputSource is = new InputSource(new StringReader(sprint.getAll().toString()));
+                    InputSource is = new InputSource(new StringReader(icescrumSprint.getAll().toString()));
                     is.setEncoding("UTF-8");
 
                     myReader.parse(is);
@@ -136,8 +156,8 @@ public class MainForm {
                             getAllStoriesInButton.setEnabled(true);
                         }
                     }
-//                    XmlResponse.DisplayInConsole(sprint.getAll());
-                    XmlResponse.SaveToFile(sprint.getAll(), sprint.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumSprint.getAll());
+                    ResponseWriter.SaveToFile(icescrumSprint.getAll(), icescrumSprint.getFileName());
                     createDefaultTasksInSprintButton.setEnabled(true);
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -153,7 +173,7 @@ public class MainForm {
                     myReader.setContentHandler(storyHandler);
 
                     for (int storyId : allSprintInCurrentRelease.get(currentSprintId).getStories()) {
-                        InputSource is = new InputSource(new StringReader(story.getItem(storyId).toString()));
+                        InputSource is = new InputSource(new StringReader(icescrumStory.getItem(storyId).toString()));
                         is.setEncoding("UTF-8");
 
                         myReader.parse(is);
@@ -167,8 +187,8 @@ public class MainForm {
 //                        System.out.println(mentry.getValue().getStoryId() + ": " + mentry.getValue().getName());
 //                    }
 
-//                    XmlResponse.DisplayInConsole(story.getAll());
-                    XmlResponse.SaveToFile(story.getAll(), story.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumStory.getAll());
+                    ResponseWriter.SaveToFile(icescrumStory.getAll(), icescrumStory.getFileName());
 
                     createDefaultTasksButton.setEnabled(true);
                 } catch (Exception e1) {
@@ -184,7 +204,7 @@ public class MainForm {
                     XMLReader myReader = XMLReaderFactory.createXMLReader();
                     myReader.setContentHandler(taskHandler);
 
-                    InputSource is = new InputSource(new StringReader(taskItem.getAll().toString()));
+                    InputSource is = new InputSource(new StringReader(icescrumTask.getAll().toString()));
                     is.setEncoding("UTF-8");
 
                     myReader.parse(is);
@@ -197,8 +217,8 @@ public class MainForm {
 //                        System.out.println(mentry.getValue().getName());
 //                    }
 
-//                    XmlResponse.DisplayInConsole(taskItem.getAll());
-                    XmlResponse.SaveToFile(taskItem.getAll(), taskItem.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumTask.getAll());
+                    ResponseWriter.SaveToFile(icescrumTask.getAll(), icescrumTask.getFileName());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -239,13 +259,13 @@ public class MainForm {
                             currentProjectId = p.getIdentifier();
                             currentProjectName = p.getPrjName();
 
-                            release.setProject(currentProjectId);
-                            sprint.setProject(currentProjectId);
-                            story.setProject(currentProjectId);
-                            taskItem.setProject(currentProjectId);
-                            feature.setProject(currentProjectId);
-                            actor.setProject(currentProjectId);
-                            availability.setProject(currentProjectId);
+                            icescrumRelease.setProject(currentProjectId);
+                            icescrumSprint.setProject(currentProjectId);
+                            icescrumStory.setProject(currentProjectId);
+                            icescrumTask.setProject(currentProjectId);
+                            icescrumFeature.setProject(currentProjectId);
+                            icescrumActor.setProject(currentProjectId);
+                            icescrumAvailability.setProject(currentProjectId);
                         }
                     }
                     getButtonPanel.setVisible(true);
@@ -271,13 +291,13 @@ public class MainForm {
                                 ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getIssueStoryDefaultTasks(
                                         currentSprintId, mentry.getValue().getStoryId());
                                 for (CreateTaskItem defaultTaskItem : defaultTasks) {
-                                    taskItem.createTask(defaultTaskItem);
+                                    icescrumTask.createTask(defaultTaskItem);
                                 }
                             } else {
                                 ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getStoryDefaultTasks(
                                         currentSprintId, mentry.getValue().getStoryId());
                                 for (CreateTaskItem defaultTaskItem : defaultTasks) {
-                                    taskItem.createTask(defaultTaskItem);
+                                    icescrumTask.createTask(defaultTaskItem);
                                 }
                             }
                         }
@@ -300,7 +320,7 @@ public class MainForm {
                         myReader.setContentHandler(storyHandler);
 
                         for (int storyId : allSprintInCurrentRelease.get(sprintID).getStories()) {
-                            InputSource is = new InputSource(new StringReader(story.getItem(storyId).toString()));
+                            InputSource is = new InputSource(new StringReader(icescrumStory.getItem(storyId).toString()));
                             is.setEncoding("UTF-8");
 
                             myReader.parse(is);
@@ -315,13 +335,13 @@ public class MainForm {
                                     ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getIssueStoryDefaultTasks(
                                             sprintID, mentry.getValue().getStoryId());
                                     for (CreateTaskItem defaultTaskItem : defaultTasks) {
-                                        taskItem.createTask(defaultTaskItem);
+                                        icescrumTask.createTask(defaultTaskItem);
                                     }
                                 } else {
                                     ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getStoryDefaultTasks(
                                             sprintID, mentry.getValue().getStoryId());
                                     for (CreateTaskItem defaultTaskItem : defaultTasks) {
-                                        taskItem.createTask(defaultTaskItem);
+                                        icescrumTask.createTask(defaultTaskItem);
                                     }
                                 }
                             }
@@ -340,38 +360,38 @@ public class MainForm {
         });
     }
 
-//                    XmlResponse.DisplayInConsole(release.getAll());
-//                    XmlResponse.SaveToFile(release.getAll(), release.getFileName());
-//                    XmlResponse.DisplayInConsole(release.getItem(76926));
-//                    XmlResponse.SaveToFile(release.getItem(76926), release.getFileName());
-//                    XmlResponse.DisplayInConsole(sprint.getAll());
-//                    XmlResponse.SaveToFile(sprint.getAll(), sprint.getFileName());
-//                    XmlResponse.DisplayInConsole(sprint.getAllInRelease(76926));
-//                    XmlResponse.SaveToFile(sprint.getAllInRelease(76926), sprint.getFileName());
-//                    XmlResponse.DisplayInConsole(sprint.getItem(77848));
-//                    XmlResponse.SaveToFile(sprint.getItem(77848), sprint.getFileName());
-//                    XmlResponse.DisplayInConsole(story.getAll());
-//                    XmlResponse.SaveToFile(story.getAll(), story.getFileName());
-//                    XmlResponse.DisplayInConsole(story.getItem(185155));
-//                    XmlResponse.SaveToFile(story.getItem(185155), story.getFileName());
-//                    XmlResponse.DisplayInConsole(taskItem.getAll());
-//                    XmlResponse.SaveToFile(taskItem.getAll(), taskItem.getFileName());
-//                    XmlResponse.DisplayInConsole(taskItem.getAllFiltered(TaskFilters.CURRENT_USER.getFilter()));
-//                    XmlResponse.SaveToFile(taskItem.getAllFiltered(TaskFilters.CURRENT_USER.getFilter()), taskItem.getFileName());
-//                    XmlResponse.DisplayInConsole(taskItem.getAllInSprint(77848));
-//                    XmlResponse.SaveToFile(taskItem.getAllInSprint(77848), taskItem.getFileName());
-//                    XmlResponse.DisplayInConsole(taskItem.getAllFilteredInSprint(77848, TaskFilters.CURRENT_USER.getFilter()));
-//                    XmlResponse.SaveToFile(taskItem.getAllFilteredInSprint(77848, TaskFilters.CURRENT_USER.getFilter()), taskItem.getFileName());
-//                    XmlResponse.DisplayInConsole(taskItem.getItem(171074));
-//                    XmlResponse.SaveToFile(taskItem.getItem(171074), taskItem.getFileName());
-//                    XmlResponse.DisplayInConsole(feature.getAll());
-//                    XmlResponse.SaveToFile(feature.getAll(), feature.getFileName());
-//                    XmlResponse.DisplayInConsole(feature.getItem(14714));
-//                    XmlResponse.SaveToFile(feature.getItem(14714), feature.getFileName());
-//                    XmlResponse.DisplayInConsole(actor.getAll());
-//                    XmlResponse.SaveToFile(actor.getAll(), actor.getFileName());
-//                    XmlResponse.DisplayInConsole(actor.getItem(2264));
-//                    XmlResponse.SaveToFile(actor.getItem(2264), actor.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumRelease.getAll());
+//                    ResponseWriter.SaveToFile(icescrumRelease.getAll(), icescrumRelease.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumRelease.getItem(76926));
+//                    ResponseWriter.SaveToFile(icescrumRelease.getItem(76926), icescrumRelease.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumSprint.getAll());
+//                    ResponseWriter.SaveToFile(icescrumSprint.getAll(), icescrumSprint.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumSprint.getAllInRelease(76926));
+//                    ResponseWriter.SaveToFile(icescrumSprint.getAllInRelease(76926), icescrumSprint.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumSprint.getItem(77848));
+//                    ResponseWriter.SaveToFile(icescrumSprint.getItem(77848), icescrumSprint.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumStory.getAll());
+//                    ResponseWriter.SaveToFile(icescrumStory.getAll(), icescrumStory.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumStory.getItem(185155));
+//                    ResponseWriter.SaveToFile(icescrumStory.getItem(185155), icescrumStory.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumTask.getAll());
+//                    ResponseWriter.SaveToFile(icescrumTask.getAll(), icescrumTask.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumTask.getAllFiltered(TaskFilters.CURRENT_USER.getFilter()));
+//                    ResponseWriter.SaveToFile(icescrumTask.getAllFiltered(TaskFilters.CURRENT_USER.getFilter()), icescrumTask.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumTask.getAllInSprint(77848));
+//                    ResponseWriter.SaveToFile(icescrumTask.getAllInSprint(77848), icescrumTask.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumTask.getAllFilteredInSprint(77848, TaskFilters.CURRENT_USER.getFilter()));
+//                    ResponseWriter.SaveToFile(icescrumTask.getAllFilteredInSprint(77848, TaskFilters.CURRENT_USER.getFilter()), icescrumTask.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumTask.getItem(171074));
+//                    ResponseWriter.SaveToFile(icescrumTask.getItem(171074), icescrumTask.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumFeature.getAll());
+//                    ResponseWriter.SaveToFile(icescrumFeature.getAll(), icescrumFeature.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumFeature.getItem(14714));
+//                    ResponseWriter.SaveToFile(icescrumFeature.getItem(14714), icescrumFeature.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumActor.getAll());
+//                    ResponseWriter.SaveToFile(icescrumActor.getAll(), icescrumActor.getFileName());
+//                    ResponseWriter.DisplayInConsole(icescrumActor.getItem(2264));
+//                    ResponseWriter.SaveToFile(icescrumActor.getItem(2264), icescrumActor.getFileName());
 
 //    private class BtnClicked implements ActionListener {
 //

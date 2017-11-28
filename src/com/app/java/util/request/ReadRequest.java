@@ -30,12 +30,15 @@ public class ReadRequest {
             con.setRequestMethod("GET");
             con.setRequestProperty("User-Agent", userAgent);
             con.setRequestProperty("Accept", responseFormat);
-            con.setRequestProperty("Authorization", Authentication.getBasicAuth());
+//            con.setRequestProperty("Authorization", Authentication.getBasicAuth());
+            con.setRequestProperty("x-icescrum-token", Authentication.getToken());
+//            con.setRequestProperty("Content-Type", "application/xml; charset=UTF-8");
+            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 
             responseCode = con.getResponseCode();
 
-//            System.out.println("\nSending request to URL : " + url);
-//            System.out.println("Response Code : " + responseCode);
+            System.out.println("\nSending request to URL : " + url);
+            System.out.println("Response Code : " + responseCode);
 
             in = new BufferedReader(
                     new InputStreamReader(con.getInputStream()));

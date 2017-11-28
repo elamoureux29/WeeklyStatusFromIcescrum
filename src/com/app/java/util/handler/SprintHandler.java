@@ -42,7 +42,7 @@ public class SprintHandler extends DefaultHandler {
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         switch (qName) {
-            case "sprint":
+            case "icescrumSprint":
                 bsprintId = true;
                 currentMapKey = Integer.parseInt(attributes.getValue("id"));
                 Sprint sprint = new Sprint();
@@ -95,7 +95,7 @@ public class SprintHandler extends DefaultHandler {
             case "state":
                 bstate = true;
                 break;
-            case "story":
+            case "icescrumStory":
 //                bstoriesId = true;
                 ArrayList<Integer> stories;
                 stories = sprintHashMap.get(currentMapKey).getStories();
@@ -123,11 +123,11 @@ public class SprintHandler extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
         /*
-        * Do something if Xml tag is empty except for the release case
+        * Do something if Xml tag is empty except for the icescrumRelease case
         * which is for re initializing the currentMapKey variable.
         */
         switch (qName) {
-            case "sprint":
+            case "icescrumSprint":
                 if (bsprintId) {
                     currentMapKey = 0;
                     bsprintId = false;

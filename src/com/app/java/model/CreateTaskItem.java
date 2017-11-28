@@ -83,11 +83,11 @@ public class CreateTaskItem {
             rootElement.appendChild(type);
         }
 
-        // sprint elements
-        Element sprint = doc.createElement("sprint");
+        // icescrumSprint elements
+        Element sprint = doc.createElement("icescrumSprint");
         rootElement.appendChild(sprint);
 
-        // set attribute to sprint element
+        // set attribute to icescrumSprint element
         Attr sprintAttr = doc.createAttribute("id");
         sprintAttr.setValue(Integer.toString(sprintId));
         sprint.setAttributeNode(sprintAttr);

@@ -31,8 +31,10 @@ public class CreateRequest {
             con.setRequestMethod("POST");
             con.setRequestProperty("User-Agent", userAgent);
             con.setRequestProperty("Accept", responseFormat);
-            con.setRequestProperty("Authorization", Authentication.getBasicAuth());
-            con.setRequestProperty("Content-Type", "application/xml; charset=UTF-8");
+//            con.setRequestProperty("Authorization", Authentication.getBasicAuth());
+            con.setRequestProperty("x-icescrum-token", Authentication.getToken());
+//            con.setRequestProperty("Content-Type", "application/xml; charset=UTF-8");
+            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             con.setDoInput(true);
             con.setDoOutput(true);
 

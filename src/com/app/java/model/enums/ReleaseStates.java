@@ -6,10 +6,10 @@ import java.util.HashMap;
  * Created by elamoureux on 1/11/2017.
  */
 public enum ReleaseStates {
-    TODO("1"), IN_PROGRESS("2"), DONE("3");
+    TODO(1), IN_PROGRESS(2), DONE(3);
 
-    // Reverse-lookup map for getting a day from an abbreviation
-    private static HashMap<String, ReleaseStates> lookup = new HashMap<>();
+    // Reverse-lookup map for getting the Key from an Identifier
+    private static HashMap<Integer, ReleaseStates> lookup = new HashMap<>();
 
     static {
         for (ReleaseStates d : ReleaseStates.values()) {
@@ -17,9 +17,9 @@ public enum ReleaseStates {
         }
     }
 
-    private String identifier;
+    private int identifier;
 
-    ReleaseStates(String s) {
+    ReleaseStates(int s) {
         identifier = s;
     }
 
@@ -27,7 +27,7 @@ public enum ReleaseStates {
         return lookup.get(identifier);
     }
 
-    public String getIdentifier() {
+    public int getIdentifier() {
         return identifier;
     }
 }

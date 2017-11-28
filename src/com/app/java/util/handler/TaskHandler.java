@@ -148,7 +148,7 @@ public class TaskHandler extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
         /*
-        * Do something if Xml tag is empty except for the release case
+        * Do something if Xml tag is empty except for the icescrumRelease case
         * which is for re initializing the currentMapKey variable.
         */
         switch (qName) {
