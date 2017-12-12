@@ -1,8 +1,7 @@
 package com.app.java.util.handler;
 
-import com.app.java.model.Story;
+import com.app.java.model.xml.XmlStory;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.HashMap;
  * Created by elamoureux on 1/13/2017.
  */
 public class StoryHandler extends DefaultHandler {
-    private HashMap<Integer, Story> storyHashMap;
+    private HashMap<Integer, XmlStory> storyHashMap;
     private int currentMapKey;
     private boolean bstoryId;
     //    private boolean bacceptanceTestsId;
@@ -48,11 +47,11 @@ public class StoryHandler extends DefaultHandler {
 private boolean notDependencesTags = true;
     private int recursionLevel;
 
-    public StoryHandler(HashMap<Integer, Story> storyHashMap) {
+    public StoryHandler(HashMap<Integer, XmlStory> storyHashMap) {
         this.storyHashMap = storyHashMap;
     }
 
-    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
         switch (qName) {
             case "icescrumStory":
                 if (bdependencesId && recursionLevel == 1) {
@@ -64,9 +63,9 @@ private boolean notDependencesTags = true;
                 } else if (recursionLevel < 1) {
                     bstoryId = true;
                     currentMapKey = Integer.parseInt(attributes.getValue("id"));
-                    Story story = new Story();
-                    story.setStoryId(currentMapKey);
-                    storyHashMap.put(currentMapKey, story);
+                    XmlStory xmlStory = new XmlStory();
+                    xmlStory.setStoryId(currentMapKey);
+                    storyHashMap.put(currentMapKey, xmlStory);
                 }
                 break;
             case "acceptanceTest":
@@ -251,7 +250,7 @@ private boolean notDependencesTags = true;
         }
     }
 
-    public void endElement(String uri, String localName, String qName) throws SAXException {
+    public void endElement(String uri, String localName, String qName) {
         /*
         * Do something if Xml tag is empty except for the icescrumRelease case
         * which is for re initializing the currentMapKey variable.
@@ -379,7 +378,7 @@ private boolean notDependencesTags = true;
         }
     }
 
-    public void characters(char ch[], int start, int length) throws SAXException {
+    public void characters(char ch[], int start, int length) {
         if (bacceptedDate) {
             storyHashMap.get(currentMapKey).setAcceptedDate(new String(ch, start, length));
             bacceptedDate = false;

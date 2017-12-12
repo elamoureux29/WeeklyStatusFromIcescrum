@@ -1,8 +1,7 @@
 package com.app.java.util.handler;
 
-import com.app.java.model.TaskItem;
+import com.app.java.model.xml.XmlTaskItem;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.HashMap;
  * Created by elamoureux on 1/13/2017.
  */
 public class TaskHandler extends DefaultHandler {
-    private HashMap<Integer, TaskItem> taskHashMap;
+    private HashMap<Integer, XmlTaskItem> taskHashMap;
     private int currentMapKey;
     private boolean btaskId;
     //    private boolean bbacklogId;
@@ -38,18 +37,18 @@ public class TaskHandler extends DefaultHandler {
 //    private boolean btagsId;
 //    private boolean bcommentsId;
 
-    public TaskHandler(HashMap<Integer, TaskItem> taskHashMap) {
+    public TaskHandler(HashMap<Integer, XmlTaskItem> taskHashMap) {
         this.taskHashMap = taskHashMap;
     }
 
-    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
         switch (qName) {
             case "task":
                 btaskId = true;
                 currentMapKey = Integer.parseInt(attributes.getValue("id"));
-                TaskItem taskItem = new TaskItem();
-                taskItem.setTaskId(currentMapKey);
-                taskHashMap.put(currentMapKey, taskItem);
+                XmlTaskItem xmlTaskItem = new XmlTaskItem();
+                xmlTaskItem.setTaskId(currentMapKey);
+                taskHashMap.put(currentMapKey, xmlTaskItem);
                 break;
             case "backlog":
 //                bbacklogId = true;
@@ -146,7 +145,7 @@ public class TaskHandler extends DefaultHandler {
         }
     }
 
-    public void endElement(String uri, String localName, String qName) throws SAXException {
+    public void endElement(String uri, String localName, String qName) {
         /*
         * Do something if Xml tag is empty except for the icescrumRelease case
         * which is for re initializing the currentMapKey variable.
@@ -231,7 +230,7 @@ public class TaskHandler extends DefaultHandler {
         }
     }
 
-    public void characters(char ch[], int start, int length) throws SAXException {
+    public void characters(char ch[], int start, int length) {
         if (bblocked) {
             taskHashMap.get(currentMapKey).setBlocked(new String(ch, start, length));
             bblocked = false;

@@ -4,15 +4,15 @@ package com.app.java.model.enums;
  * Created by elamoureux on 1/11/2017.
  */
 public enum SprintStates {
-    TODO("1"), IN_PROGRESS("2"), DONE("3");
+    TODO(1), IN_PROGRESS(2), DONE(3);
 
-    private String identifier;
+    private int identifier;
 
-    SprintStates(String s) {
+    SprintStates(int s) {
         identifier = s;
     }
 
-    public String getIdentifier() {
+    public int getIdentifier() {
         return identifier;
     }
 }

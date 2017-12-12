@@ -1,8 +1,7 @@
 package com.app.java.util.handler;
 
-import com.app.java.model.Sprint;
+import com.app.java.model.xml.XmlSprint;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.HashMap;
  * Created by elamoureux on 1/13/2017.
  */
 public class SprintHandler extends DefaultHandler {
-    private HashMap<Integer, Sprint> sprintHashMap;
+    private HashMap<Integer, XmlSprint> sprintHashMap;
     private int currentMapKey;
     private boolean bsprintId;
     private boolean bactivationDate;
@@ -36,18 +35,18 @@ public class SprintHandler extends DefaultHandler {
     private boolean bexpectedAvailability;
     private boolean bactualAvailability;
 
-    public SprintHandler(HashMap<Integer, Sprint> sprintHashMap) {
+    public SprintHandler(HashMap<Integer, XmlSprint> sprintHashMap) {
         this.sprintHashMap = sprintHashMap;
     }
 
-    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
         switch (qName) {
             case "icescrumSprint":
                 bsprintId = true;
                 currentMapKey = Integer.parseInt(attributes.getValue("id"));
-                Sprint sprint = new Sprint();
-                sprint.setSprintId(currentMapKey);
-                sprintHashMap.put(currentMapKey, sprint);
+                XmlSprint XmlSprint = new XmlSprint();
+                XmlSprint.setSprintId(currentMapKey);
+                sprintHashMap.put(currentMapKey, XmlSprint);
                 break;
             case "activationDate":
                 bactivationDate = true;
@@ -121,7 +120,7 @@ public class SprintHandler extends DefaultHandler {
         }
     }
 
-    public void endElement(String uri, String localName, String qName) throws SAXException {
+    public void endElement(String uri, String localName, String qName) {
         /*
         * Do something if Xml tag is empty except for the icescrumRelease case
         * which is for re initializing the currentMapKey variable.
@@ -221,7 +220,7 @@ public class SprintHandler extends DefaultHandler {
         }
     }
 
-    public void characters(char ch[], int start, int length) throws SAXException {
+    public void characters(char ch[], int start, int length) {
         if (bactivationDate) {
             sprintHashMap.get(currentMapKey).setActivationDate(new String(ch, start, length));
             bactivationDate = false;

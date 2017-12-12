@@ -1,9 +1,9 @@
 package com.app.java.util;
 
-import com.app.java.model.Sprint;
 import com.app.java.model.enums.ReleaseStates;
 import com.app.java.model.enums.SprintStates;
 import com.app.java.model.xml.XmlRelease;
+import com.app.java.model.xml.XmlSprint;
 import com.app.java.util.handler.SprintHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -31,8 +31,8 @@ public class TaktTimeStories {
         Set releaseSet = reversedReleaseMap.entrySet();
         Iterator releaseIterator = releaseSet.iterator();
         while (releaseIterator.hasNext() && list.size() < TAKTTIME_MAX_DATA) {
-            HashMap<Integer, Sprint> allSprintInRelease = new HashMap<>();
-            HashMap<Integer, Sprint> reversedSprintMap = new HashMap<>();
+            HashMap<Integer, XmlSprint> allSprintInRelease = new HashMap<>();
+            HashMap<Integer, XmlSprint> reversedSprintMap = new HashMap<>();
 
             Map.Entry<Integer, XmlRelease> releaseMentry = (Map.Entry) releaseIterator.next();
             if (releaseMentry.getValue().getState().equalsIgnoreCase(Integer.toString(ReleaseStates.IN_PROGRESS.getIdentifier()))) {
@@ -52,8 +52,8 @@ public class TaktTimeStories {
                     Set set = reversedSprintMap.entrySet();
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext() && list.size() < TAKTTIME_MAX_DATA) {
-                        Map.Entry<Integer, Sprint> mentry = (Map.Entry) iterator.next();
-                        if (mentry.getValue().getState().equalsIgnoreCase(SprintStates.DONE.getIdentifier())) {
+                        Map.Entry<Integer, XmlSprint> mentry = (Map.Entry) iterator.next();
+                        if (mentry.getValue().getState().equalsIgnoreCase(Integer.toString(SprintStates.DONE.getIdentifier()))) {
                             list.add(mentry.getValue().getStories().size());
                         }
                     }
@@ -78,7 +78,7 @@ public class TaktTimeStories {
                     Set set = reversedSprintMap.entrySet();
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext() && list.size() < TAKTTIME_MAX_DATA) {
-                        Map.Entry<Integer, Sprint> mentry = (Map.Entry) iterator.next();
+                        Map.Entry<Integer, XmlSprint> mentry = (Map.Entry) iterator.next();
                         list.add(mentry.getValue().getStories().size());
                     }
                 } catch (Exception e) {

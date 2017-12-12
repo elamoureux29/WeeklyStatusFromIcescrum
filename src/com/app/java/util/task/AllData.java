@@ -1,10 +1,10 @@
 package com.app.java.util.task;
 
 import com.app.java.MainForm;
-import com.app.java.model.Sprint;
 import com.app.java.model.enums.ReleaseStates;
 import com.app.java.model.enums.SprintStates;
 import com.app.java.model.xml.XmlRelease;
+import com.app.java.model.xml.XmlSprint;
 import com.app.java.util.HashMapSort;
 import com.app.java.util.TaktTimeStories;
 import com.app.java.util.handler.ReleaseHandler;
@@ -79,13 +79,13 @@ public class AllData extends TaskWorker {
             myReader.parse(is);
 
                     /* Display content using Iterator*/
-            Map<Integer, Sprint> map = new TreeMap<>(MainForm.allSprintInCurrentRelease);
+            Map<Integer, XmlSprint> map = new TreeMap<>(MainForm.allSprintInCurrentRelease);
             Set set = map.entrySet();
             Iterator iterator = set.iterator();
             while (iterator.hasNext()) {
-                Map.Entry<Integer, Sprint> mentry = (Map.Entry) iterator.next();
+                Map.Entry<Integer, XmlSprint> mentry = (Map.Entry) iterator.next();
 //                System.out.println(mentry.getValue().getGoal() + mentry.getValue().getOrderNumber());
-                if (mentry.getValue().getState().equalsIgnoreCase(SprintStates.IN_PROGRESS.getIdentifier())) {
+                if (mentry.getValue().getState().equalsIgnoreCase(Integer.toString(SprintStates.IN_PROGRESS.getIdentifier()))) {
                     MainForm.currentSprintId = mentry.getValue().getSprintId();
                 }
             }
@@ -111,7 +111,7 @@ public class AllData extends TaskWorker {
 //            Set set = MainForm.allStoriesInCurrentSprint.entrySet();
 //            Iterator iterator = set.iterator();
 //            while (iterator.hasNext()) {
-//                Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
+//                Map.Entry<Integer, XmlStory> mentry = (Map.Entry) iterator.next();
 //                System.out.println(mentry.getValue().getStoryId() + ": " + mentry.getValue().getName());
 //            }
         } catch (Exception e) {
@@ -134,7 +134,7 @@ public class AllData extends TaskWorker {
 //            Set set = MainForm.allTasksInCurrentSprint.entrySet();
 //            Iterator iterator = set.iterator();
 //            while (iterator.hasNext()) {
-//                Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
+//                Map.Entry<Integer, XmlTaskItem> mentry = (Map.Entry) iterator.next();
 //                System.out.println(mentry.getValue().getName());
 //            }
         } catch (Exception e) {

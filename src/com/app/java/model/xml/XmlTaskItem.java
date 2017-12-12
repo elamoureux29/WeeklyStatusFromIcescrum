@@ -1,11 +1,11 @@
-package com.app.java.model;
+package com.app.java.model.xml;
 
 import java.util.ArrayList;
 
 /**
  * Created by elamoureux on 1/16/2017.
  */
-public class TaskItem {
+public class XmlTaskItem {
     private int taskId;
     private int backlogId;
     private String blocked = "";

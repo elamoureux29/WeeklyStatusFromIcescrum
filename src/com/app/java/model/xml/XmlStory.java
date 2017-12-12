@@ -1,11 +1,11 @@
-package com.app.java.model;
+package com.app.java.model.xml;
 
 import java.util.ArrayList;
 
 /**
  * Created by elamoureux on 1/16/2017.
  */
-public class Story {
+public class XmlStory {
     private int storyId;
     private ArrayList<Integer> acceptanceTestsId = new ArrayList<>();
     private String acceptedDate = "";

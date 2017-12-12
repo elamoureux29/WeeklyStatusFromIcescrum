@@ -1,17 +1,22 @@
 package com.app.java;
 
-import com.app.java.model.*;
+import com.app.java.model.CreateTaskItem;
+import com.app.java.model.StatusTableModel;
 import com.app.java.model.api.*;
 import com.app.java.model.enums.Projects;
 import com.app.java.model.enums.ReleaseStates;
 import com.app.java.model.enums.SprintStates;
 import com.app.java.model.enums.StoryTypes;
 import com.app.java.model.json.Release;
+import com.app.java.model.json.Sprint;
 import com.app.java.model.xml.XmlRelease;
+import com.app.java.model.xml.XmlSprint;
+import com.app.java.model.xml.XmlStory;
+import com.app.java.model.xml.XmlTaskItem;
 import com.app.java.util.DefaultTasksCreator;
 import com.app.java.util.ExcelUtil;
 import com.app.java.util.ResponseWriter;
-import com.app.java.util.handler.SprintHandler;
+import com.app.java.util.customJsonDeserializer.SprintDeserializer;
 import com.app.java.util.handler.StoryHandler;
 import com.app.java.util.handler.TaskHandler;
 import com.app.java.util.task.AllData;
@@ -35,9 +40,9 @@ import java.util.*;
  */
 public class MainForm {
     public static HashMap<Integer, XmlRelease> allReleases = new HashMap<>();
-    public static HashMap<Integer, Sprint> allSprintInCurrentRelease = new HashMap<>();
-    public static HashMap<Integer, Story> allStoriesInCurrentSprint = new HashMap<>();
-    public static HashMap<Integer, TaskItem> allTasksInCurrentSprint = new HashMap<>();
+    public static HashMap<Integer, XmlSprint> allSprintInCurrentRelease = new HashMap<>();
+    public static HashMap<Integer, XmlStory> allStoriesInCurrentSprint = new HashMap<>();
+    public static HashMap<Integer, XmlTaskItem> allTasksInCurrentSprint = new HashMap<>();
     public static String currentProjectId;
     public static String currentProjectName;
     public static int currentReleaseId;
@@ -135,29 +140,49 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    SprintHandler sprintHandler = new SprintHandler(allSprintInCurrentRelease);
-                    XMLReader myReader = XMLReaderFactory.createXMLReader();
-                    myReader.setContentHandler(sprintHandler);
+                    StringBuffer stringBuffer = icescrumSprint.getAll();
+//                    SprintHandler sprintHandler = new SprintHandler(allSprintInCurrentRelease);
+//                    XMLReader myReader = XMLReaderFactory.createXMLReader();
+//                    myReader.setContentHandler(sprintHandler);
+//
+//                    InputSource is = new InputSource(new StringReader(icescrumSprint.getAll().toString()));
+//                    is.setEncoding("UTF-8");
+//
+//                    myReader.parse(is);
 
-                    InputSource is = new InputSource(new StringReader(icescrumSprint.getAll().toString()));
-                    is.setEncoding("UTF-8");
+                    Reader reader = new StringReader(stringBuffer.toString());
 
-                    myReader.parse(is);
+//                    Gson gson = new GsonBuilder().create();
+                    // Configure Gson
+                    GsonBuilder gsonBuilder = new GsonBuilder();
+                    gsonBuilder.registerTypeAdapter(Sprint.class, new SprintDeserializer());
+                    Gson gson = gsonBuilder.create();
+                    Sprint[] sprints = gson.fromJson(reader, Sprint[].class);
 
                     /* Display content using Iterator*/
-                    Map<Integer, Sprint> map = new TreeMap<>(allSprintInCurrentRelease);
-                    Set set = map.entrySet();
-                    Iterator iterator = set.iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry<Integer, Sprint> mentry = (Map.Entry) iterator.next();
-//                        System.out.println(mentry.getValue().getGoal() + mentry.getValue().getOrderNumber());
-                        if (mentry.getValue().getState().equalsIgnoreCase(SprintStates.IN_PROGRESS.getIdentifier())) {
-                            currentSprintId = mentry.getValue().getSprintId();
+//                    Map<Integer, XmlSprint> map = new TreeMap<>(allSprintInCurrentRelease);
+//                    Set set = map.entrySet();
+//                    Iterator iterator = set.iterator();
+//                    while (iterator.hasNext()) {
+//                        Map.Entry<Integer, XmlSprint> mentry = (Map.Entry) iterator.next();
+////                        System.out.println(mentry.getValue().getGoal() + mentry.getValue().getOrderNumber());
+//                        if (mentry.getValue().getState().equalsIgnoreCase(SprintStates.IN_PROGRESS.getIdentifier())) {
+//                            currentSprintId = mentry.getValue().getSprintId();
+//                            getAllStoriesInButton.setEnabled(true);
+//                        }
+//                    }
+
+                    for (Sprint sprint : sprints) {
+//                        System.out.println(sprint.getId());
+                        if (sprint.getState() == SprintStates.IN_PROGRESS.getIdentifier()) {
+                            currentSprintId = sprint.getId();
                             getAllStoriesInButton.setEnabled(true);
                         }
                     }
-//                    ResponseWriter.DisplayInConsole(icescrumSprint.getAll());
-                    ResponseWriter.SaveToFile(icescrumSprint.getAll(), icescrumSprint.getFileName());
+//                    System.out.println(currentSprintId);
+
+//                    ResponseWriter.DisplayInConsole(stringBuffer);
+                    ResponseWriter.SaveToFile(stringBuffer, icescrumSprint.getFileName());
                     createDefaultTasksInSprintButton.setEnabled(true);
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -183,7 +208,7 @@ public class MainForm {
 //                    Set set = allStoriesInCurrentSprint.entrySet();
 //                    Iterator iterator = set.iterator();
 //                    while (iterator.hasNext()) {
-//                        Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
+//                        Map.Entry<Integer, XmlStory> mentry = (Map.Entry) iterator.next();
 //                        System.out.println(mentry.getValue().getStoryId() + ": " + mentry.getValue().getName());
 //                    }
 
@@ -213,7 +238,7 @@ public class MainForm {
 //                    Set set = allTasksInCurrentSprint.entrySet();
 //                    Iterator iterator = set.iterator();
 //                    while (iterator.hasNext()) {
-//                        Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
+//                        Map.Entry<Integer, XmlTaskItem> mentry = (Map.Entry) iterator.next();
 //                        System.out.println(mentry.getValue().getName());
 //                    }
 
@@ -285,7 +310,7 @@ public class MainForm {
                     Set set = allStoriesInCurrentSprint.entrySet();
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
-                        Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
+                        Map.Entry<Integer, XmlStory> mentry = (Map.Entry) iterator.next();
                         if (mentry.getValue().getTasksId().isEmpty()) {
                             if (mentry.getValue().getType().equalsIgnoreCase(StoryTypes.DEFECT.getIdentifier())) {
                                 ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getIssueStoryDefaultTasks(
@@ -312,7 +337,7 @@ public class MainForm {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (!textField1.getText().isEmpty()) {
-                        HashMap<Integer, Story> allStoriesInSprint = new HashMap<>();
+                        HashMap<Integer, XmlStory> allStoriesInSprint = new HashMap<>();
                         int sprintID = Integer.parseInt(textField1.getText());
 
                         StoryHandler storyHandler = new StoryHandler(allStoriesInSprint);
@@ -329,7 +354,7 @@ public class MainForm {
                         Set set = allStoriesInSprint.entrySet();
                         Iterator iterator = set.iterator();
                         while (iterator.hasNext()) {
-                            Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
+                            Map.Entry<Integer, XmlStory> mentry = (Map.Entry) iterator.next();
                             if (mentry.getValue().getTasksId().isEmpty()) {
                                 if (mentry.getValue().getType().equalsIgnoreCase(StoryTypes.DEFECT.getIdentifier())) {
                                     ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getIssueStoryDefaultTasks(

@@ -1,11 +1,11 @@
-package com.app.java.model;
+package com.app.java.model.xml;
 
 import java.util.ArrayList;
 
 /**
  * Created by elamoureux on 1/16/2017.
  */
-public class Sprint {
+public class XmlSprint {
     private int sprintId;
     private String activationDate = "";
     private String capacity = "";
