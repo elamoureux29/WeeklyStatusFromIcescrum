@@ -13,7 +13,7 @@ public class DependencesStory {
     private int comments_count;
     private User creator;
     private String dateCreated;
-    private DependencesStory dependsOn;
+    private DependsOnStory dependsOn;
     private String description;
     private String doneDate;
     private float effort;
@@ -136,11 +136,11 @@ public class DependencesStory {
         this.dateCreated = dateCreated;
     }
 
-    public DependencesStory getDependsOn() {
+    public DependsOnStory getDependsOn() {
         return dependsOn;
     }
 
-    public void setDependsOn(DependencesStory dependsOn) {
+    public void setDependsOn(DependsOnStory dependsOn) {
         this.dependsOn = dependsOn;
     }
 

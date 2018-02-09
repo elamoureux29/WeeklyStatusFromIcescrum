@@ -10,6 +10,7 @@ import com.app.java.model.enums.StoryTypes;
 import com.app.java.model.json.Release;
 import com.app.java.model.json.Sprint;
 import com.app.java.model.json.Story;
+import com.app.java.model.json.TaskItem;
 import com.app.java.model.xml.XmlRelease;
 import com.app.java.model.xml.XmlStory;
 import com.app.java.model.xml.XmlTaskItem;
@@ -19,12 +20,10 @@ import com.app.java.util.ResponseWriter;
 import com.app.java.util.customJsonDeserializer.SprintDeserializer;
 import com.app.java.util.customJsonDeserializer.StoryDeserializer;
 import com.app.java.util.handler.StoryHandler;
-import com.app.java.util.handler.TaskHandler;
 import com.app.java.util.task.AllData;
 import com.app.java.util.task.TaskWorker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -144,6 +143,8 @@ public class MainForm {
                     } else if (fileRadioButton.isSelected()) {
                         ResponseWriter.SaveToFile(stringBuffer, icescrumRelease.getFileName());
                     }
+
+                    tabbedPane1.setEnabledAt(1, false);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -202,6 +203,7 @@ public class MainForm {
                     }
 
                     createDefaultTasksInSprintButton.setEnabled(true);
+                    tabbedPane1.setEnabledAt(1, false);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -244,20 +246,21 @@ public class MainForm {
 //                    }
 
                     if (consoleRadioButton.isSelected()) {
-                        for (Story story : stories) {
-                            System.out.println(story.getName());
-                        }
+//                        for (Story story : stories) {
+//                            System.out.println(story.getName());
+//                        }
                         StringBuffer stringBuffer = icescrumStory.getAll();
                         ResponseWriter.DisplayInConsole(stringBuffer);
                     } else if (fileRadioButton.isSelected()) {
-                        for (Story story : stories) {
-                            System.out.println(story.getName());
-                        }
+//                        for (Story story : stories) {
+//                            System.out.println(story.getName());
+//                        }
                         StringBuffer stringBuffer = icescrumStory.getAll();
                         ResponseWriter.SaveToFile(stringBuffer, icescrumStory.getFileName());
                     }
 
                     createDefaultTasksButton.setEnabled(true);
+                    tabbedPane1.setEnabledAt(1, false);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -267,14 +270,26 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    TaskHandler taskHandler = new TaskHandler(allTasksInCurrentSprint);
-                    XMLReader myReader = XMLReaderFactory.createXMLReader();
-                    myReader.setContentHandler(taskHandler);
+                    StringBuffer stringBuffer = icescrumTask.getAll();
+//                    TaskHandler taskHandler = new TaskHandler(allTasksInCurrentSprint);
+//                    XMLReader myReader = XMLReaderFactory.createXMLReader();
+//                    myReader.setContentHandler(taskHandler);
+//
+//                    InputSource is = new InputSource(new StringReader(icescrumTask.getAll().toString()));
+//                    is.setEncoding("UTF-8");
+//
+//                    myReader.parse(is);
 
-                    InputSource is = new InputSource(new StringReader(icescrumTask.getAll().toString()));
-                    is.setEncoding("UTF-8");
+                    Reader reader = new StringReader(stringBuffer.toString());
 
-                    myReader.parse(is);
+//                    Gson gson = new GsonBuilder().create();
+//                    TaskItem[] taskItems = gson.fromJson(reader, TaskItem[].class);
+
+                    // Configure Gson
+                    GsonBuilder gsonBuilder = new GsonBuilder();
+                    gsonBuilder.registerTypeAdapter(Sprint.class, new SprintDeserializer());
+                    Gson gson = gsonBuilder.create();
+                    TaskItem[] taskItems = gson.fromJson(reader, TaskItem[].class);
 
                     /* Display content using Iterator*/
 //                    Set set = allTasksInCurrentSprint.entrySet();
@@ -284,8 +299,14 @@ public class MainForm {
 //                        System.out.println(mentry.getValue().getName());
 //                    }
 
-//                    ResponseWriter.DisplayInConsole(icescrumTask.getAll());
-                    ResponseWriter.SaveToFile(icescrumTask.getAll(), icescrumTask.getFileName());
+                    if (consoleRadioButton.isSelected()) {
+                        ResponseWriter.DisplayInConsole(stringBuffer);
+                    } else if (fileRadioButton.isSelected()) {
+                        ResponseWriter.SaveToFile(stringBuffer, icescrumTask.getFileName());
+                    }
+
+                    createDefaultTasksButton.setEnabled(true);
+                    tabbedPane1.setEnabledAt(1, false);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -341,6 +362,7 @@ public class MainForm {
                     getAllStoriesInButton.setEnabled(false);
                     createDefaultTasksButton.setEnabled(false);
                     createDefaultTasksInSprintButton.setEnabled(false);
+                    tabbedPane1.setEnabledAt(1, false);
                 } else {
                     getButtonPanel.setVisible(false);
                     createButtonPanel.setVisible(false);

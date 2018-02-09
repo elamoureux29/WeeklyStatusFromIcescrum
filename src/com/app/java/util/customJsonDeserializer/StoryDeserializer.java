@@ -36,10 +36,10 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
         // Delegate the deserialization to the context
         User creator = context.deserialize(jsonObject.get("creator"), User.class);
         String dateCreated = jsonObject.get("dateCreated").getAsString();
-        Story dependsOn = null;
+        DependsOnStory dependsOn = null;
         if (!jsonObject.get("dependsOn").isJsonNull()) {
             // Delegate the deserialization to the context
-            dependsOn = context.deserialize(jsonObject.get("dependsOn"), Story.class);
+            dependsOn = context.deserialize(jsonObject.get("dependsOn"), DependsOnStory.class);
         }
         String description = "";
         if (!jsonObject.get("description").isJsonNull()) {
