@@ -31,7 +31,10 @@ public class SprintDeserializer implements JsonDeserializer<Sprint> {
         if (!jsonObject.get("doneDate").isJsonNull()) {
             doneDate = jsonObject.get("doneDate").getAsString();
         }
-        String doneDefinition = jsonObject.get("doneDefinition").getAsString();
+        String doneDefinition = "";
+        if (!jsonObject.get("doneDefinition").isJsonNull()) {
+            doneDefinition = jsonObject.get("doneDefinition").getAsString();
+        }
         String endDate = jsonObject.get("endDate").getAsString();
         String goal = "";
         if (!jsonObject.get("goal").isJsonNull()) {
@@ -47,20 +50,23 @@ public class SprintDeserializer implements JsonDeserializer<Sprint> {
         }
         String lastUpdated = jsonObject.get("lastUpdated").getAsString();
         int orderNumber = jsonObject.get("orderNumber").getAsInt();
-//        Release parentRelease;
         // Delegate the deserialization to the context
         Release parentRelease = context.deserialize(jsonObject.get("parentRelease"), Release.class);
-        String retrospective = jsonObject.get("retrospective").getAsString();
+        String retrospective = "";
+        if (!jsonObject.get("retrospective").isJsonNull()) {
+            retrospective = jsonObject.get("retrospective").getAsString();
+        }
         String startDate = jsonObject.get("startDate").getAsString();
         int state = jsonObject.get("state").getAsInt();
-
+        // The reason for this Deserializer
+        // Icescrum returns a JsonArray of JsonObjects with 1 key:value instead of an Array of int
+        // This prevents from using the simple parser
         JsonArray jsonStories_idsArray = jsonObject.get("stories_ids").getAsJsonArray();
         int[] stories_ids = new int[jsonStories_idsArray.size()];
         for (int i = 0; i < stories_ids.length; i++) {
             JsonObject jsonStories_id = jsonStories_idsArray.get(i).getAsJsonObject();
             stories_ids[i] = jsonStories_id.get("id").getAsInt();
         }
-
         int tasks_count = jsonObject.get("tasks_count").getAsInt();
         String todoDate = jsonObject.get("todoDate").getAsString();
         float velocity = jsonObject.get("velocity").getAsFloat();

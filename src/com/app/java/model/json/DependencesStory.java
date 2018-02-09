@@ -1,6 +1,6 @@
 package com.app.java.model.json;
 
-public class Story {
+public class DependencesStory {
     //    private String class;
     private int id;
     private int acceptanceTests_count;
@@ -13,7 +13,7 @@ public class Story {
     private int comments_count;
     private User creator;
     private String dateCreated;
-    private Story dependsOn;
+    private DependencesStory dependsOn;
     private String description;
     private String doneDate;
     private float effort;
@@ -38,7 +38,7 @@ public class Story {
     private int voters_count;
     private int testState;
     private String[] tags;
-    private Story[] dependences;
+    private DependencesStory[] dependences;
     private boolean followed;
     private int countDoneTasks;
     private int commits_count;
@@ -136,11 +136,11 @@ public class Story {
         this.dateCreated = dateCreated;
     }
 
-    public Story getDependsOn() {
+    public DependencesStory getDependsOn() {
         return dependsOn;
     }
 
-    public void setDependsOn(Story dependsOn) {
+    public void setDependsOn(DependencesStory dependsOn) {
         this.dependsOn = dependsOn;
     }
 
@@ -336,11 +336,11 @@ public class Story {
         this.tags = tags;
     }
 
-    public Story[] getDependences() {
+    public DependencesStory[] getDependences() {
         return dependences;
     }
 
-    public void setDependences(Story[] dependences) {
+    public void setDependences(DependencesStory[] dependences) {
         this.dependences = dependences;
     }
 

@@ -350,7 +350,7 @@ public class ExcelUtil {
         Row sprintDetailsValueRow = sheet.createRow(8);
         Cell sprintDetailsValueRowCellA = sprintDetailsValueRow.createCell(0);
         sprintDetailsValueRowCellA.setCellValue(Math.round(completedPoints) + "/" +
-                Math.round(Float.parseFloat(allSprintInCurrentRelease.get(currentSprintId).getCapacity())));
+                Math.round(allSprintInCurrentRelease.get(currentSprintId).getCapacity()));
         Cell sprintDetailsValueRowCellC = sprintDetailsValueRow.createCell(2);
         sprintDetailsValueRowCellC.setCellValue(numCompletedStories);
         CellUtil.setAlignment(sprintDetailsValueRowCellC, HorizontalAlignment.CENTER);

@@ -2,13 +2,10 @@ package com.app.java.util.task;
 
 import com.app.java.MainForm;
 import com.app.java.model.enums.ReleaseStates;
-import com.app.java.model.enums.SprintStates;
 import com.app.java.model.xml.XmlRelease;
-import com.app.java.model.xml.XmlSprint;
 import com.app.java.util.HashMapSort;
 import com.app.java.util.TaktTimeStories;
 import com.app.java.util.handler.ReleaseHandler;
-import com.app.java.util.handler.SprintHandler;
 import com.app.java.util.handler.StoryHandler;
 import com.app.java.util.handler.TaskHandler;
 import org.xml.sax.InputSource;
@@ -21,7 +18,6 @@ import java.io.StringReader;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 /**
  * Created by elamoureux on 1/26/2017.
@@ -69,26 +65,26 @@ public class AllData extends TaskWorker {
         jProgressBar.setValue(25);
 
         try {
-            SprintHandler sprintHandler = new SprintHandler(MainForm.allSprintInCurrentRelease);
-            XMLReader myReader = XMLReaderFactory.createXMLReader();
-            myReader.setContentHandler(sprintHandler);
-
-            InputSource is = new InputSource(new StringReader(MainForm.icescrumSprint.getAll().toString()));
-            is.setEncoding("UTF-8");
-
-            myReader.parse(is);
-
-                    /* Display content using Iterator*/
-            Map<Integer, XmlSprint> map = new TreeMap<>(MainForm.allSprintInCurrentRelease);
-            Set set = map.entrySet();
-            Iterator iterator = set.iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<Integer, XmlSprint> mentry = (Map.Entry) iterator.next();
-//                System.out.println(mentry.getValue().getGoal() + mentry.getValue().getOrderNumber());
-                if (mentry.getValue().getState().equalsIgnoreCase(Integer.toString(SprintStates.IN_PROGRESS.getIdentifier()))) {
-                    MainForm.currentSprintId = mentry.getValue().getSprintId();
-                }
-            }
+//            SprintHandler sprintHandler = new SprintHandler(MainForm.allSprintInCurrentRelease);
+//            XMLReader myReader = XMLReaderFactory.createXMLReader();
+//            myReader.setContentHandler(sprintHandler);
+//
+//            InputSource is = new InputSource(new StringReader(MainForm.icescrumSprint.getAll().toString()));
+//            is.setEncoding("UTF-8");
+//
+//            myReader.parse(is);
+//
+//                    /* Display content using Iterator*/
+//            Map<Integer, XmlSprint> map = new TreeMap<>(MainForm.allSprintInCurrentRelease);
+//            Set set = map.entrySet();
+//            Iterator iterator = set.iterator();
+//            while (iterator.hasNext()) {
+//                Map.Entry<Integer, XmlSprint> mentry = (Map.Entry) iterator.next();
+////                System.out.println(mentry.getValue().getGoal() + mentry.getValue().getOrderNumber());
+//                if (mentry.getValue().getState().equalsIgnoreCase(Integer.toString(SprintStates.IN_PROGRESS.getIdentifier()))) {
+//                    MainForm.currentSprintId = mentry.getValue().getSprintId();
+//                }
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,7 +96,7 @@ public class AllData extends TaskWorker {
             XMLReader myReader = XMLReaderFactory.createXMLReader();
             myReader.setContentHandler(storyHandler);
 
-            for (int storyId : MainForm.allSprintInCurrentRelease.get(MainForm.currentSprintId).getStories()) {
+            for (int storyId : MainForm.allSprintInCurrentRelease.get(MainForm.currentSprintId).getStories_ids()) {
                 InputSource is = new InputSource(new StringReader(MainForm.icescrumStory.getItem(storyId).toString()));
                 is.setEncoding("UTF-8");
 
