@@ -45,12 +45,15 @@ public class MainForm {
 
 
     public static HashMap<Integer, XmlRelease> allReleases = new HashMap<>();
-    public List<Story> stories = new ArrayList<>();
     public static HashMap<Integer, XmlTaskItem> allTasksInCurrentSprint = new HashMap<>();
     public static String currentProjectId;
     public static String currentProjectName;
     public static int currentReleaseId;
     public static int currentSprintId;
+    public static Release[] releases;
+    public static Sprint[] sprints;
+    public static List<Story> stories = new ArrayList<>();
+    public static TaskItem[] taskItems;
     public static IcescrumRelease icescrumRelease = new IcescrumRelease();
     public static IcescrumSprint icescrumSprint = new IcescrumSprint();
     public static IcescrumStory icescrumStory = new IcescrumStory();
@@ -115,7 +118,7 @@ public class MainForm {
                     Reader reader = new StringReader(stringBuffer.toString());
 
                     Gson gson = new GsonBuilder().create();
-                    Release[] releases = gson.fromJson(reader, Release[].class);
+                    releases = gson.fromJson(reader, Release[].class);
 
 
                     /* Display content using Iterator*/
@@ -171,7 +174,7 @@ public class MainForm {
                     GsonBuilder gsonBuilder = new GsonBuilder();
                     gsonBuilder.registerTypeAdapter(Sprint.class, new SprintDeserializer());
                     Gson gson = gsonBuilder.create();
-                    Sprint[] sprints = gson.fromJson(reader, Sprint[].class);
+                    sprints = gson.fromJson(reader, Sprint[].class);
 
                     /* Display content using Iterator*/
 //                    Map<Integer, XmlSprint> map = new TreeMap<>(allSprintInCurrentRelease);
@@ -289,7 +292,7 @@ public class MainForm {
                     GsonBuilder gsonBuilder = new GsonBuilder();
                     gsonBuilder.registerTypeAdapter(Sprint.class, new SprintDeserializer());
                     Gson gson = gsonBuilder.create();
-                    TaskItem[] taskItems = gson.fromJson(reader, TaskItem[].class);
+                    taskItems = gson.fromJson(reader, TaskItem[].class);
 
                     /* Display content using Iterator*/
 //                    Set set = allTasksInCurrentSprint.entrySet();

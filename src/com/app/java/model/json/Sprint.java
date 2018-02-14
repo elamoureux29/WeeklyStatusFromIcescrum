@@ -1,6 +1,8 @@
 package com.app.java.model.json;
 
-public class Sprint {
+import java.util.Comparator;
+
+public class Sprint implements Comparable<Sprint> {
     //    private String class;
     private int id;
     private int activities_count;
@@ -291,5 +293,26 @@ public class Sprint {
 
     public void setDoneDefinition_html(String doneDefinition_html) {
         this.doneDefinition_html = doneDefinition_html;
+    }
+
+    public static Comparator<Sprint> ReverseOrderNumberComparator
+            = new Comparator<Sprint>() {
+
+        public int compare(Sprint compareSprint1, Sprint compareSprint2) {
+            //ascending order
+            return compareSprint2.getOrderNumber() - compareSprint1.getOrderNumber();
+
+            //descending order
+            //return compareSprint1.getOrderNumber() - compareSprint2.getOrderNumber();
+        }
+    };
+
+    @Override
+    public int compareTo(Sprint compareSprint) {
+        //ascending order
+        return this.orderNumber - compareSprint.getOrderNumber();
+
+        //descending order
+        //return compareSprint.getOrderNumber() - this.orderNumber;
     }
 }

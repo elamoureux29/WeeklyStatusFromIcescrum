@@ -16,6 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Arrays;
 
 /**
  * Created by elamoureux on 1/26/2017.
@@ -39,11 +40,9 @@ public class AllData extends TaskWorker {
             StringBuffer stringBuffer = MainForm.icescrumRelease.getAll();
             Reader reader = new StringReader(stringBuffer.toString());
             Gson gson = new GsonBuilder().create();
-//
-//
-            Release[] releases = gson.fromJson(reader, Release[].class);
+            MainForm.releases = gson.fromJson(reader, Release[].class);
 
-            for (Release release : releases) {
+            for (Release release : MainForm.releases) {
                 if (release.getState() == ReleaseStates.IN_PROGRESS.getIdentifier()) {
                     MainForm.currentReleaseId = release.getId();
                 }
@@ -61,11 +60,9 @@ public class AllData extends TaskWorker {
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(Sprint.class, new SprintDeserializer());
             Gson gson = gsonBuilder.create();
-//
-//
-            Sprint[] sprints = gson.fromJson(reader, Sprint[].class);
+            MainForm.sprints = gson.fromJson(reader, Sprint[].class);
 
-            for (Sprint sprint : sprints) {
+            for (Sprint sprint : MainForm.sprints) {
                 MainForm.allSprintInCurrentRelease.put(sprint.getId(), sprint);
                 if (sprint.getState() == SprintStates.IN_PROGRESS.getIdentifier()) {
                     MainForm.currentSprintId = sprint.getId();
@@ -86,9 +83,7 @@ public class AllData extends TaskWorker {
                 gsonBuilder.registerTypeAdapter(Story.class, new StoryDeserializer());
                 Gson gson = gsonBuilder.create();
                 Story story = gson.fromJson(reader, Story.class);
-//
-//
-//                MainForm.stories.add(story);
+                MainForm.stories.add(story);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,9 +98,7 @@ public class AllData extends TaskWorker {
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(Sprint.class, new SprintDeserializer());
             Gson gson = gsonBuilder.create();
-//
-//
-            TaskItem[] taskItems = gson.fromJson(reader, TaskItem[].class);
+            MainForm.taskItems = gson.fromJson(reader, TaskItem[].class);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,7 +106,30 @@ public class AllData extends TaskWorker {
         jProgressBar.setValue(90);
 
         try {
-//            TaktTimeStories taktTimeStories = new TaktTimeStories(MainForm.allReleases);
+            Arrays.sort(MainForm.releases);
+            for (Release release : MainForm.releases) {
+                System.out.println(release.getName() + " " + release.getOrderNumber());
+            }
+            System.out.println("Now in reverse");
+            Arrays.sort(MainForm.releases, Release.ReverseOrderNumberComparator);
+            for (Release release : MainForm.releases) {
+                System.out.println(release.getName() + " " + release.getOrderNumber());
+            }
+            System.out.println("");
+            System.out.println("");
+
+            Arrays.sort(MainForm.sprints);
+            for (Sprint sprint : MainForm.sprints) {
+                System.out.println(sprint.getDescription() + " " + sprint.getOrderNumber());
+            }
+            System.out.println("Now in reverse");
+            Arrays.sort(MainForm.sprints, Sprint.ReverseOrderNumberComparator);
+            for (Sprint sprint : MainForm.sprints) {
+                System.out.println(sprint.getDescription() + " " + sprint.getOrderNumber());
+            }
+
+
+//            TaktTimeStories taktTimeStories = new TaktTimeStories(MainForm.releases);
 //            MainForm.taktTimeData = taktTimeStories.getTaktTimeData();
         } catch (Exception e) {
             e.printStackTrace();

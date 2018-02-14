@@ -1,6 +1,8 @@
 package com.app.java.model.json;
 
-public class Release {
+import java.util.Comparator;
+
+public class Release implements Comparable<Release> {
     //    private String class;
     private int id;
     private int activities_count;
@@ -211,5 +213,26 @@ public class Release {
 
     public void setVision_html(String vision_html) {
         this.vision_html = vision_html;
+    }
+
+    public static Comparator<Release> ReverseOrderNumberComparator
+            = new Comparator<Release>() {
+
+        public int compare(Release compareRelease1, Release compareRelease2) {
+            //ascending order
+            return compareRelease2.getOrderNumber() - compareRelease1.getOrderNumber();
+
+            //descending order
+            //return compareRelease1.getOrderNumber() - compareRelease2.getOrderNumber();
+        }
+    };
+
+    @Override
+    public int compareTo(Release compareRelease) {
+        //ascending order
+        return this.orderNumber - compareRelease.getOrderNumber();
+
+        //descending order
+        //return compareRelease.getOrderNumber() - this.orderNumber;
     }
 }
