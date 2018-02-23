@@ -29,8 +29,8 @@ public class TaskItem {
     private int uid;
     private String[] tags;
     private Sprint sprint;
-    private String[] commits;
-    private String[] builds;
+    //    private String[] commits;
+//    private String[] builds;
     private String notes_html;
 
     // GSON sets the fields directly using reflection.
@@ -252,21 +252,21 @@ public class TaskItem {
         this.sprint = sprint;
     }
 
-    public String[] getCommits() {
-        return commits;
-    }
-
-    public void setCommits(String[] commits) {
-        this.commits = commits;
-    }
-
-    public String[] getBuilds() {
-        return builds;
-    }
-
-    public void setBuilds(String[] builds) {
-        this.builds = builds;
-    }
+//    public String[] getCommits() {
+//        return commits;
+//    }
+//
+//    public void setCommits(String[] commits) {
+//        this.commits = commits;
+//    }
+//
+//    public String[] getBuilds() {
+//        return builds;
+//    }
+//
+//    public void setBuilds(String[] builds) {
+//        this.builds = builds;
+//    }
 
     public String getNotes_html() {
         return notes_html;

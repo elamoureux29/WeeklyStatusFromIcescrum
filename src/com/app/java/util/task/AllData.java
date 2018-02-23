@@ -7,6 +7,7 @@ import com.app.java.model.json.Release;
 import com.app.java.model.json.Sprint;
 import com.app.java.model.json.Story;
 import com.app.java.model.json.TaskItem;
+import com.app.java.util.TaktTimeStories;
 import com.app.java.util.customJsonDeserializer.SprintDeserializer;
 import com.app.java.util.customJsonDeserializer.StoryDeserializer;
 import com.google.gson.Gson;
@@ -16,7 +17,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.Arrays;
 
 /**
  * Created by elamoureux on 1/26/2017.
@@ -106,31 +106,8 @@ public class AllData extends TaskWorker {
         jProgressBar.setValue(90);
 
         try {
-            Arrays.sort(MainForm.releases);
-            for (Release release : MainForm.releases) {
-                System.out.println(release.getName() + " " + release.getOrderNumber());
-            }
-            System.out.println("Now in reverse");
-            Arrays.sort(MainForm.releases, Release.ReverseOrderNumberComparator);
-            for (Release release : MainForm.releases) {
-                System.out.println(release.getName() + " " + release.getOrderNumber());
-            }
-            System.out.println("");
-            System.out.println("");
-
-            Arrays.sort(MainForm.sprints);
-            for (Sprint sprint : MainForm.sprints) {
-                System.out.println(sprint.getDescription() + " " + sprint.getOrderNumber());
-            }
-            System.out.println("Now in reverse");
-            Arrays.sort(MainForm.sprints, Sprint.ReverseOrderNumberComparator);
-            for (Sprint sprint : MainForm.sprints) {
-                System.out.println(sprint.getDescription() + " " + sprint.getOrderNumber());
-            }
-
-
-//            TaktTimeStories taktTimeStories = new TaktTimeStories(MainForm.releases);
-//            MainForm.taktTimeData = taktTimeStories.getTaktTimeData();
+            TaktTimeStories taktTimeStories = new TaktTimeStories(MainForm.sprints);
+            MainForm.taktTimeData = taktTimeStories.getTaktTimeData();
         } catch (Exception e) {
             e.printStackTrace();
         }
