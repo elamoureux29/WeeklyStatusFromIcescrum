@@ -3,8 +3,8 @@ package com.app.java.util;
 import com.app.java.MainForm;
 import com.app.java.model.enums.StoryStates;
 import com.app.java.model.enums.TaskStates;
+import com.app.java.model.json.Story;
 import com.app.java.model.json.TaskItem;
-import com.app.java.model.xml.XmlStory;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
@@ -223,7 +223,7 @@ public class ExcelUtil {
         float completedPoints = 0;
         Iterator iterator = set.iterator();
         while (iterator.hasNext()) {
-            Map.Entry<Integer, XmlStory> mentry = (Map.Entry) iterator.next();
+            Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
 
             int tasksToDo = 0;
             int tasksInProgress = 0;
@@ -233,31 +233,28 @@ public class ExcelUtil {
             Date latestUpdate = DateFormat.DateParse(allReleases.get(currentReleaseId).getStartDate());
             HashMap<Integer, String> teamHashMap = new HashMap<>();
 
-            if (mentry.getValue().getState().equalsIgnoreCase(StoryStates.DONE.getIdentifier())) {
+            if (mentry.getValue().getState() == StoryStates.DONE.getIdentifier()) {
                 numCompletedStories++;
-                completedPoints += Float.parseFloat(mentry.getValue().getEffort());
+                completedPoints += mentry.getValue().getEffort();
             } else {
-                for (int key : mentry.getValue().getTasksId()) {
-                    TaskItem taskItem = allTasksInCurrentSprint.get(key);
+                for (Map.Entry<Integer, TaskItem> me : allTasksInCurrentSprint.entrySet()) {
+                    if (me.getValue().getParentStory().getId() == mentry.getValue().getId()) {
+                        if (DateFormat.DateParse(me.getValue().getLastUpdated()).compareTo(latestUpdate) > 0) {
+                            latestUpdate = DateFormat.DateParse(me.getValue().getLastUpdated());
+                        }
 
-                    if (DateFormat.DateParse(taskItem.getLastUpdated()).compareTo(latestUpdate) > 0) {
-                        latestUpdate = DateFormat.DateParse(taskItem.getLastUpdated());
+                        if (me.getValue().getState() == TaskStates.TODO.getIdentifier()) {
+                            tasksToDo++;
+                        } else if (me.getValue().getState() == TaskStates.IN_PROGRESS.getIdentifier()) {
+                            tasksInProgress++;
+                        } else if (me.getValue().getState() == TaskStates.DONE.getIdentifier()) {
+                            tasksDone++;
+                        }
+
+                        if (me.getValue().getResponsible() != null) {
+                            teamHashMap.put(me.getValue().getResponsible().getId(), me.getValue().getResponsible().getFirstName() + " " + me.getValue().getResponsible().getLastName());
+                        }
                     }
-
-                    if (taskItem.getState() == TaskStates.TODO.getIdentifier()) {
-                        tasksToDo++;
-                    } else if (taskItem.getState() == TaskStates.IN_PROGRESS.getIdentifier()) {
-                        tasksInProgress++;
-                    } else if (taskItem.getState() == TaskStates.DONE.getIdentifier()) {
-                        tasksDone++;
-                    }
-
-//                    for (Users u : Users.values()) {
-//                        if (taskItem.getResponsibleId() == u.getIdentifier()) {
-//                            teamHashMap.put(taskItem.getResponsibleId(), u.getUserName());
-//                        }
-//                    }
-                    teamHashMap.put(taskItem.getResponsible().getId(), taskItem.getResponsible().getFirstName() + " " + taskItem.getResponsible().getLastName());
                 }
 
                 if (tasksInProgress + tasksDone != 0) {

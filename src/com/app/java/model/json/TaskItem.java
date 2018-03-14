@@ -25,7 +25,7 @@ public class TaskItem {
     private User responsible;
     private int state;
     private String todoDate;
-    private String type;
+    private int type;
     private int uid;
     private String[] tags;
     private Sprint sprint;
@@ -220,11 +220,11 @@ public class TaskItem {
         this.todoDate = todoDate;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 

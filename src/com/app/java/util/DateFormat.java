@@ -15,11 +15,11 @@ import java.util.Date;
  */
 public class DateFormat {
     public static Date DateParse(String dateString) {
-        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S zzz");
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         Date date = null;
 
         try {
-            date = parser.parse(dateString);
+            date = parser.parse(dateString.replaceAll("Z$", "+0000"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -27,14 +27,30 @@ public class DateFormat {
         return date;
     }
 
+    public static String MediumDateFormat(String dateString) {
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        SimpleDateFormat formater = new SimpleDateFormat("dd-MMM-yyyy");
+        Date date = null;
+        String returnDate = "";
+
+        try {
+            date = parser.parse(dateString.replaceAll("Z$", "+0000"));
+            returnDate = formater.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return returnDate;
+    }
+
     public static Date ExcelDateFormat(String dateString) {
-        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S zzz");
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         SimpleDateFormat formater = new SimpleDateFormat("M/d/yyyy");
         Date date = null;
         Date returnDate = null;
 
         try {
-            date = parser.parse(dateString);
+            date = parser.parse(dateString.replaceAll("Z$", "+0000"));
             returnDate = formater.parse(formater.format(date));
         } catch (ParseException e) {
             e.printStackTrace();

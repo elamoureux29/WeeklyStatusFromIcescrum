@@ -20,10 +20,10 @@ public class NonStoryTasks {
         Iterator iterator = set.iterator();
         while (iterator.hasNext()) {
             Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
-            if (mentry.getValue().getType().equalsIgnoreCase(TaskTypes.URGENT.getIdentifier())) {
+            if (mentry.getValue().getType() == TaskTypes.URGENT.getIdentifier()) {
 //                System.out.println("Urgent:" + mentry.getValue().getName());
                 urgentTasksHashMap.put(mentry.getKey(), mentry.getValue());
-            } else if (mentry.getValue().getType().equalsIgnoreCase(TaskTypes.RECURRENT.getIdentifier())) {
+            } else if (mentry.getValue().getType() == TaskTypes.RECURRENT.getIdentifier()) {
 //                System.out.println("Recurrent:" + mentry.getValue().getName());
                 recurrentTasksHashMap.put(mentry.getKey(), mentry.getValue());
             }

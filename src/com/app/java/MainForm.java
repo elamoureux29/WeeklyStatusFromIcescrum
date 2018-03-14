@@ -12,6 +12,7 @@ import com.app.java.model.json.Sprint;
 import com.app.java.model.json.Story;
 import com.app.java.model.json.TaskItem;
 import com.app.java.model.xml.XmlStory;
+import com.app.java.util.DateFormat;
 import com.app.java.util.DefaultTasksCreator;
 import com.app.java.util.ExcelUtil;
 import com.app.java.util.ResponseWriter;
@@ -31,7 +32,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Reader;
 import java.io.StringReader;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -270,11 +270,7 @@ public class MainForm {
                         ResponseWriter.SaveToFile(stringBuffer, icescrumStory.getFileName());
                     }
                     if (currentSprintId != 0) {
-                        SimpleDateFormat simpleFormatter = new SimpleDateFormat("dd-MMM-yyyy");
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-                        Date date = formatter.parse(allSprintInCurrentRelease.get(currentSprintId).getStartDate().replaceAll("Z$", "+0000"));
-
-                        currentSprintLabel.setText(simpleFormatter.format(date) +
+                        currentSprintLabel.setText(DateFormat.MediumDateFormat(allSprintInCurrentRelease.get(currentSprintId).getStartDate()) +
                                 " " + allSprintInCurrentRelease.get(currentSprintId).getOrderNumber() + " " +
                                 allSprintInCurrentRelease.get(currentSprintId).getIndex());
                         createDefaultTasksButton.setEnabled(true);
