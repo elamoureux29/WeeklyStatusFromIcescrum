@@ -37,12 +37,14 @@ public class AllData extends TaskWorker {
         jProgressBar.setValue(0);
 
         try {
+            MainForm.allReleases.clear();
             StringBuffer stringBuffer = MainForm.icescrumRelease.getAll();
             Reader reader = new StringReader(stringBuffer.toString());
             Gson gson = new GsonBuilder().create();
             MainForm.releases = gson.fromJson(reader, Release[].class);
 
             for (Release release : MainForm.releases) {
+                MainForm.allReleases.put(release.getId(), release);
                 if (release.getState() == ReleaseStates.IN_PROGRESS.getIdentifier()) {
                     MainForm.currentReleaseId = release.getId();
                 }
@@ -54,6 +56,7 @@ public class AllData extends TaskWorker {
         jProgressBar.setValue(25);
 
         try {
+            MainForm.allSprintInCurrentRelease.clear();
             StringBuffer stringBuffer = MainForm.icescrumSprint.getAll();
             Reader reader = new StringReader(stringBuffer.toString());
             // Configure Gson
@@ -75,15 +78,23 @@ public class AllData extends TaskWorker {
         jProgressBar.setValue(50);
 
         try {
-            for (int storyId : MainForm.allSprintInCurrentRelease.get(MainForm.currentSprintId).getStories_ids()) {
-                StringBuffer stringBuffer = MainForm.icescrumStory.getItem(storyId);
-                Reader reader = new StringReader(stringBuffer.toString());
-                // Configure Gson
-                GsonBuilder gsonBuilder = new GsonBuilder();
-                gsonBuilder.registerTypeAdapter(Story.class, new StoryDeserializer());
-                Gson gson = gsonBuilder.create();
-                Story story = gson.fromJson(reader, Story.class);
-                MainForm.stories.add(story);
+            MainForm.allStoriesInCurrentSprint.clear();
+            StringBuffer stringBuffer = MainForm.icescrumStory.getAll();
+            Reader reader = new StringReader(stringBuffer.toString());
+            // Configure Gson
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(Story.class, new StoryDeserializer());
+            Gson gson = gsonBuilder.create();
+            MainForm.stories = gson.fromJson(reader, Story[].class);
+
+            if (MainForm.currentSprintId != 0) {
+                for (Story story : MainForm.stories) {
+                    if (story.getParentSprint() != null) {
+                        if (story.getParentSprint().getId() == MainForm.currentSprintId) {
+                            MainForm.allStoriesInCurrentSprint.put(story.getId(), story);
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,6 +110,16 @@ public class AllData extends TaskWorker {
             gsonBuilder.registerTypeAdapter(Sprint.class, new SprintDeserializer());
             Gson gson = gsonBuilder.create();
             MainForm.taskItems = gson.fromJson(reader, TaskItem[].class);
+
+            if (!MainForm.allStoriesInCurrentSprint.isEmpty()) {
+                for (TaskItem taskItem : MainForm.taskItems) {
+                    if (taskItem.getParentStory() != null) {
+                        if (MainForm.allStoriesInCurrentSprint.containsKey(taskItem.getParentStory().getId())) {
+                            MainForm.allTasksInCurrentSprint.put(taskItem.getId(), taskItem);
+                        }
+                    }
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -11,9 +11,7 @@ import com.app.java.model.json.Release;
 import com.app.java.model.json.Sprint;
 import com.app.java.model.json.Story;
 import com.app.java.model.json.TaskItem;
-import com.app.java.model.xml.XmlRelease;
 import com.app.java.model.xml.XmlStory;
-import com.app.java.model.xml.XmlTaskItem;
 import com.app.java.util.DefaultTasksCreator;
 import com.app.java.util.ExcelUtil;
 import com.app.java.util.ResponseWriter;
@@ -33,26 +31,32 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Reader;
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
  * Created by elamoureux on 1/6/2017.
  */
 public class MainForm {
+    public static HashMap<Integer, Release> allReleases = new HashMap<>();
+    //    public static HashMap<Integer, XmlRelease> allReleases = new HashMap<>();
+
     public static HashMap<Integer, Sprint> allSprintInCurrentRelease = new HashMap<>();
     //    public static HashMap<Integer, XmlSprint> allSprintInCurrentRelease = new HashMap<>();
-    public static HashMap<Integer, XmlStory> allStoriesInCurrentSprint = new HashMap<>();
 
+    public static HashMap<Integer, Story> allStoriesInCurrentSprint = new HashMap<>();
+    //    public static HashMap<Integer, XmlStory> allStoriesInCurrentSprint = new HashMap<>();
 
-    public static HashMap<Integer, XmlRelease> allReleases = new HashMap<>();
-    public static HashMap<Integer, XmlTaskItem> allTasksInCurrentSprint = new HashMap<>();
+    public static HashMap<Integer, TaskItem> allTasksInCurrentSprint = new HashMap<>();
+//    public static HashMap<Integer, XmlTaskItem> allTasksInCurrentSprint = new HashMap<>();
+
     public static String currentProjectId;
     public static String currentProjectName;
     public static int currentReleaseId;
     public static int currentSprintId;
     public static Release[] releases;
     public static Sprint[] sprints;
-    public static List<Story> stories = new ArrayList<>();
+    public static Story[] stories;
     public static TaskItem[] taskItems;
     public static IcescrumRelease icescrumRelease = new IcescrumRelease();
     public static IcescrumSprint icescrumSprint = new IcescrumSprint();
@@ -70,9 +74,9 @@ public class MainForm {
     private JProgressBar progressBar1;
     private JComboBox comboBox1;
     private JButton getAllReleasesButton;
-    private JButton getAllSprintsInButton;
-    private JButton getAllStoriesInButton;
-    private JButton getAllTasksInButton;
+    private JButton getAllSprintsButton;
+    private JButton getAllStoriesButton;
+    private JButton getAllTasksButton;
     private JTable table1;
     private JButton exportButton;
     private JButton populateButton;
@@ -88,6 +92,8 @@ public class MainForm {
     private JRadioButton consoleRadioButton;
     private JRadioButton fileRadioButton;
     private JPanel outputPanel;
+    private JPanel projectSelectionPanel;
+    private JLabel currentSprintLabel;
 
 
     public MainForm() {
@@ -104,6 +110,7 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    allReleases.clear();
                     StringBuffer stringBuffer = icescrumRelease.getAll();
 //                    ReleaseHandler releaseHandler = new ReleaseHandler(allReleases);
 //                    XMLReader myReader = XMLReaderFactory.createXMLReader();
@@ -135,6 +142,7 @@ public class MainForm {
 
                     for (Release release : releases) {
 //                        System.out.println(release.getName());
+                        allReleases.put(release.getId(), release);
                         if (release.getState() == ReleaseStates.IN_PROGRESS.getIdentifier()) {
                             currentReleaseId = release.getId();
                         }
@@ -153,10 +161,11 @@ public class MainForm {
                 }
             }
         });
-        getAllSprintsInButton.addActionListener(new ActionListener() {
+        getAllSprintsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    allSprintInCurrentRelease.clear();
                     StringBuffer stringBuffer = icescrumSprint.getAll();
 //                    SprintHandler sprintHandler = new SprintHandler(allSprintInCurrentRelease);
 //                    XMLReader myReader = XMLReaderFactory.createXMLReader();
@@ -185,7 +194,7 @@ public class MainForm {
 ////                        System.out.println(mentry.getValue().getGoal() + mentry.getValue().getOrderNumber());
 //                        if (mentry.getValue().getState().equalsIgnoreCase(SprintStates.IN_PROGRESS.getIdentifier())) {
 //                            currentSprintId = mentry.getValue().getSprintId();
-//                            getAllStoriesInButton.setEnabled(true);
+//                            getAllStoriesButton.setEnabled(true);
 //                        }
 //                    }
 
@@ -194,7 +203,6 @@ public class MainForm {
                         allSprintInCurrentRelease.put(sprint.getId(), sprint);
                         if (sprint.getState() == SprintStates.IN_PROGRESS.getIdentifier()) {
                             currentSprintId = sprint.getId();
-                            getAllStoriesInButton.setEnabled(true);
                         }
                     }
 //                    System.out.println(currentSprintId);
@@ -212,10 +220,12 @@ public class MainForm {
                 }
             }
         });
-        getAllStoriesInButton.addActionListener(new ActionListener() {
+        getAllStoriesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    allStoriesInCurrentSprint.clear();
+                    StringBuffer stringBuffer = icescrumStory.getAll();
 //                    StoryHandler storyHandler = new StoryHandler(allStoriesInCurrentSprint);
 //                    XMLReader myReader = XMLReaderFactory.createXMLReader();
 //                    myReader.setContentHandler(storyHandler);
@@ -227,18 +237,14 @@ public class MainForm {
 //                        myReader.parse(is);
 //                    }
 
-                    for (int storyId : allSprintInCurrentRelease.get(currentSprintId).getStories_ids()) {
-                        StringBuffer stringBuffer = icescrumStory.getItem(storyId);
-                        Reader reader = new StringReader(stringBuffer.toString());
+                    Reader reader = new StringReader(stringBuffer.toString());
 
-//                        Gson gson = new GsonBuilder().create();
-                        // Configure Gson
-                        GsonBuilder gsonBuilder = new GsonBuilder();
-                        gsonBuilder.registerTypeAdapter(Story.class, new StoryDeserializer());
-                        Gson gson = gsonBuilder.create();
-                        Story story = gson.fromJson(reader, Story.class);
-                        stories.add(story);
-                    }
+//                    Gson gson = new GsonBuilder().create();
+                    // Configure Gson
+                    GsonBuilder gsonBuilder = new GsonBuilder();
+                    gsonBuilder.registerTypeAdapter(Story.class, new StoryDeserializer());
+                    Gson gson = gsonBuilder.create();
+                    stories = gson.fromJson(reader, Story[].class);
 
                     /* Display content using Iterator*/
 //                    Set set = allStoriesInCurrentSprint.entrySet();
@@ -248,28 +254,38 @@ public class MainForm {
 //                        System.out.println(mentry.getValue().getStoryId() + ": " + mentry.getValue().getName());
 //                    }
 
-                    if (consoleRadioButton.isSelected()) {
-//                        for (Story story : stories) {
-//                            System.out.println(story.getName());
-//                        }
-                        StringBuffer stringBuffer = icescrumStory.getAll();
-                        ResponseWriter.DisplayInConsole(stringBuffer);
-                    } else if (fileRadioButton.isSelected()) {
-//                        for (Story story : stories) {
-//                            System.out.println(story.getName());
-//                        }
-                        StringBuffer stringBuffer = icescrumStory.getAll();
-                        ResponseWriter.SaveToFile(stringBuffer, icescrumStory.getFileName());
+                    if (currentSprintId != 0) {
+                        for (Story story : stories) {
+                            if (story.getParentSprint() != null) {
+                                if (story.getParentSprint().getId() == currentSprintId) {
+                                    allStoriesInCurrentSprint.put(story.getId(), story);
+                                }
+                            }
+                        }
                     }
 
-                    createDefaultTasksButton.setEnabled(true);
+                    if (consoleRadioButton.isSelected()) {
+                        ResponseWriter.DisplayInConsole(stringBuffer);
+                    } else if (fileRadioButton.isSelected()) {
+                        ResponseWriter.SaveToFile(stringBuffer, icescrumStory.getFileName());
+                    }
+                    if (currentSprintId != 0) {
+                        SimpleDateFormat simpleFormatter = new SimpleDateFormat("dd-MMM-yyyy");
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+                        Date date = formatter.parse(allSprintInCurrentRelease.get(currentSprintId).getStartDate().replaceAll("Z$", "+0000"));
+
+                        currentSprintLabel.setText(simpleFormatter.format(date) +
+                                " " + allSprintInCurrentRelease.get(currentSprintId).getOrderNumber() + " " +
+                                allSprintInCurrentRelease.get(currentSprintId).getIndex());
+                        createDefaultTasksButton.setEnabled(true);
+                    }
                     tabbedPane1.setEnabledAt(1, false);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
             }
         });
-        getAllTasksInButton.addActionListener(new ActionListener() {
+        getAllTasksButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -302,13 +318,22 @@ public class MainForm {
 //                        System.out.println(mentry.getValue().getName());
 //                    }
 
+                    if (!allStoriesInCurrentSprint.isEmpty()) {
+                        for (TaskItem taskItem : taskItems) {
+                            if (taskItem.getParentStory() != null) {
+                                if (allStoriesInCurrentSprint.containsKey(taskItem.getParentStory().getId())) {
+                                    allTasksInCurrentSprint.put(taskItem.getId(), taskItem);
+                                }
+                            }
+                        }
+                    }
+
                     if (consoleRadioButton.isSelected()) {
                         ResponseWriter.DisplayInConsole(stringBuffer);
                     } else if (fileRadioButton.isSelected()) {
                         ResponseWriter.SaveToFile(stringBuffer, icescrumTask.getFileName());
                     }
 
-                    createDefaultTasksButton.setEnabled(true);
                     tabbedPane1.setEnabledAt(1, false);
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -362,7 +387,7 @@ public class MainForm {
                     getButtonPanel.setVisible(true);
                     createButtonPanel.setVisible(true);
                     testPanel.setVisible(true);
-                    getAllStoriesInButton.setEnabled(false);
+                    currentSprintLabel.setText("");
                     createDefaultTasksButton.setEnabled(false);
                     createDefaultTasksInSprintButton.setEnabled(false);
                     tabbedPane1.setEnabledAt(1, false);

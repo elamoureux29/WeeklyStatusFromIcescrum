@@ -2,7 +2,7 @@ package com.app.java.util;
 
 import com.app.java.model.enums.TaskStates;
 import com.app.java.model.enums.Users;
-import com.app.java.model.xml.XmlTaskItem;
+import com.app.java.model.json.TaskItem;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,7 +15,7 @@ import java.util.Set;
 public class UsersNoInProgressTasks {
     private HashMap<Integer, String> usersList = new HashMap<>();
 
-    public UsersNoInProgressTasks(HashMap<Integer, XmlTaskItem> tasksMap) {
+    public UsersNoInProgressTasks(HashMap<Integer, TaskItem> tasksMap) {
         for (Users u : Users.values()) {
             if (!u.isManager()){
                 usersList.put(u.getIdentifier(), u.getUserName());
@@ -25,9 +25,9 @@ public class UsersNoInProgressTasks {
         Set set = tasksMap.entrySet();
         Iterator iterator = set.iterator();
         while (iterator.hasNext()) {
-            Map.Entry<Integer, XmlTaskItem> mentry = (Map.Entry) iterator.next();
-            if (mentry.getValue().getState().equalsIgnoreCase(TaskStates.IN_PROGRESS.getIdentifier())) {
-                usersList.remove(mentry.getValue().getResponsibleId());
+            Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
+            if (mentry.getValue().getState() == TaskStates.IN_PROGRESS.getIdentifier()) {
+                usersList.remove(mentry.getValue().getResponsible());
             }
         }
 //        System.out.println("Users List:" + usersList);

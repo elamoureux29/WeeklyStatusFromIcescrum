@@ -1,8 +1,12 @@
 package com.app.java.util;
 
+import com.app.java.MainForm;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Created by elamoureux on 1/11/2017.
@@ -12,8 +16,13 @@ public class ResponseWriter {
         File file;
         FileOutputStream fos = null;
 
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.now();
+
+        String fullFileName = fileName + "_" + MainForm.currentProjectName + "_" + dtf.format(localDate);
+
         try {
-            file = new File(System.getProperty("user.home") + "/" + fileName + ".json");
+            file = new File(System.getProperty("user.home") + "/" + fullFileName + ".json");
             fos = new FileOutputStream(file);
 
             // if file doesnt exists, then create it

@@ -1,7 +1,7 @@
 package com.app.java.util;
 
 import com.app.java.model.enums.TaskTypes;
-import com.app.java.model.xml.XmlTaskItem;
+import com.app.java.model.json.TaskItem;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,14 +12,14 @@ import java.util.Set;
  * Created by elamoureux on 3/24/2017.
  */
 public class NonStoryTasks {
-    private HashMap<Integer, XmlTaskItem> urgentTasksHashMap = new HashMap<>();
-    private HashMap<Integer, XmlTaskItem> recurrentTasksHashMap = new HashMap<>();
+    private HashMap<Integer, TaskItem> urgentTasksHashMap = new HashMap<>();
+    private HashMap<Integer, TaskItem> recurrentTasksHashMap = new HashMap<>();
 
-    public NonStoryTasks(HashMap<Integer, XmlTaskItem> tasksMap) {
+    public NonStoryTasks(HashMap<Integer, TaskItem> tasksMap) {
         Set set = tasksMap.entrySet();
         Iterator iterator = set.iterator();
         while (iterator.hasNext()) {
-            Map.Entry<Integer, XmlTaskItem> mentry = (Map.Entry) iterator.next();
+            Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
             if (mentry.getValue().getType().equalsIgnoreCase(TaskTypes.URGENT.getIdentifier())) {
 //                System.out.println("Urgent:" + mentry.getValue().getName());
                 urgentTasksHashMap.put(mentry.getKey(), mentry.getValue());
@@ -30,11 +30,11 @@ public class NonStoryTasks {
         }
     }
 
-    public HashMap<Integer, XmlTaskItem> getUrgentTasksHashMap() {
+    public HashMap<Integer, TaskItem> getUrgentTasksHashMap() {
         return urgentTasksHashMap;
     }
 
-    public HashMap<Integer, XmlTaskItem> getRecurrentTasksHashMap() {
+    public HashMap<Integer, TaskItem> getRecurrentTasksHashMap() {
         return recurrentTasksHashMap;
     }
 }

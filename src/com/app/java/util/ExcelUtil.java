@@ -3,9 +3,8 @@ package com.app.java.util;
 import com.app.java.MainForm;
 import com.app.java.model.enums.StoryStates;
 import com.app.java.model.enums.TaskStates;
-import com.app.java.model.enums.Users;
+import com.app.java.model.json.TaskItem;
 import com.app.java.model.xml.XmlStory;
-import com.app.java.model.xml.XmlTaskItem;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
@@ -160,20 +159,21 @@ public class ExcelUtil {
         Iterator urgentTasksIterator = urgentTasksSet.iterator();
         while (urgentTasksIterator.hasNext()) {
             rowStartPoint++;
-            Map.Entry<Integer, XmlTaskItem> mentry = (Map.Entry) urgentTasksIterator.next();
+            Map.Entry<Integer, TaskItem> mentry = (Map.Entry) urgentTasksIterator.next();
             Row urgentTaskDetailRow = sheet.createRow(rowStartPoint);
             Cell urgentTaskDetailRowCellA = urgentTaskDetailRow.createCell(0);
             urgentTaskDetailRowCellA.setCellValue(mentry.getValue().getName());
             sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, 0, 6));
             Cell urgentTaskDetailRowCellH = urgentTaskDetailRow.createCell(7);
-            for (Users u : Users.values()) {
-                if (mentry.getValue().getResponsibleId() == u.getIdentifier()) {
-                    urgentTaskDetailRowCellH.setCellValue(u.getUserName());
-                }
-            }
+//            for (Users u : Users.values()) {
+//                if (mentry.getValue().getResponsibleId() == u.getIdentifier()) {
+//                    urgentTaskDetailRowCellH.setCellValue(u.getUserName());
+//                }
+//            }
+            urgentTaskDetailRowCellH.setCellValue(mentry.getValue().getResponsible().getFirstName() + " " + mentry.getValue().getResponsible().getLastName());
             Cell urgentTaskDetailRowCellI = urgentTaskDetailRow.createCell(8);
             for (TaskStates ts : TaskStates.values()) {
-                if (mentry.getValue().getState().equalsIgnoreCase(ts.getIdentifier())) {
+                if (mentry.getValue().getState() == ts.getIdentifier()) {
                     urgentTaskDetailRowCellI.setCellValue(ts.getText());
                 }
             }
@@ -193,20 +193,21 @@ public class ExcelUtil {
         Iterator recurrentTasksIterator = recurrentTasksSet.iterator();
         while (recurrentTasksIterator.hasNext()) {
             rowStartPoint++;
-            Map.Entry<Integer, XmlTaskItem> mentry = (Map.Entry) recurrentTasksIterator.next();
+            Map.Entry<Integer, TaskItem> mentry = (Map.Entry) recurrentTasksIterator.next();
             Row recurrentTaskDetailRow = sheet.createRow(rowStartPoint);
             Cell recurrentTaskDetailRowCellA = recurrentTaskDetailRow.createCell(0);
             recurrentTaskDetailRowCellA.setCellValue(mentry.getValue().getName());
             sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, 0, 6));
             Cell recurrentTaskDetailRowCellH = recurrentTaskDetailRow.createCell(7);
-            for (Users u : Users.values()) {
-                if (mentry.getValue().getResponsibleId() == u.getIdentifier()) {
-                    recurrentTaskDetailRowCellH.setCellValue(u.getUserName());
-                }
-            }
+//            for (Users u : Users.values()) {
+//                if (mentry.getValue().getResponsibleId() == u.getIdentifier()) {
+//                    recurrentTaskDetailRowCellH.setCellValue(u.getUserName());
+//                }
+//            }
+            recurrentTaskDetailRowCellH.setCellValue(mentry.getValue().getResponsible().getFirstName() + " " + mentry.getValue().getResponsible().getLastName());
             Cell recurrentTaskDetailRowCellI = recurrentTaskDetailRow.createCell(8);
             for (TaskStates ts : TaskStates.values()) {
-                if (mentry.getValue().getState().equalsIgnoreCase(ts.getIdentifier())) {
+                if (mentry.getValue().getState() == ts.getIdentifier()) {
                     recurrentTaskDetailRowCellI.setCellValue(ts.getText());
                 }
             }
@@ -237,25 +238,26 @@ public class ExcelUtil {
                 completedPoints += Float.parseFloat(mentry.getValue().getEffort());
             } else {
                 for (int key : mentry.getValue().getTasksId()) {
-                    XmlTaskItem xmlTaskItem = allTasksInCurrentSprint.get(key);
+                    TaskItem taskItem = allTasksInCurrentSprint.get(key);
 
-                    if (DateFormat.DateParse(xmlTaskItem.getLastUpdated()).compareTo(latestUpdate) > 0) {
-                        latestUpdate = DateFormat.DateParse(xmlTaskItem.getLastUpdated());
+                    if (DateFormat.DateParse(taskItem.getLastUpdated()).compareTo(latestUpdate) > 0) {
+                        latestUpdate = DateFormat.DateParse(taskItem.getLastUpdated());
                     }
 
-                    if (xmlTaskItem.getState().equalsIgnoreCase(TaskStates.TODO.getIdentifier())) {
+                    if (taskItem.getState() == TaskStates.TODO.getIdentifier()) {
                         tasksToDo++;
-                    } else if (xmlTaskItem.getState().equalsIgnoreCase(TaskStates.IN_PROGRESS.getIdentifier())) {
+                    } else if (taskItem.getState() == TaskStates.IN_PROGRESS.getIdentifier()) {
                         tasksInProgress++;
-                    } else if (xmlTaskItem.getState().equalsIgnoreCase(TaskStates.DONE.getIdentifier())) {
+                    } else if (taskItem.getState() == TaskStates.DONE.getIdentifier()) {
                         tasksDone++;
                     }
 
-                    for (Users u : Users.values()) {
-                        if (xmlTaskItem.getResponsibleId() == u.getIdentifier()) {
-                            teamHashMap.put(xmlTaskItem.getResponsibleId(), u.getUserName());
-                        }
-                    }
+//                    for (Users u : Users.values()) {
+//                        if (taskItem.getResponsibleId() == u.getIdentifier()) {
+//                            teamHashMap.put(taskItem.getResponsibleId(), u.getUserName());
+//                        }
+//                    }
+                    teamHashMap.put(taskItem.getResponsible().getId(), taskItem.getResponsible().getFirstName() + " " + taskItem.getResponsible().getLastName());
                 }
 
                 if (tasksInProgress + tasksDone != 0) {

@@ -14,7 +14,10 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
         int id = jsonId.getAsInt();
 
         int acceptanceTests_count = jsonObject.get("acceptanceTests_count").getAsInt();
-        String acceptedDate = jsonObject.get("acceptedDate").getAsString();
+        String acceptedDate = "";
+        if (!jsonObject.get("acceptedDate").isJsonNull()) {
+            acceptedDate = jsonObject.get("acceptedDate").getAsString();
+        }
         int activities_count = jsonObject.get("activities_count").getAsInt();
         // The reason for this Deserializer
         // Icescrum returns a JsonArray of JsonObjects with 1 key:value instead of an Array of int
@@ -49,12 +52,21 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
         if (!jsonObject.get("doneDate").isJsonNull()) {
             doneDate = jsonObject.get("doneDate").getAsString();
         }
-        float effort = jsonObject.get("effort").getAsFloat();
-        String estimatedDate = jsonObject.get("estimatedDate").getAsString();
+        float effort = 0.0f;
+        if (!jsonObject.get("effort").isJsonNull()) {
+            effort = jsonObject.get("effort").getAsFloat();
+        }
+        String estimatedDate = "";
+        if (!jsonObject.get("estimatedDate").isJsonNull()) {
+            estimatedDate = jsonObject.get("estimatedDate").getAsString();
+        }
         // Delegate the deserialization to the context
         Feature feature = context.deserialize(jsonObject.get("feature"), Feature.class);
         int followers_count = jsonObject.get("followers_count").getAsInt();
-        String inProgressDate = jsonObject.get("inProgressDate").getAsString();
+        String inProgressDate = "";
+        if (!jsonObject.get("inProgressDate").isJsonNull()) {
+            inProgressDate = jsonObject.get("inProgressDate").getAsString();
+        }
         String lastUpdated = jsonObject.get("lastUpdated").getAsString();
         String name = jsonObject.get("name").getAsString();
         String notes = "";
@@ -67,7 +79,10 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
         }
         // Delegate the deserialization to the context
         Sprint parentSprint = context.deserialize(jsonObject.get("parentSprint"), Sprint.class);
-        String plannedDate = jsonObject.get("plannedDate").getAsString();
+        String plannedDate = "";
+        if (!jsonObject.get("plannedDate").isJsonNull()) {
+            plannedDate = jsonObject.get("plannedDate").getAsString();
+        }
         int rank = jsonObject.get("rank").getAsInt();
         int state = jsonObject.get("state").getAsInt();
         String suggestedDate = jsonObject.get("suggestedDate").getAsString();

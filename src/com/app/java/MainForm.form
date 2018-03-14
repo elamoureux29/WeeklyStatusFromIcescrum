@@ -28,7 +28,7 @@
               <grid id="37fb1" binding="createButtonPanel" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -59,6 +59,14 @@
                     </constraints>
                     <properties/>
                   </component>
+                  <component id="ed65d" class="javax.swing.JLabel" binding="currentSprintLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value=""/>
+                    </properties>
+                  </component>
                 </children>
               </grid>
               <component id="e1bb5" class="javax.swing.JProgressBar" binding="progressBar1" default-binding="true">
@@ -87,16 +95,10 @@
                   </component>
                 </children>
               </grid>
-              <component id="bd103" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties/>
-              </component>
               <grid id="11793" binding="getButtonPanel" layout-manager="GridLayoutManager" row-count="6" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <enabled value="true"/>
@@ -113,31 +115,31 @@
                       <text value="Get All Releases"/>
                     </properties>
                   </component>
-                  <component id="ec8c6" class="javax.swing.JButton" binding="getAllSprintsInButton" default-binding="true">
+                  <component id="ec8c6" class="javax.swing.JButton" binding="getAllSprintsButton">
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <enabled value="true"/>
-                      <text value="Get All Sprints In Current Release"/>
+                      <text value="Get All Sprints"/>
                     </properties>
                   </component>
-                  <component id="ef7e9" class="javax.swing.JButton" binding="getAllStoriesInButton" default-binding="true">
+                  <component id="ef7e9" class="javax.swing.JButton" binding="getAllStoriesButton">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <enabled value="false"/>
-                      <text value="Get All Stories In Current Sprint"/>
+                      <enabled value="true"/>
+                      <text value="Get All Stories"/>
                     </properties>
                   </component>
-                  <component id="bfb4e" class="javax.swing.JButton" binding="getAllTasksInButton" default-binding="true">
+                  <component id="bfb4e" class="javax.swing.JButton" binding="getAllTasksButton">
                     <constraints>
                       <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <enabled value="true"/>
-                      <text value="Get All Tasks In Current Sprint"/>
+                      <text value="Get All Tasks"/>
                     </properties>
                   </component>
                   <component id="1eb75" class="javax.swing.JButton" binding="getDataButton" default-binding="true">
@@ -154,7 +156,7 @@
               <grid id="9a0f7" binding="outputPanel" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
                 <border type="none" title="Output"/>
@@ -182,6 +184,22 @@
                     <properties>
                       <text value="File"/>
                     </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="626b6" binding="projectSelectionPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="bd103" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
                   </component>
                 </children>
               </grid>
