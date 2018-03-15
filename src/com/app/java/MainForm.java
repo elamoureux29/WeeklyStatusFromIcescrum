@@ -11,20 +11,13 @@ import com.app.java.model.json.Release;
 import com.app.java.model.json.Sprint;
 import com.app.java.model.json.Story;
 import com.app.java.model.json.TaskItem;
-import com.app.java.model.xml.XmlStory;
-import com.app.java.util.DateFormat;
-import com.app.java.util.DefaultTasksCreator;
-import com.app.java.util.ExcelUtil;
-import com.app.java.util.ResponseWriter;
+import com.app.java.util.*;
 import com.app.java.util.customJsonDeserializer.SprintDeserializer;
 import com.app.java.util.customJsonDeserializer.StoryDeserializer;
-import com.app.java.util.handler.StoryHandler;
 import com.app.java.util.task.AllData;
 import com.app.java.util.task.TaskWorker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -87,13 +80,13 @@ public class MainForm {
     private JButton testButton;
     private JButton createDefaultTasksButton;
     private JButton createDefaultTasksInSprintButton;
-    private JTextField textField1;
     private JRadioButton noneRadioButton;
     private JRadioButton consoleRadioButton;
     private JRadioButton fileRadioButton;
     private JPanel outputPanel;
     private JPanel projectSelectionPanel;
     private JLabel currentSprintLabel;
+    private JComboBox comboBox2;
 
 
     public MainForm() {
@@ -198,11 +191,26 @@ public class MainForm {
 //                        }
 //                    }
 
+                    comboBox2.addItem("Please select");
+
                     for (Sprint sprint : sprints) {
 //                        System.out.println(sprint.getId());
-                        allSprintInCurrentRelease.put(sprint.getId(), sprint);
+                        if (sprint.getParentRelease().getId() == currentReleaseId) {
+                            allSprintInCurrentRelease.put(sprint.getId(), sprint);
+                        }
+
                         if (sprint.getState() == SprintStates.IN_PROGRESS.getIdentifier()) {
                             currentSprintId = sprint.getId();
+                            currentSprintLabel.setText(sprint.getParentRelease().getName() + " " +
+                                    DateFormat.MediumDateFormat(sprint.getStartDate()) + " " +
+                                    sprint.getOrderNumber() + " " +
+                                    sprint.getIndex());
+
+                        } else if (sprint.getState() == SprintStates.TODO.getIdentifier()) {
+                            comboBox2.addItem(new Item(sprint.getId(), sprint.getParentRelease().getName() + " " +
+                                    DateFormat.MediumDateFormat(sprint.getStartDate()) + " " +
+                                    sprint.getOrderNumber() + " " +
+                                    sprint.getIndex()));
                         }
                     }
 //                    System.out.println(currentSprintId);
@@ -213,7 +221,6 @@ public class MainForm {
                         ResponseWriter.SaveToFile(stringBuffer, icescrumSprint.getFileName());
                     }
 
-                    createDefaultTasksInSprintButton.setEnabled(true);
                     tabbedPane1.setEnabledAt(1, false);
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -269,12 +276,12 @@ public class MainForm {
                     } else if (fileRadioButton.isSelected()) {
                         ResponseWriter.SaveToFile(stringBuffer, icescrumStory.getFileName());
                     }
+
                     if (currentSprintId != 0) {
-                        currentSprintLabel.setText(DateFormat.MediumDateFormat(allSprintInCurrentRelease.get(currentSprintId).getStartDate()) +
-                                " " + allSprintInCurrentRelease.get(currentSprintId).getOrderNumber() + " " +
-                                allSprintInCurrentRelease.get(currentSprintId).getIndex());
                         createDefaultTasksButton.setEnabled(true);
                     }
+
+                    createDefaultTasksInSprintButton.setEnabled(true);
                     tabbedPane1.setEnabledAt(1, false);
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -384,6 +391,7 @@ public class MainForm {
                     createButtonPanel.setVisible(true);
                     testPanel.setVisible(true);
                     currentSprintLabel.setText("");
+                    comboBox2.removeAllItems();
                     createDefaultTasksButton.setEnabled(false);
                     createDefaultTasksInSprintButton.setEnabled(false);
                     tabbedPane1.setEnabledAt(1, false);
@@ -401,17 +409,17 @@ public class MainForm {
                     Set set = allStoriesInCurrentSprint.entrySet();
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
-                        Map.Entry<Integer, XmlStory> mentry = (Map.Entry) iterator.next();
-                        if (mentry.getValue().getTasksId().isEmpty()) {
-                            if (mentry.getValue().getType().equalsIgnoreCase(StoryTypes.DEFECT.getIdentifier())) {
+                        Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
+                        if (mentry.getValue().getTasks_count() == 0) {
+                            if (mentry.getValue().getType() == StoryTypes.DEFECT.getIdentifier()) {
                                 ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getIssueStoryDefaultTasks(
-                                        currentSprintId, mentry.getValue().getStoryId());
+                                        currentSprintId, mentry.getValue().getId());
                                 for (CreateTaskItem defaultTaskItem : defaultTasks) {
                                     icescrumTask.createTask(defaultTaskItem);
                                 }
                             } else {
                                 ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getStoryDefaultTasks(
-                                        currentSprintId, mentry.getValue().getStoryId());
+                                        currentSprintId, mentry.getValue().getId());
                                 for (CreateTaskItem defaultTaskItem : defaultTasks) {
                                     icescrumTask.createTask(defaultTaskItem);
                                 }
@@ -427,35 +435,32 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (!textField1.getText().isEmpty()) {
-                        HashMap<Integer, XmlStory> allStoriesInSprint = new HashMap<>();
-                        int sprintID = Integer.parseInt(textField1.getText());
+                    if (comboBox2.getSelectedIndex() > 0) {
+                        HashMap<Integer, Story> allStoriesInSprint = new HashMap<>();
+                        Item item = (Item) comboBox2.getSelectedItem();
 
-                        StoryHandler storyHandler = new StoryHandler(allStoriesInSprint);
-                        XMLReader myReader = XMLReaderFactory.createXMLReader();
-                        myReader.setContentHandler(storyHandler);
-
-//                        for (int storyId : allSprintInCurrentRelease.get(sprintID).getStories()) {
-//                            InputSource is = new InputSource(new StringReader(icescrumStory.getItem(storyId).toString()));
-//                            is.setEncoding("UTF-8");
-//
-//                            myReader.parse(is);
-//                        }
+                        for (Story story : stories) {
+                            if (story.getParentSprint() != null) {
+                                if (story.getParentSprint().getId() == item.getValue()) {
+                                    allStoriesInSprint.put(story.getId(), story);
+                                }
+                            }
+                        }
 
                         Set set = allStoriesInSprint.entrySet();
                         Iterator iterator = set.iterator();
                         while (iterator.hasNext()) {
-                            Map.Entry<Integer, XmlStory> mentry = (Map.Entry) iterator.next();
-                            if (mentry.getValue().getTasksId().isEmpty()) {
-                                if (mentry.getValue().getType().equalsIgnoreCase(StoryTypes.DEFECT.getIdentifier())) {
+                            Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
+                            if (mentry.getValue().getTasks_count() == 0) {
+                                if (mentry.getValue().getType() == StoryTypes.DEFECT.getIdentifier()) {
                                     ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getIssueStoryDefaultTasks(
-                                            sprintID, mentry.getValue().getStoryId());
+                                            item.getValue(), mentry.getValue().getId());
                                     for (CreateTaskItem defaultTaskItem : defaultTasks) {
                                         icescrumTask.createTask(defaultTaskItem);
                                     }
                                 } else {
                                     ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getStoryDefaultTasks(
-                                            sprintID, mentry.getValue().getStoryId());
+                                            item.getValue(), mentry.getValue().getId());
                                     for (CreateTaskItem defaultTaskItem : defaultTasks) {
                                         icescrumTask.createTask(defaultTaskItem);
                                     }

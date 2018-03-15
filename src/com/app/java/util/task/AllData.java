@@ -66,7 +66,10 @@ public class AllData extends TaskWorker {
             MainForm.sprints = gson.fromJson(reader, Sprint[].class);
 
             for (Sprint sprint : MainForm.sprints) {
-                MainForm.allSprintInCurrentRelease.put(sprint.getId(), sprint);
+                if (sprint.getParentRelease().getId() == MainForm.currentReleaseId) {
+                    MainForm.allSprintInCurrentRelease.put(sprint.getId(), sprint);
+                }
+
                 if (sprint.getState() == SprintStates.IN_PROGRESS.getIdentifier()) {
                     MainForm.currentSprintId = sprint.getId();
                 }
