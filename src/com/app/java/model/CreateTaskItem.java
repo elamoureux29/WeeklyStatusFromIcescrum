@@ -121,6 +121,7 @@ public class CreateTaskItem {
 
             storyTaskItem.setName(name);
             storyTaskItem.setColor(color.getIdentifier());
+            storyTaskItem.setEstimation(estimation);
 
             taskItem.setTask(storyTaskItem);
 

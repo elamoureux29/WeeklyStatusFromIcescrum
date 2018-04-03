@@ -21,6 +21,10 @@ public class DefaultTasksCreator {
         debugTaskItem.setColor(TaskColors.RED);
         defaultTasks.add(debugTaskItem);
 
+        CreateTaskItem codeReviewTaskItem = new CreateTaskItem(currentSprintId, parentStoryId, "Code Review");
+        codeReviewTaskItem.setColor(TaskColors.ORANGE);
+        defaultTasks.add(codeReviewTaskItem);
+
         CreateTaskItem tpTaskItem = new CreateTaskItem(currentSprintId, parentStoryId, "Test Plan");
         tpTaskItem.setColor(TaskColors.LIGHTBLUE);
         defaultTasks.add(tpTaskItem);
@@ -39,6 +43,11 @@ public class DefaultTasksCreator {
         codeTaskItem.setColor(TaskColors.YELLOW);
         codeTaskItem.setEstimation(12);
         defaultTasks.add(codeTaskItem);
+
+        CreateTaskItem codeReviewTaskItem = new CreateTaskItem(currentSprintId, parentStoryId, "Code Review");
+        codeReviewTaskItem.setColor(TaskColors.ORANGE);
+        codeReviewTaskItem.setEstimation(2);
+        defaultTasks.add(codeReviewTaskItem);
 
         CreateTaskItem testsTaskItem = new CreateTaskItem(currentSprintId, parentStoryId, "Tests");
         testsTaskItem.setColor(TaskColors.BLUE);
@@ -74,7 +83,6 @@ public class DefaultTasksCreator {
 
         CreateTaskItem createTaskItem2 = new CreateTaskItem(currentSprintId, TaskTypes.URGENT, "Patate2");
         createTaskItem2.setColor(TaskColors.YELLOW);
-        createTaskItem2.setEstimation(12);
         defaultTasks.add(createTaskItem2);
 
         return defaultTasks;

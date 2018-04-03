@@ -3,7 +3,7 @@ package com.app.java.model.json;
 public class StoryTaskItem {
     private String name;
     private String color;
-    //    private float estimation;
+    private float estimation;
     private StoryTaskItemStory parentStory;
 
     public String getColor() {
@@ -14,13 +14,13 @@ public class StoryTaskItem {
         this.color = color;
     }
 
-//    public float getEstimation() {
-//        return estimation;
-//    }
-//
-//    public void setEstimation(float estimation) {
-//        this.estimation = estimation;
-//    }
+    public float getEstimation() {
+        return estimation;
+    }
+
+    public void setEstimation(float estimation) {
+        this.estimation = estimation;
+    }
 
     public String getName() {
         return name;
