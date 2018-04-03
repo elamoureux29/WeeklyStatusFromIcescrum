@@ -4,8 +4,8 @@ package com.app.java.model.enums;
  * Created by elamoureux on 1/11/2017.
  */
 public enum TaskColors {
-    YELLOW("yellow"), BLUE("blue"), GREEN("green"), RED("red"), ORANGE("orange"), VIOLET("violet"),
-    GRAY("gray"), PINK("pink"), LIGHTBLUE("bluelight");
+    YELLOW("#FFFF00"), BLUE("#0000FF"), GREEN("#008000"), RED("#FF0000"), ORANGE("#FFA500"), VIOLET("#EE82EE"),
+    GRAY("#808080"), PINK("#FFC0CB"), LIGHTBLUE("#ADD8E6");
 
     private String identifier;
 

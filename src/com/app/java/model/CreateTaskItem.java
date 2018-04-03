@@ -2,6 +2,8 @@ package com.app.java.model;
 
 import com.app.java.model.enums.TaskColors;
 import com.app.java.model.enums.TaskTypes;
+import com.app.java.model.json.*;
+import com.google.gson.Gson;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -17,13 +19,11 @@ import javax.xml.transform.dom.DOMSource;
 public class CreateTaskItem {
     private int sprintId;
     private TaskColors color;
-    private String description = "";
     private float estimation;
     private String name = "";
     private int parentStoryId;
     private TaskTypes type;
     //Use commas for multiple tags
-    private String tags = "";
 
     public CreateTaskItem(int sprintId, int parentStoryId, String name) {
         this.sprintId = sprintId;
@@ -41,16 +41,8 @@ public class CreateTaskItem {
         this.color = color;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public void setEstimation(float estimation) {
         this.estimation = estimation;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
     }
 
     public DOMSource createDOMSource() {
@@ -104,25 +96,11 @@ public class CreateTaskItem {
             rootElement.appendChild(color);
         }
 
-        if (!this.description.isEmpty()) {
-            // description elements
-            Element description = doc.createElement("description");
-            description.appendChild(doc.createTextNode(this.description));
-            rootElement.appendChild(description);
-        }
-
         if (this.estimation != 0.0) {
             // estimation elements
             Element estimation = doc.createElement("estimation");
             estimation.appendChild(doc.createTextNode(Float.toString(this.estimation)));
             rootElement.appendChild(estimation);
-        }
-
-        if (!this.tags.isEmpty()) {
-            // tags elements
-            Element tags = doc.createElement("tags");
-            tags.appendChild(doc.createTextNode(this.tags));
-            rootElement.appendChild(tags);
         }
 
         // shorten way
@@ -131,5 +109,41 @@ public class CreateTaskItem {
         DOMSource source = new DOMSource(doc);
 
         return source;
+    }
+
+    public String createJSONSource() {
+        if (parentStoryId != 0) {
+            NewStoryTaskItem taskItem = new NewStoryTaskItem();
+            StoryTaskItem storyTaskItem = new StoryTaskItem();
+            StoryTaskItemStory parentStory = new StoryTaskItemStory();
+            parentStory.setId(parentStoryId);
+            storyTaskItem.setParentStory(parentStory);
+
+            storyTaskItem.setName(name);
+            storyTaskItem.setColor(color.getIdentifier());
+
+            taskItem.setTask(storyTaskItem);
+
+            Gson gson = new Gson();
+            String json = gson.toJson(taskItem);
+            return json;
+        } else {
+            NewSprintTaskItem taskItem = new NewSprintTaskItem();
+            SprintTaskItem sprintTaskItem = new SprintTaskItem();
+            SprintTaskItemTimeBox timeBox = new SprintTaskItemTimeBox();
+            timeBox.setId(sprintId);
+            sprintTaskItem.setBacklog(timeBox);
+            sprintTaskItem.setType(type.getIdentifier());
+
+            sprintTaskItem.setName(name);
+            sprintTaskItem.setColor(color.getIdentifier());
+            sprintTaskItem.setEstimation(estimation);
+
+            taskItem.setTask(sprintTaskItem);
+
+            Gson gson = new Gson();
+            String json = gson.toJson(taskItem);
+            return json;
+        }
     }
 }

@@ -52,6 +52,7 @@ public class IcescrumTask extends IcescrumRest {
     public StringBuffer createTask(CreateTaskItem createTaskItem) throws Exception {
         String fullUrl = URL + project + URL_BASE_COMMAND;
 
-        return CreateRequest.send(USER_AGENT, RESPONSE_FORMAT, fullUrl, createTaskItem.createDOMSource());
+//        return CreateRequest.send(USER_AGENT, RESPONSE_FORMAT, fullUrl, createTaskItem.createDOMSource());
+        return CreateRequest.send(USER_AGENT, RESPONSE_FORMAT, fullUrl, createTaskItem.createJSONSource());
     }
 }

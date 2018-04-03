@@ -4,7 +4,7 @@ package com.app.java.model.enums;
  * Created by elamoureux on 1/11/2017.
  */
 public enum TaskTypes {
-    RECURRENT(10, "recurrent"), URGENT(11, "urgent");
+    RECURRENT(10, "Recurrent"), URGENT(11, "Urgent");
 
     private int identifier;
     private String name;

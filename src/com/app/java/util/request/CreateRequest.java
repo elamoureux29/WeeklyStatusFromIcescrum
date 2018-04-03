@@ -3,20 +3,17 @@ package com.app.java.util.request;
 import com.app.java.util.Authentication;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URL;
 
 /**
  * Created by elamoureux on 1/11/2017.
  */
 public class CreateRequest {
-    public static StringBuffer send(String userAgent, String responseFormat, String url, DOMSource source) throws Exception {
+    public static StringBuffer send(String userAgent, String responseFormat, String url, String source) throws Exception {
         URL obj;
         HttpsURLConnection con;
         BufferedReader in = null;
@@ -38,20 +35,26 @@ public class CreateRequest {
             con.setDoInput(true);
             con.setDoOutput(true);
 
-            // write the XML content to stream
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            StreamResult result = new StreamResult(con.getOutputStream());
+//            // write the XML content to stream
+//            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+//            Transformer transformer = transformerFactory.newTransformer();
+//            StreamResult result = new StreamResult(con.getOutputStream());
 
             // Output to console for testing
 //            StreamResult result = new StreamResult(System.out);
 
-            transformer.transform(source, result);
+//            transformer.transform(source, result);
 
             // Send post request
-//            con.setDoOutput(true);
+            con.setDoOutput(true);
+
+            OutputStream os = con.getOutputStream();
+            os.write(source.getBytes("UTF-8"));
+            os.flush();
+            os.close();
+
 //            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-//            wr.writeBytes(urlParameters);
+//            wr.writeBytes(source);
 //            wr.flush();
 //            wr.close();
 

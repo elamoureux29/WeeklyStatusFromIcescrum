@@ -3,10 +3,7 @@ package com.app.java;
 import com.app.java.model.CreateTaskItem;
 import com.app.java.model.StatusTableModel;
 import com.app.java.model.api.*;
-import com.app.java.model.enums.Projects;
-import com.app.java.model.enums.ReleaseStates;
-import com.app.java.model.enums.SprintStates;
-import com.app.java.model.enums.StoryTypes;
+import com.app.java.model.enums.*;
 import com.app.java.model.json.Release;
 import com.app.java.model.json.Sprint;
 import com.app.java.model.json.Story;
@@ -410,7 +407,7 @@ public class MainForm {
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
                         Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
-                        if (mentry.getValue().getTasks_count() == 0) {
+                        if (mentry.getValue().getTasks_count() == 0 && mentry.getValue().getState() != StoryStates.DONE.getIdentifier()) {
                             if (mentry.getValue().getType() == StoryTypes.DEFECT.getIdentifier()) {
                                 ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getIssueStoryDefaultTasks(
                                         currentSprintId, mentry.getValue().getId());
@@ -451,7 +448,7 @@ public class MainForm {
                         Iterator iterator = set.iterator();
                         while (iterator.hasNext()) {
                             Map.Entry<Integer, Story> mentry = (Map.Entry) iterator.next();
-                            if (mentry.getValue().getTasks_count() == 0) {
+                            if (mentry.getValue().getTasks_count() == 0 && mentry.getValue().getState() != StoryStates.DONE.getIdentifier()) {
                                 if (mentry.getValue().getType() == StoryTypes.DEFECT.getIdentifier()) {
                                     ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getIssueStoryDefaultTasks(
                                             item.getValue(), mentry.getValue().getId());
@@ -477,9 +474,11 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    StringBuffer stringBuffer = icescrumStory.getAll();
-//                    ResponseWriter.DisplayInConsole(stringBuffer);
-                    ResponseWriter.SaveToFile(stringBuffer, icescrumStory.getFileName());
+                    ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getUrgentDefaultTasks(
+                            currentSprintId);
+                    for (CreateTaskItem defaultTaskItem : defaultTasks) {
+                        icescrumTask.createTask(defaultTaskItem);
+                    }
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

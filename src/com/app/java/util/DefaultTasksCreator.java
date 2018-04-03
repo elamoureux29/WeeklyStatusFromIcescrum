@@ -2,6 +2,7 @@ package com.app.java.util;
 
 import com.app.java.model.CreateTaskItem;
 import com.app.java.model.enums.TaskColors;
+import com.app.java.model.enums.TaskTypes;
 
 import java.util.ArrayList;
 
@@ -47,13 +48,35 @@ public class DefaultTasksCreator {
         return defaultTasks;
     }
 
-//    public static void getRecurrentDefaultTasks(){
-//        CreateTaskItem createTaskItem = new CreateTaskItem(currentSprintId, TaskTypes.RECURRENT, "Patate");
-//
-//    }
-//
-//    public static void getUrgentDefaultTasks(){
-//        CreateTaskItem createTaskItem = new CreateTaskItem(currentSprintId, TaskTypes.URGENT, "Patate");
-//
-//    }
+    public static ArrayList<CreateTaskItem> getRecurrentDefaultTasks(int currentSprintId) {
+        ArrayList<CreateTaskItem> defaultTasks = new ArrayList<>();
+
+        CreateTaskItem createTaskItem1 = new CreateTaskItem(currentSprintId, TaskTypes.RECURRENT, "Patate1");
+        createTaskItem1.setColor(TaskColors.YELLOW);
+        createTaskItem1.setEstimation(12);
+        defaultTasks.add(createTaskItem1);
+
+        CreateTaskItem createTaskItem2 = new CreateTaskItem(currentSprintId, TaskTypes.RECURRENT, "Patate2");
+        createTaskItem2.setColor(TaskColors.YELLOW);
+        createTaskItem2.setEstimation(12);
+        defaultTasks.add(createTaskItem2);
+
+        return defaultTasks;
+    }
+
+    public static ArrayList<CreateTaskItem> getUrgentDefaultTasks(int currentSprintId) {
+        ArrayList<CreateTaskItem> defaultTasks = new ArrayList<>();
+
+        CreateTaskItem createTaskItem1 = new CreateTaskItem(currentSprintId, TaskTypes.URGENT, "Patate1");
+        createTaskItem1.setColor(TaskColors.YELLOW);
+        createTaskItem1.setEstimation(12);
+        defaultTasks.add(createTaskItem1);
+
+        CreateTaskItem createTaskItem2 = new CreateTaskItem(currentSprintId, TaskTypes.URGENT, "Patate2");
+        createTaskItem2.setColor(TaskColors.YELLOW);
+        createTaskItem2.setEstimation(12);
+        defaultTasks.add(createTaskItem2);
+
+        return defaultTasks;
+    }
 }
