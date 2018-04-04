@@ -120,6 +120,10 @@ public class AllData extends TaskWorker {
                         if (MainForm.allStoriesInCurrentSprint.containsKey(taskItem.getParentStory().getId())) {
                             MainForm.allTasksInCurrentSprint.put(taskItem.getId(), taskItem);
                         }
+                    } else {
+                        if (taskItem.getSprint().getId() == MainForm.currentSprintId) {
+                            MainForm.allTasksInCurrentSprint.put(taskItem.getId(), taskItem);
+                        }
                     }
                 }
             }

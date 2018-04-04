@@ -238,21 +238,23 @@ public class ExcelUtil {
                 completedPoints += mentry.getValue().getEffort();
             } else {
                 for (Map.Entry<Integer, TaskItem> me : allTasksInCurrentSprint.entrySet()) {
-                    if (me.getValue().getParentStory().getId() == mentry.getValue().getId()) {
-                        if (DateFormat.DateParse(me.getValue().getLastUpdated()).compareTo(latestUpdate) > 0) {
-                            latestUpdate = DateFormat.DateParse(me.getValue().getLastUpdated());
-                        }
+                    if (me.getValue().getParentStory() != null) {
+                        if (me.getValue().getParentStory().getId() == mentry.getValue().getId()) {
+                            if (DateFormat.DateParse(me.getValue().getLastUpdated()).compareTo(latestUpdate) > 0) {
+                                latestUpdate = DateFormat.DateParse(me.getValue().getLastUpdated());
+                            }
 
-                        if (me.getValue().getState() == TaskStates.TODO.getIdentifier()) {
-                            tasksToDo++;
-                        } else if (me.getValue().getState() == TaskStates.IN_PROGRESS.getIdentifier()) {
-                            tasksInProgress++;
-                        } else if (me.getValue().getState() == TaskStates.DONE.getIdentifier()) {
-                            tasksDone++;
-                        }
+                            if (me.getValue().getState() == TaskStates.TODO.getIdentifier()) {
+                                tasksToDo++;
+                            } else if (me.getValue().getState() == TaskStates.IN_PROGRESS.getIdentifier()) {
+                                tasksInProgress++;
+                            } else if (me.getValue().getState() == TaskStates.DONE.getIdentifier()) {
+                                tasksDone++;
+                            }
 
-                        if (me.getValue().getResponsible() != null) {
-                            teamHashMap.put(me.getValue().getResponsible().getId(), me.getValue().getResponsible().getFirstName() + " " + me.getValue().getResponsible().getLastName());
+                            if (me.getValue().getResponsible() != null) {
+                                teamHashMap.put(me.getValue().getResponsible().getId(), me.getValue().getResponsible().getFirstName() + " " + me.getValue().getResponsible().getLastName());
+                            }
                         }
                     }
                 }

@@ -324,6 +324,10 @@ public class MainForm {
                                 if (allStoriesInCurrentSprint.containsKey(taskItem.getParentStory().getId())) {
                                     allTasksInCurrentSprint.put(taskItem.getId(), taskItem);
                                 }
+                            } else {
+                                if (taskItem.getSprint().getId() == currentSprintId) {
+                                    allTasksInCurrentSprint.put(taskItem.getId(), taskItem);
+                                }
                             }
                         }
                     }
