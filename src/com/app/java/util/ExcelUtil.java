@@ -1,10 +1,11 @@
 package com.app.java.util;
 
-import com.app.java.MainForm;
 import com.app.java.model.enums.StoryStates;
 import com.app.java.model.enums.TaskStates;
 import com.app.java.model.json.Story;
 import com.app.java.model.json.TaskItem;
+import com.app.java.util.excel.LighthouseDataToExcel;
+import com.app.java.util.excel.TaktDataToExcel;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
@@ -29,7 +30,6 @@ public class ExcelUtil {
         XSSFSheet sheet = workbook.createSheet("Status");
 
         int rowStartPoint = 0;
-        int sheet2RowStartPoint = 0;
         int projectBordersRowStartPoint = 0;
         int sprintBordersRowStartPoint = 0;
         int noInProgressTaskBordersRowStartPoint = 0;
@@ -396,35 +396,9 @@ public class ExcelUtil {
             sheet.autoSizeColumn(columnIndex);
         }
 
-        XSSFSheet sheet2 = workbook.createSheet("TaktData");
+        new TaktDataToExcel(workbook);
 
-        Row sheet2TitleRow = sheet2.createRow(sheet2RowStartPoint);
-        Cell sheet2TitleRowCellA = sheet2TitleRow.createCell(0);
-        sheet2TitleRowCellA.setCellValue("Takt Data");
-        CellUtil.setCellStyleProperties(sheet2TitleRowCellA, cellStyleValues);
-//        CellUtil.setAlignment(titleRowCellA, HorizontalAlignment.CENTER);
-        sheet2.addMergedRegion(new CellRangeAddress(sheet2RowStartPoint, sheet2RowStartPoint, 0, 3));
-
-        sheet2RowStartPoint += 2;
-        int sprintNumber = 1;
-
-        for (int i: MainForm.taktTimeData) {
-            Row row = sheet2.createRow(sheet2RowStartPoint);
-            Cell rowCellA = row.createCell(0);
-            rowCellA.setCellValue("Sprint " + sprintNumber);
-            Cell rowCellB = row.createCell(1);
-            rowCellB.setCellValue(i);
-            sheet2RowStartPoint++;
-            sprintNumber++;
-        }
-
-        sheet2RowStartPoint += 2;
-
-        Row sheet2WorkItemsRow = sheet2.createRow(sheet2RowStartPoint);
-        Cell sheet2WorkItemsRowCellA = sheet2WorkItemsRow.createCell(0);
-        sheet2WorkItemsRowCellA.setCellValue("Work Items");
-        Cell sheet2WorkItemsRowCellB = sheet2WorkItemsRow.createCell(1);
-        sheet2WorkItemsRowCellB.setCellValue(stories.length);
+        new LighthouseDataToExcel(workbook);
 
         try {
             File file;

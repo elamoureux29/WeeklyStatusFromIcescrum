@@ -44,6 +44,7 @@ public class MainForm {
     public static String currentProjectName;
     public static int currentReleaseId;
     public static int currentSprintId;
+    public static int firstSprintId;
     public static Release[] releases;
     public static Sprint[] sprints;
     public static Story[] stories;
@@ -194,6 +195,10 @@ public class MainForm {
 //                        System.out.println(sprint.getId());
                         if (sprint.getParentRelease().getId() == currentReleaseId) {
                             allSprintInCurrentRelease.put(sprint.getId(), sprint);
+                        }
+
+                        if (sprint.getOrderNumber() == 1) {
+                            firstSprintId = sprint.getId();
                         }
 
                         if (sprint.getState() == SprintStates.IN_PROGRESS.getIdentifier()) {
