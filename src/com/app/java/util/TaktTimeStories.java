@@ -12,12 +12,15 @@ import java.util.List;
  */
 public class TaktTimeStories {
     private Sprint[] reversedSprints;
+    //    private Sprint[] orderedSprints;
     private final int TAKTTIME_MAX_DATA = 10;
     private List<Integer> list = new ArrayList<>();
 
     public TaktTimeStories(Sprint[] sprints) {
         Arrays.sort(sprints, Sprint.ReverseOrderNumberComparator);
+//        Arrays.sort(sprints);
         reversedSprints = sprints;
+//        orderedSprints = sprints;
     }
 
     public List<Integer> getTaktTimeData() {
@@ -27,6 +30,12 @@ public class TaktTimeStories {
                     list.add(reversedSprints[i].getStories_ids().length);
                 }
             }
+
+//            for (int i = 0; i < orderedSprints.length && list.size() < TAKTTIME_MAX_DATA; i++) {
+//                if (orderedSprints[i].getState() == SprintStates.DONE.getIdentifier()) {
+//                    list.add(orderedSprints[i].getStories_ids().length);
+//                }
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -418,6 +418,14 @@ public class ExcelUtil {
             sprintNumber++;
         }
 
+        sheet2RowStartPoint += 2;
+
+        Row sheet2WorkItemsRow = sheet2.createRow(sheet2RowStartPoint);
+        Cell sheet2WorkItemsRowCellA = sheet2WorkItemsRow.createCell(0);
+        sheet2WorkItemsRowCellA.setCellValue("Work Items");
+        Cell sheet2WorkItemsRowCellB = sheet2WorkItemsRow.createCell(1);
+        sheet2WorkItemsRowCellB.setCellValue(stories.length);
+
         try {
             File file;
             FileOutputStream fos = null;
