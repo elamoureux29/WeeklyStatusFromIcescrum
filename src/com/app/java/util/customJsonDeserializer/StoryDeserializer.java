@@ -62,7 +62,10 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
         }
         // Delegate the deserialization to the context
         Feature feature = context.deserialize(jsonObject.get("feature"), Feature.class);
-        int followers_count = jsonObject.get("followers_count").getAsInt();
+//        int followers_count = 0;
+//        if (!jsonObject.get("followers_count").isJsonNull()) {
+//            followers_count = jsonObject.get("followers_count").getAsInt();
+//        }
         String inProgressDate = "";
         if (!jsonObject.get("inProgressDate").isJsonNull()) {
             inProgressDate = jsonObject.get("inProgressDate").getAsString();
@@ -91,7 +94,7 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
         int type = jsonObject.get("type").getAsInt();
         int uid = jsonObject.get("uid").getAsInt();
         int value = jsonObject.get("value").getAsInt();
-        int voters_count = jsonObject.get("voters_count").getAsInt();
+//        int voters_count = jsonObject.get("voters_count").getAsInt();
         int testState = jsonObject.get("testState").getAsInt();
         JsonArray jsonTagsArray = jsonObject.get("tags").getAsJsonArray();
         String[] tags = new String[jsonTagsArray.size()];
@@ -106,11 +109,11 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
             // Delegate the deserialization to the context
             dependences[i] = context.deserialize(jsonDependence, Story.class);
         }
-        boolean followed = jsonObject.get("followed").getAsBoolean();
+//        boolean followed = jsonObject.get("followed").getAsBoolean();
         int countDoneTasks = jsonObject.get("countDoneTasks").getAsInt();
         int commits_count = jsonObject.get("commits_count").getAsInt();
         int builds_count = jsonObject.get("builds_count").getAsInt();
-        boolean hasVotedFor = jsonObject.get("hasVotedFor").getAsBoolean();
+//        boolean hasVotedFor = jsonObject.get("hasVotedFor").getAsBoolean();
         String notes_html = jsonObject.get("notes_html").getAsString();
 
         Story story = new Story();
@@ -131,7 +134,7 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
         story.setEffort(effort);
         story.setEstimatedDate(estimatedDate);
         story.setFeature(feature);
-        story.setFollowers_count(followers_count);
+//        story.setFollowers_count(followers_count);
         story.setInProgressDate(inProgressDate);
         story.setLastUpdated(lastUpdated);
         story.setName(name);
@@ -147,15 +150,15 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
         story.setType(type);
         story.setUid(uid);
         story.setValue(value);
-        story.setVoters_count(voters_count);
+//        story.setVoters_count(voters_count);
         story.setTestState(testState);
         story.setTags(tags);
         story.setDependences(dependences);
-        story.setFollowed(followed);
+//        story.setFollowed(followed);
         story.setCountDoneTasks(countDoneTasks);
         story.setCommits_count(commits_count);
         story.setBuilds_count(builds_count);
-        story.setHasVotedFor(hasVotedFor);
+//        story.setHasVotedFor(hasVotedFor);
         story.setNotes_html(notes_html);
 
         return story;
