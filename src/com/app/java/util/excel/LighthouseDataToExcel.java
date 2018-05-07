@@ -2,6 +2,7 @@ package com.app.java.util.excel;
 
 import com.app.java.model.json.Sprint;
 import com.app.java.util.DateFormat;
+import com.app.java.util.HashMapSort;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
@@ -80,8 +81,8 @@ public class LighthouseDataToExcel {
         rowStartPoint += 1;
 
 //        Need to use HashMapSort
-//        Need to change XmlSprint to Sprint in HashMapSort
-        Set set = allSprintInCurrentRelease.entrySet();
+        HashMap<Integer, Sprint> sortedSprintHashMap = HashMapSort.sortSprintByValues(allSprintInCurrentRelease);
+        Set set = sortedSprintHashMap.entrySet();
         Iterator iterator = set.iterator();
         while (iterator.hasNext()) {
             Map.Entry<Integer, Sprint> mentry = (Map.Entry) iterator.next();
@@ -90,7 +91,7 @@ public class LighthouseDataToExcel {
             rowCellA.setCellValue("Sprint " + mentry.getValue().getOrderNumber());
             Cell rowCellB = row.createCell(1);
             //Do not know how to get this data yet
-            rowCellB.setCellValue(mentry.getValue().getTotalRemaining());
+            rowCellB.setCellValue(mentry.getValue().getStories_ids().length);
             Cell rowCellC = row.createCell(2);
             rowCellC.setCellValue(mentry.getValue().getVelocity());
             rowStartPoint++;
