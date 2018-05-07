@@ -37,25 +37,47 @@ public class LighthouseDataToExcel {
 
         Row numSprintRow = sheet.createRow(rowStartPoint);
         Cell numSprintRowCellA = numSprintRow.createCell(0);
-        numSprintRowCellA.setCellValue(allReleases.get(currentReleaseId).getSprints_count());
+        numSprintRowCellA.setCellValue("Number of Sprints");
+        Cell numSprintRowCellB = numSprintRow.createCell(1);
+        numSprintRowCellB.setCellValue(allReleases.get(currentReleaseId).getSprints_count());
 
         rowStartPoint += 1;
 
         Row firstSprintStartDateRow = sheet.createRow(rowStartPoint);
         Cell firstSprintStartDateRowCellA = firstSprintStartDateRow.createCell(0);
-        firstSprintStartDateRowCellA.setCellValue(DateFormat.ExcelDateFormat(
+        firstSprintStartDateRowCellA.setCellValue("First Sprint Start Date");
+        Cell firstSprintStartDateRowCellB = firstSprintStartDateRow.createCell(1);
+        firstSprintStartDateRowCellB.setCellValue(DateFormat.ExcelDateFormat(
                 allSprintInCurrentRelease.get(firstSprintId).getStartDate()));
-        firstSprintStartDateRowCellA.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
+        firstSprintStartDateRowCellB.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
 
         rowStartPoint += 1;
 
         Row firstSprintEndDateRow = sheet.createRow(rowStartPoint);
         Cell firstSprintEndDateRowCellA = firstSprintEndDateRow.createCell(0);
-        firstSprintEndDateRowCellA.setCellValue(DateFormat.ExcelDateFormat(
+        firstSprintEndDateRowCellA.setCellValue("First Sprint End Date");
+        Cell firstSprintEndDateRowCellB = firstSprintEndDateRow.createCell(1);
+        firstSprintEndDateRowCellB.setCellValue(DateFormat.ExcelDateFormat(
                 allSprintInCurrentRelease.get(firstSprintId).getEndDate()));
-        firstSprintEndDateRowCellA.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
+        firstSprintEndDateRowCellB.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
 
         rowStartPoint += 2;
+
+        Row dataTitleRow1 = sheet.createRow(rowStartPoint);
+        Cell dataTitleRow1CellB = dataTitleRow1.createCell(1);
+        dataTitleRow1CellB.setCellValue("At START of Sprint");
+        Cell dataTitleRow1CellC = dataTitleRow1.createCell(2);
+        dataTitleRow1CellC.setCellValue("At END of Sprint");
+
+        rowStartPoint += 1;
+
+        Row dataTitleRow2 = sheet.createRow(rowStartPoint);
+        Cell dataTitleRow2CellB = dataTitleRow2.createCell(1);
+        dataTitleRow2CellB.setCellValue("Story Points in Product Backlog");
+        Cell dataTitleRow2CellC = dataTitleRow2.createCell(2);
+        dataTitleRow2CellC.setCellValue("Story Points Done in Sprint");
+
+        rowStartPoint += 1;
 
 //        Need to use HashMapSort
 //        Need to change XmlSprint to Sprint in HashMapSort
@@ -67,7 +89,10 @@ public class LighthouseDataToExcel {
             Cell rowCellA = row.createCell(0);
             rowCellA.setCellValue("Sprint " + mentry.getValue().getOrderNumber());
             Cell rowCellB = row.createCell(1);
-            rowCellB.setCellValue(mentry.getValue().getVelocity());
+            //Do not know how to get this data yet
+            rowCellB.setCellValue(mentry.getValue().getTotalRemaining());
+            Cell rowCellC = row.createCell(2);
+            rowCellC.setCellValue(mentry.getValue().getVelocity());
             rowStartPoint++;
         }
     }

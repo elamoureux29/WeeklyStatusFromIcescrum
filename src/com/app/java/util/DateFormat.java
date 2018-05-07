@@ -8,7 +8,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by elamoureux on 2/16/2017.
@@ -43,18 +47,27 @@ public class DateFormat {
         return returnDate;
     }
 
-    public static Date ExcelDateFormat(String dateString) {
-        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-        SimpleDateFormat formater = new SimpleDateFormat("M/d/yyyy");
-        Date date = null;
-        Date returnDate = null;
+    public static String ExcelDateFormat(String dateString) {
+//        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+//        SimpleDateFormat formater = new SimpleDateFormat("M/d/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofLocalizedDate(
+                FormatStyle.MEDIUM).withLocale(Locale.US);
+//        Date date = null;
+        LocalDateTime date = null;
+//        Date returnDate = null;
+        String returnDate = "";
 
-        try {
-            date = parser.parse(dateString.replaceAll("Z$", "+0000"));
-            returnDate = formater.parse(formater.format(date));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        date = LocalDateTime.parse(dateString.replaceAll("Z$", "+0000"), parser);
+//        returnDate = date.plusDays(1);
+        returnDate = formatter.format(date);
+//        try {
+//            date = parser.parse(dateString.replaceAll("Z$", "+0000"));
+//            returnDate = formater.parse(formater.format(date));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 
         return returnDate;
     }
