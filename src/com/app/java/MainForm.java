@@ -4,13 +4,14 @@ import com.app.java.model.CreateTaskItem;
 import com.app.java.model.StatusTableModel;
 import com.app.java.model.api.*;
 import com.app.java.model.enums.*;
-import com.app.java.model.json.Release;
-import com.app.java.model.json.Sprint;
-import com.app.java.model.json.Story;
-import com.app.java.model.json.TaskItem;
-import com.app.java.util.*;
+import com.app.java.model.json.*;
+import com.app.java.util.DateFormat;
+import com.app.java.util.DefaultTasksCreator;
+import com.app.java.util.Item;
+import com.app.java.util.ResponseWriter;
 import com.app.java.util.customJsonDeserializer.SprintDeserializer;
 import com.app.java.util.customJsonDeserializer.StoryDeserializer;
+import com.app.java.util.excel.ExcelUtil;
 import com.app.java.util.task.AllData;
 import com.app.java.util.task.TaskWorker;
 import com.google.gson.Gson;
@@ -49,6 +50,7 @@ public class MainForm {
     public static Sprint[] sprints;
     public static Story[] stories;
     public static TaskItem[] taskItems;
+    public static Feature[] features;
     public static IcescrumRelease icescrumRelease = new IcescrumRelease();
     public static IcescrumSprint icescrumSprint = new IcescrumSprint();
     public static IcescrumStory icescrumStory = new IcescrumStory();
@@ -85,6 +87,7 @@ public class MainForm {
     private JPanel projectSelectionPanel;
     private JLabel currentSprintLabel;
     private JComboBox comboBox2;
+    private JButton getAllFeaturesButton;
 
 
     public MainForm() {
@@ -341,6 +344,33 @@ public class MainForm {
                         ResponseWriter.DisplayInConsole(stringBuffer);
                     } else if (fileRadioButton.isSelected()) {
                         ResponseWriter.SaveToFile(stringBuffer, icescrumTask.getFileName());
+                    }
+
+                    tabbedPane1.setEnabledAt(1, false);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        getAllFeaturesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    StringBuffer stringBuffer = icescrumFeature.getAll();
+
+                    Reader reader = new StringReader(stringBuffer.toString());
+
+                    Gson gson = new GsonBuilder().create();
+                    features = gson.fromJson(reader, Feature[].class);
+
+//                    for (Feature feature : features) {
+//                        System.out.println(feature.getName());
+//                    }
+
+                    if (consoleRadioButton.isSelected()) {
+                        ResponseWriter.DisplayInConsole(stringBuffer);
+                    } else if (fileRadioButton.isSelected()) {
+                        ResponseWriter.SaveToFile(stringBuffer, icescrumFeature.getFileName());
                     }
 
                     tabbedPane1.setEnabledAt(1, false);

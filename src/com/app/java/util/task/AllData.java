@@ -3,10 +3,7 @@ package com.app.java.util.task;
 import com.app.java.MainForm;
 import com.app.java.model.enums.ReleaseStates;
 import com.app.java.model.enums.SprintStates;
-import com.app.java.model.json.Release;
-import com.app.java.model.json.Sprint;
-import com.app.java.model.json.Story;
-import com.app.java.model.json.TaskItem;
+import com.app.java.model.json.*;
 import com.app.java.util.TaktTimeStories;
 import com.app.java.util.customJsonDeserializer.SprintDeserializer;
 import com.app.java.util.customJsonDeserializer.StoryDeserializer;
@@ -53,7 +50,7 @@ public class AllData extends TaskWorker {
             e.printStackTrace();
         }
 
-        jProgressBar.setValue(25);
+        jProgressBar.setValue(10);
 
         try {
             MainForm.allSprintInCurrentRelease.clear();
@@ -82,7 +79,7 @@ public class AllData extends TaskWorker {
             e.printStackTrace();
         }
 
-        jProgressBar.setValue(50);
+        jProgressBar.setValue(20);
 
         try {
             MainForm.allStoriesInCurrentSprint.clear();
@@ -107,7 +104,7 @@ public class AllData extends TaskWorker {
             e.printStackTrace();
         }
 
-        jProgressBar.setValue(75);
+        jProgressBar.setValue(40);
 
         try {
             StringBuffer stringBuffer = MainForm.icescrumTask.getAll();
@@ -131,6 +128,17 @@ public class AllData extends TaskWorker {
                     }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        jProgressBar.setValue(70);
+
+        try {
+            StringBuffer stringBuffer = MainForm.icescrumFeature.getAll();
+            Reader reader = new StringReader(stringBuffer.toString());
+            Gson gson = new GsonBuilder().create();
+            MainForm.features = gson.fromJson(reader, Feature[].class);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,11 +1,12 @@
-package com.app.java.util;
+package com.app.java.util.excel;
 
 import com.app.java.model.enums.StoryStates;
 import com.app.java.model.enums.TaskStates;
 import com.app.java.model.json.Story;
 import com.app.java.model.json.TaskItem;
-import com.app.java.util.excel.LighthouseDataToExcel;
-import com.app.java.util.excel.TaktDataToExcel;
+import com.app.java.util.DateFormat;
+import com.app.java.util.NonStoryTasks;
+import com.app.java.util.UsersNoInProgressTasks;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
@@ -399,6 +400,8 @@ public class ExcelUtil {
         new TaktDataToExcel(workbook);
 
         new LighthouseDataToExcel(workbook);
+
+        new DashboardDataToExcel(workbook);
 
         try {
             File file;
