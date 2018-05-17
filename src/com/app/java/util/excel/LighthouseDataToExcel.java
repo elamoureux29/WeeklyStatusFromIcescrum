@@ -96,5 +96,10 @@ public class LighthouseDataToExcel {
             rowCellC.setCellValue(mentry.getValue().getVelocity());
             rowStartPoint++;
         }
+
+        // Auto size the column widths
+        for (int columnIndex = 0; columnIndex < 10; columnIndex++) {
+            sheet.autoSizeColumn(columnIndex);
+        }
     }
 }

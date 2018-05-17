@@ -2,6 +2,8 @@ package com.app.java.util.excel;
 
 import com.app.java.model.enums.StoryStates;
 import com.app.java.model.enums.TaskStates;
+import com.app.java.model.json.Feature;
+import com.app.java.model.json.Id;
 import com.app.java.model.json.Story;
 import com.app.java.model.json.TaskItem;
 import com.app.java.util.DateFormat;
@@ -395,6 +397,15 @@ public class ExcelUtil {
         // Auto size the column widths
         for (int columnIndex = 0; columnIndex < 10; columnIndex++) {
             sheet.autoSizeColumn(columnIndex);
+        }
+
+        for (Feature feature : features) {
+            for (Id storyId : feature.getStories_ids()) {
+                if (allStoriesInCurrentSprint.containsKey(storyId.getId())) {
+                    new FeatureDataToExcel(workbook, feature);
+                    break;
+                }
+            }
         }
 
         new TaktDataToExcel(workbook);

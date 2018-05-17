@@ -70,5 +70,10 @@ public class DashboardDataToExcel {
                     + feature.getCountDoneStories() + "/" + feature.getStories_ids().length + " Stories)");
             rowStartPoint++;
         }
+
+        // Auto size the column widths
+        for (int columnIndex = 0; columnIndex < 10; columnIndex++) {
+            sheet.autoSizeColumn(columnIndex);
+        }
     }
 }

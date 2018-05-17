@@ -50,5 +50,10 @@ public class TaktDataToExcel {
         workItemsRowCellA.setCellValue("Work Items");
         Cell workItemsRowCellB = workItemsRow.createCell(1);
         workItemsRowCellB.setCellValue(stories.length);
+
+        // Auto size the column widths
+        for (int columnIndex = 0; columnIndex < 10; columnIndex++) {
+            sheet.autoSizeColumn(columnIndex);
+        }
     }
 }
