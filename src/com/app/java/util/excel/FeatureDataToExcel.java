@@ -46,10 +46,12 @@ public class FeatureDataToExcel {
 //        CellUtil.setAlignment(titleRowCellA, HorizontalAlignment.CENTER);
         sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol));
 
-        rowStartPoint += 3;
+        rowStartPoint += 2;
         sprintBordersRowStartPoint = rowStartPoint;
 
         Row sprintDetailsRow = sheet.createRow(rowStartPoint);
+        Cell sprintDetailsRowCellA = sprintDetailsRow.createCell(0);
+        sprintDetailsRowCellA.setCellValue("Current Sprint");
         Cell sprintDetailsRowCellC = sprintDetailsRow.createCell(2);
         sprintDetailsRowCellC.setCellValue("# Completed Stories");
         Cell sprintDetailsRowCellD = sprintDetailsRow.createCell(3);
@@ -58,10 +60,25 @@ public class FeatureDataToExcel {
         Cell sprintDetailsRowCellE = sprintDetailsRow.createCell(4);
         sprintDetailsRowCellE.setCellValue("# Total Stories");
 
-        rowStartPoint += 6;
+        rowStartPoint += 2;
+
+        Row sprintDetailsRow2 = sheet.createRow(rowStartPoint);
+        Cell sprintDetailsRow2CellC = sprintDetailsRow2.createCell(2);
+        sprintDetailsRow2CellC.setCellValue("Completed Points");
+        Cell sprintDetailsRow2CellD = sprintDetailsRow2.createCell(3);
+        sprintDetailsRow2CellD.setCellValue("/");
+        CellUtil.setAlignment(sprintDetailsRowCellD, HorizontalAlignment.CENTER);
+        Cell sprintDetailsRow2CellE = sprintDetailsRow2.createCell(4);
+        sprintDetailsRow2CellE.setCellValue("Total Points");
+
+        rowStartPoint += 3;
         storiesBordersRowStartPoint = rowStartPoint;
 
         float completedPoints = 0;
+        float sprintTotalPoints = 0;
+        int completedStories = 0;
+        int sprintTotalStories = 0;
+        Map<Integer, Story> doneStories = new HashMap<>();
         for (Id storyId : feature.getStories_ids()) {
             if (allStoriesInCurrentSprint.containsKey(storyId.getId())) {
                 Story story = allStoriesInCurrentSprint.get(storyId.getId());
@@ -73,8 +90,12 @@ public class FeatureDataToExcel {
                 Date latestUpdate = DateFormat.DateParse(allReleases.get(currentReleaseId).getStartDate());
                 HashMap<Integer, String> teamHashMap = new HashMap<>();
 
+                sprintTotalPoints += story.getEffort();
+                sprintTotalStories++;
                 if (story.getState() == StoryStates.DONE.getIdentifier()) {
                     completedPoints += story.getEffort();
+                    completedStories++;
+                    doneStories.put(story.getId(), story);
                 } else {
                     for (Map.Entry<Integer, TaskItem> me : allTasksInCurrentSprint.entrySet()) {
                         if (me.getValue().getParentStory() != null) {
@@ -192,16 +213,52 @@ public class FeatureDataToExcel {
             }
         }
 
-        Row sprintDetailsValueRow = sheet.createRow(4);
+        for (Map.Entry<Integer, Story> me : doneStories.entrySet()) {
+            Row storyRow = sheet.createRow(rowStartPoint);
+            Cell storyRowCellA = storyRow.createCell(0);
+            storyRowCellA.setCellValue(me.getValue().getName());
+            sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, 6));
+            Cell storyRowCellH = storyRow.createCell(7);
+            storyRowCellH.setCellValue("Points:");
+            Cell storyRowCellI = storyRow.createCell(8);
+            storyRowCellI.setCellValue(me.getValue().getEffort());
+
+            PropertyTemplate pt = new PropertyTemplate();
+            // these cells will have medium outside borders and thin inside borders
+            pt.drawBorders(new CellRangeAddress(
+                    storiesBordersRowStartPoint, rowStartPoint,
+                    firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
+            pt.drawBorders(new CellRangeAddress(
+                    storiesBordersRowStartPoint, rowStartPoint,
+                    firstCol, lastCol), BorderStyle.THIN, BorderExtent.INSIDE);
+
+            // apply borders to sheet
+            pt.applyBorders(sheet);
+
+            rowStartPoint += 1;
+        }
+
+        Row sprintDetailsValueRow = sheet.createRow(sprintBordersRowStartPoint + 1);
         Cell sprintDetailsValueRowCellC = sprintDetailsValueRow.createCell(2);
-        sprintDetailsValueRowCellC.setCellValue(feature.getCountDoneStories());
+        sprintDetailsValueRowCellC.setCellValue(completedStories);
         CellUtil.setAlignment(sprintDetailsValueRowCellC, HorizontalAlignment.CENTER);
         Cell sprintDetailsValueRowCellD = sprintDetailsValueRow.createCell(3);
         sprintDetailsValueRowCellD.setCellValue("/");
         CellUtil.setAlignment(sprintDetailsValueRowCellD, HorizontalAlignment.CENTER);
         Cell sprintDetailsValueRowCellE = sprintDetailsValueRow.createCell(4);
-        sprintDetailsValueRowCellE.setCellValue(feature.getStories_ids().length);
+        sprintDetailsValueRowCellE.setCellValue(sprintTotalStories);
         CellUtil.setAlignment(sprintDetailsValueRowCellE, HorizontalAlignment.CENTER);
+
+        Row sprintDetailsValueRow2 = sheet.createRow(sprintBordersRowStartPoint + 3);
+        Cell sprintDetailsValueRow2CellC = sprintDetailsValueRow2.createCell(2);
+        sprintDetailsValueRow2CellC.setCellValue(completedPoints);
+        CellUtil.setAlignment(sprintDetailsValueRow2CellC, HorizontalAlignment.CENTER);
+        Cell sprintDetailsValueRow2CellD = sprintDetailsValueRow2.createCell(3);
+        sprintDetailsValueRow2CellD.setCellValue("/");
+        CellUtil.setAlignment(sprintDetailsValueRow2CellD, HorizontalAlignment.CENTER);
+        Cell sprintDetailsValueRow2CellE = sprintDetailsValueRow2.createCell(4);
+        sprintDetailsValueRow2CellE.setCellValue(sprintTotalPoints);
+        CellUtil.setAlignment(sprintDetailsValueRow2CellE, HorizontalAlignment.CENTER);
 
         PropertyTemplate pt1 = new PropertyTemplate();
         // these cells will have medium outside borders
