@@ -2,10 +2,7 @@ package com.app.java.util.excel;
 
 import com.app.java.model.enums.StoryStates;
 import com.app.java.model.enums.TaskStates;
-import com.app.java.model.json.Feature;
-import com.app.java.model.json.Id;
-import com.app.java.model.json.Story;
-import com.app.java.model.json.TaskItem;
+import com.app.java.model.json.*;
 import com.app.java.util.DateFormat;
 import com.app.java.util.NonStoryTasks;
 import com.app.java.util.UsersNoInProgressTasks;
@@ -136,8 +133,8 @@ public class ExcelUtil {
         Iterator usersNoInProgressTasksIterator = usersNoInProgressTasksSet.iterator();
         List list = new ArrayList();
         while (usersNoInProgressTasksIterator.hasNext()) {
-            Map.Entry<Integer, String> mentry = (Map.Entry) usersNoInProgressTasksIterator.next();
-            list.add(mentry.getValue());
+            Map.Entry<Integer, User> mentry = (Map.Entry) usersNoInProgressTasksIterator.next();
+            list.add(mentry.getValue().getFirstName() + " " + mentry.getValue().getLastName());
         }
         Row noInProgressTaskDetailRow = sheet.createRow(rowStartPoint);
         noInProgressTaskDetailRow.setHeightInPoints(30);
