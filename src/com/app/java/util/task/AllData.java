@@ -107,6 +107,7 @@ public class AllData extends TaskWorker {
         jProgressBar.setValue(40);
 
         try {
+            MainForm.allTasksInCurrentSprint.clear();
             StringBuffer stringBuffer = MainForm.icescrumTask.getAll();
             Reader reader = new StringReader(stringBuffer.toString());
             // Configure Gson

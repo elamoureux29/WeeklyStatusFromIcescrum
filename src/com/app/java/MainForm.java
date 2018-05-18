@@ -297,6 +297,7 @@ public class MainForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    allTasksInCurrentSprint.clear();
                     StringBuffer stringBuffer = icescrumTask.getAll();
 //                    TaskHandler taskHandler = new TaskHandler(allTasksInCurrentSprint);
 //                    XMLReader myReader = XMLReaderFactory.createXMLReader();
