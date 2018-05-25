@@ -105,6 +105,10 @@ public class MainForm {
             public void actionPerformed(ActionEvent e) {
                 try {
                     allReleases.clear();
+                    currentReleaseId = 0;
+                    currentSprintId = 0;
+                    firstSprintId = 0;
+
                     StringBuffer stringBuffer = icescrumRelease.getAll();
 //                    ReleaseHandler releaseHandler = new ReleaseHandler(allReleases);
 //                    XMLReader myReader = XMLReaderFactory.createXMLReader();
@@ -160,6 +164,8 @@ public class MainForm {
             public void actionPerformed(ActionEvent e) {
                 try {
                     allSprintInCurrentRelease.clear();
+                    currentSprintId = 0;
+                    firstSprintId = 0;
                     StringBuffer stringBuffer = icescrumSprint.getAll();
 //                    SprintHandler sprintHandler = new SprintHandler(allSprintInCurrentRelease);
 //                    XMLReader myReader = XMLReaderFactory.createXMLReader();
@@ -198,24 +204,24 @@ public class MainForm {
 //                        System.out.println(sprint.getId());
                         if (sprint.getParentRelease().getId() == currentReleaseId) {
                             allSprintInCurrentRelease.put(sprint.getId(), sprint);
-                        }
 
-                        if (sprint.getOrderNumber() == 1) {
-                            firstSprintId = sprint.getId();
-                        }
+                            if (sprint.getOrderNumber() == 1) {
+                                firstSprintId = sprint.getId();
+                            }
 
-                        if (sprint.getState() == SprintStates.IN_PROGRESS.getIdentifier()) {
-                            currentSprintId = sprint.getId();
-                            currentSprintLabel.setText(sprint.getParentRelease().getName() + " " +
-                                    DateFormat.MediumDateFormat(sprint.getStartDate()) + " " +
-                                    sprint.getOrderNumber() + " " +
-                                    sprint.getIndex());
+                            if (sprint.getState() == SprintStates.IN_PROGRESS.getIdentifier()) {
+                                currentSprintId = sprint.getId();
+                                currentSprintLabel.setText(sprint.getParentRelease().getName() + " " +
+                                        DateFormat.MediumDateFormat(sprint.getStartDate()) + " " +
+                                        sprint.getOrderNumber() + " " +
+                                        sprint.getIndex());
 
-                        } else if (sprint.getState() == SprintStates.TODO.getIdentifier()) {
-                            comboBox2.addItem(new Item(sprint.getId(), sprint.getParentRelease().getName() + " " +
-                                    DateFormat.MediumDateFormat(sprint.getStartDate()) + " " +
-                                    sprint.getOrderNumber() + " " +
-                                    sprint.getIndex()));
+                            } else if (sprint.getState() == SprintStates.TODO.getIdentifier()) {
+                                comboBox2.addItem(new Item(sprint.getId(), sprint.getParentRelease().getName() + " " +
+                                        DateFormat.MediumDateFormat(sprint.getStartDate()) + " " +
+                                        sprint.getOrderNumber() + " " +
+                                        sprint.getIndex()));
+                            }
                         }
                     }
 //                    System.out.println(currentSprintId);

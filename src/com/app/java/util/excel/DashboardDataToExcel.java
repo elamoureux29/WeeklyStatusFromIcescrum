@@ -34,9 +34,17 @@ public class DashboardDataToExcel {
         rowStartPoint += 2;
 
         Row numSprintRow = sheet.createRow(rowStartPoint);
-        Cell numSprintRowCellA = numSprintRow.createCell(0);
-        numSprintRowCellA.setCellValue("Sprint " + allSprintInCurrentRelease.get(currentSprintId).getOrderNumber()
-                + "/" + allReleases.get(currentReleaseId).getSprints_count() + " is in progress.");
+        if (currentSprintId > 0 && currentReleaseId > 0) {
+            Cell numSprintRowCellA = numSprintRow.createCell(0);
+            numSprintRowCellA.setCellValue("Sprint " + allSprintInCurrentRelease.get(currentSprintId).getOrderNumber()
+                    + "/" + allReleases.get(currentReleaseId).getSprints_count() + " is in progress.");
+        } else if (currentReleaseId > 0) {
+            Cell numSprintRowCellA = numSprintRow.createCell(0);
+            numSprintRowCellA.setCellValue("Sprint not activated.");
+        } else {
+            Cell numSprintRowCellA = numSprintRow.createCell(0);
+            numSprintRowCellA.setCellValue("No Release in progress");
+        }
 
         rowStartPoint += 1;
 

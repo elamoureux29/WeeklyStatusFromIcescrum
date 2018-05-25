@@ -42,17 +42,19 @@ public class StatusTableModel {
         vector4.add("");
         data.add(vector4);
 
-        Vector<Object> vector5 = new Vector<Object>();
-        vector5.add(allReleases.get(currentReleaseId).getName());
-        vector5.add("");
-        vector5.add("");
-        vector5.add("");
-        vector5.add("");
-        vector5.add("");
-        vector5.add("");
-        vector5.add("");
-        vector5.add(allReleases.get(currentReleaseId).getEndDate());
-        data.add(vector5);
+        if (currentReleaseId > 0) {
+            Vector<Object> vector5 = new Vector<Object>();
+            vector5.add(allReleases.get(currentReleaseId).getName());
+            vector5.add("");
+            vector5.add("");
+            vector5.add("");
+            vector5.add("");
+            vector5.add("");
+            vector5.add("");
+            vector5.add("");
+            vector5.add(allReleases.get(currentReleaseId).getEndDate());
+            data.add(vector5);
+        }
 
         Vector<Object> vector6 = new Vector<Object>();
         vector6.add("");

@@ -16,6 +16,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -66,13 +67,15 @@ public class ExcelUtil {
 
         rowStartPoint += 1;
 
-        Row releaseRow = sheet.createRow(rowStartPoint);
-        Cell releaseRowCellA = releaseRow.createCell(0);
-        releaseRowCellA.setCellValue(allReleases.get(currentReleaseId).getName());
-        sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol - 1));
-        Cell releaseRowCellI = releaseRow.createCell(8);
-        releaseRowCellI.setCellValue(DateFormat.ExcelDateFormat(allReleases.get(currentReleaseId).getEndDate()));
-        releaseRowCellI.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
+        if (currentReleaseId > 0) {
+            Row releaseRow = sheet.createRow(rowStartPoint);
+            Cell releaseRowCellA = releaseRow.createCell(0);
+            releaseRowCellA.setCellValue(allReleases.get(currentReleaseId).getName());
+            sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, lastCol - 1));
+            Cell releaseRowCellI = releaseRow.createCell(8);
+            releaseRowCellI.setCellValue(DateFormat.ExcelDateFormat(allReleases.get(currentReleaseId).getEndDate()));
+            releaseRowCellI.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
+        }
 
         rowStartPoint += 2;
         sprintBordersRowStartPoint = rowStartPoint;
@@ -92,20 +95,22 @@ public class ExcelUtil {
 
         rowStartPoint += 1;
 
-        Row sprintValueRow = sheet.createRow(rowStartPoint);
-        Cell sprintValueRowCellC = sprintValueRow.createCell(2);
-        sprintValueRowCellC.setCellValue(allSprintInCurrentRelease.get(currentSprintId).getOrderNumber());
-        CellUtil.setAlignment(sprintValueRowCellC, HorizontalAlignment.CENTER);
-        Cell sprintValueRowCellD = sprintValueRow.createCell(3);
-        sprintValueRowCellD.setCellValue("/");
-        CellUtil.setAlignment(sprintValueRowCellD, HorizontalAlignment.CENTER);
-        Cell sprintValueRowCellE = sprintValueRow.createCell(4);
-        sprintValueRowCellE.setCellValue(allSprintInCurrentRelease.size());
-        CellUtil.setAlignment(sprintValueRowCellE, HorizontalAlignment.CENTER);
-        Cell sprintValueRowCellI = sprintValueRow.createCell(8);
-        sprintValueRowCellI.setCellValue(DateFormat.ExcelDateFormat(
-                allSprintInCurrentRelease.get(currentSprintId).getEndDate()));
-        sprintValueRowCellI.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
+        if (currentSprintId > 0) {
+            Row sprintValueRow = sheet.createRow(rowStartPoint);
+            Cell sprintValueRowCellC = sprintValueRow.createCell(2);
+            sprintValueRowCellC.setCellValue(allSprintInCurrentRelease.get(currentSprintId).getOrderNumber());
+            CellUtil.setAlignment(sprintValueRowCellC, HorizontalAlignment.CENTER);
+            Cell sprintValueRowCellD = sprintValueRow.createCell(3);
+            sprintValueRowCellD.setCellValue("/");
+            CellUtil.setAlignment(sprintValueRowCellD, HorizontalAlignment.CENTER);
+            Cell sprintValueRowCellE = sprintValueRow.createCell(4);
+            sprintValueRowCellE.setCellValue(allSprintInCurrentRelease.size());
+            CellUtil.setAlignment(sprintValueRowCellE, HorizontalAlignment.CENTER);
+            Cell sprintValueRowCellI = sprintValueRow.createCell(8);
+            sprintValueRowCellI.setCellValue(DateFormat.ExcelDateFormat(
+                    allSprintInCurrentRelease.get(currentSprintId).getEndDate()));
+            sprintValueRowCellI.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
+        }
 
         rowStartPoint += 1;
 
@@ -170,7 +175,8 @@ public class ExcelUtil {
 //                    urgentTaskDetailRowCellH.setCellValue(u.getUserName());
 //                }
 //            }
-            urgentTaskDetailRowCellH.setCellValue(mentry.getValue().getResponsible().getFirstName() + " " + mentry.getValue().getResponsible().getLastName());
+            urgentTaskDetailRowCellH.setCellValue(mentry.getValue().getResponsible().getFirstName()
+                    + " " + mentry.getValue().getResponsible().getLastName());
             Cell urgentTaskDetailRowCellI = urgentTaskDetailRow.createCell(8);
             for (TaskStates ts : TaskStates.values()) {
                 if (mentry.getValue().getState() == ts.getIdentifier()) {
@@ -204,7 +210,8 @@ public class ExcelUtil {
 //                    recurrentTaskDetailRowCellH.setCellValue(u.getUserName());
 //                }
 //            }
-            recurrentTaskDetailRowCellH.setCellValue(mentry.getValue().getResponsible().getFirstName() + " " + mentry.getValue().getResponsible().getLastName());
+            recurrentTaskDetailRowCellH.setCellValue(mentry.getValue().getResponsible().getFirstName() + " "
+                    + mentry.getValue().getResponsible().getLastName());
             Cell recurrentTaskDetailRowCellI = recurrentTaskDetailRow.createCell(8);
             for (TaskStates ts : TaskStates.values()) {
                 if (mentry.getValue().getState() == ts.getIdentifier()) {
@@ -230,7 +237,7 @@ public class ExcelUtil {
             int tasksDone = 0;
             Boolean missingUpdate = false;
             String tasksTeam = "";
-            Date latestUpdate = DateFormat.DateParse(allReleases.get(currentReleaseId).getStartDate());
+            LocalDateTime latestUpdate = DateFormat.DateParse(allReleases.get(currentReleaseId).getStartDate());
             HashMap<Integer, String> teamHashMap = new HashMap<>();
 
             if (mentry.getValue().getState() == StoryStates.DONE.getIdentifier()) {
@@ -253,7 +260,9 @@ public class ExcelUtil {
                             }
 
                             if (me.getValue().getResponsible() != null) {
-                                teamHashMap.put(me.getValue().getResponsible().getId(), me.getValue().getResponsible().getFirstName() + " " + me.getValue().getResponsible().getLastName());
+                                teamHashMap.put(me.getValue().getResponsible().getId(),
+                                        me.getValue().getResponsible().getFirstName()
+                                                + " " + me.getValue().getResponsible().getLastName());
                             }
                         }
                     }
@@ -309,7 +318,7 @@ public class ExcelUtil {
                 storyRow2CellG.setCellValue(tasksDone);
                 CellUtil.setAlignment(storyRow2CellG, HorizontalAlignment.CENTER);
                 Cell storyRow2CellI = storyRow2.createCell(8);
-                storyRow2CellI.setCellValue(latestUpdate);
+                storyRow2CellI.setCellValue(latestUpdate.toString());
                 storyRow2CellI.setCellStyle(DateFormat.ExcelDateColorCellStyle(workbook, latestUpdate, missingUpdate));
 
                 rowStartPoint += 1;
@@ -348,19 +357,21 @@ public class ExcelUtil {
             }
         }
 
-        Row sprintDetailsValueRow = sheet.createRow(8);
-        Cell sprintDetailsValueRowCellA = sprintDetailsValueRow.createCell(0);
-        sprintDetailsValueRowCellA.setCellValue(Math.round(completedPoints) + "/" +
-                Math.round(allSprintInCurrentRelease.get(currentSprintId).getCapacity()));
-        Cell sprintDetailsValueRowCellC = sprintDetailsValueRow.createCell(2);
-        sprintDetailsValueRowCellC.setCellValue(numCompletedStories);
-        CellUtil.setAlignment(sprintDetailsValueRowCellC, HorizontalAlignment.CENTER);
-        Cell sprintDetailsValueRowCellD = sprintDetailsValueRow.createCell(3);
-        sprintDetailsValueRowCellD.setCellValue("/");
-        CellUtil.setAlignment(sprintDetailsValueRowCellD, HorizontalAlignment.CENTER);
-        Cell sprintDetailsValueRowCellE = sprintDetailsValueRow.createCell(4);
-        sprintDetailsValueRowCellE.setCellValue(allStoriesInCurrentSprint.size());
-        CellUtil.setAlignment(sprintDetailsValueRowCellE, HorizontalAlignment.CENTER);
+        if (currentSprintId > 0) {
+            Row sprintDetailsValueRow = sheet.createRow(8);
+            Cell sprintDetailsValueRowCellA = sprintDetailsValueRow.createCell(0);
+            sprintDetailsValueRowCellA.setCellValue(Math.round(completedPoints) + "/" +
+                    Math.round(allSprintInCurrentRelease.get(currentSprintId).getCapacity()));
+            Cell sprintDetailsValueRowCellC = sprintDetailsValueRow.createCell(2);
+            sprintDetailsValueRowCellC.setCellValue(numCompletedStories);
+            CellUtil.setAlignment(sprintDetailsValueRowCellC, HorizontalAlignment.CENTER);
+            Cell sprintDetailsValueRowCellD = sprintDetailsValueRow.createCell(3);
+            sprintDetailsValueRowCellD.setCellValue("/");
+            CellUtil.setAlignment(sprintDetailsValueRowCellD, HorizontalAlignment.CENTER);
+            Cell sprintDetailsValueRowCellE = sprintDetailsValueRow.createCell(4);
+            sprintDetailsValueRowCellE.setCellValue(allStoriesInCurrentSprint.size());
+            CellUtil.setAlignment(sprintDetailsValueRowCellE, HorizontalAlignment.CENTER);
+        }
 
         PropertyTemplate pt = new PropertyTemplate();
         // these cells will have medium outside borders and thin inside borders
@@ -418,8 +429,14 @@ public class ExcelUtil {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate localDate = LocalDate.now();
 
-            String fileName = currentProjectName + "_" + allReleases.get(currentReleaseId).getName() + "_WeeklyStatus_"
-                    + dtf.format(localDate);
+            String fileName = currentProjectName;
+
+            if (currentReleaseId > 0) {
+                fileName += "_" + allReleases.get(currentReleaseId).getName() + "_WeeklyStatus_"
+                        + dtf.format(localDate);
+            } else {
+                fileName += "_WeeklyStatus_" + dtf.format(localDate);
+            }
 
             file = new File(System.getProperty("user.home") + "/" + fileName + ".xlsx");
 //            file = new File("c:/" + fileName + ".xlsx");

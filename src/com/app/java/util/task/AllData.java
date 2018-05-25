@@ -33,8 +33,13 @@ public class AllData extends TaskWorker {
         jProgressBar.setStringPainted(true);
         jProgressBar.setValue(0);
 
+        MainForm.currentReleaseId = 0;
+        MainForm.currentSprintId = 0;
+        MainForm.firstSprintId = 0;
+
         try {
             MainForm.allReleases.clear();
+
             StringBuffer stringBuffer = MainForm.icescrumRelease.getAll();
             Reader reader = new StringReader(stringBuffer.toString());
             Gson gson = new GsonBuilder().create();
@@ -63,16 +68,16 @@ public class AllData extends TaskWorker {
             MainForm.sprints = gson.fromJson(reader, Sprint[].class);
 
             for (Sprint sprint : MainForm.sprints) {
-                if (sprint.getOrderNumber() == 1) {
-                    MainForm.firstSprintId = sprint.getId();
-                }
-
                 if (sprint.getParentRelease().getId() == MainForm.currentReleaseId) {
                     MainForm.allSprintInCurrentRelease.put(sprint.getId(), sprint);
-                }
 
-                if (sprint.getState() == SprintStates.IN_PROGRESS.getIdentifier()) {
-                    MainForm.currentSprintId = sprint.getId();
+                    if (sprint.getOrderNumber() == 1) {
+                        MainForm.firstSprintId = sprint.getId();
+                    }
+
+                    if (sprint.getState() == SprintStates.IN_PROGRESS.getIdentifier()) {
+                        MainForm.currentSprintId = sprint.getId();
+                    }
                 }
             }
         } catch (Exception e) {

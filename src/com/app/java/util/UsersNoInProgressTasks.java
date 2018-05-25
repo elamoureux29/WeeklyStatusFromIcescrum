@@ -29,7 +29,7 @@ public class UsersNoInProgressTasks {
             Map.Entry<Integer, TaskItem> mentry = (Map.Entry) iterator.next();
             if (mentry.getValue().getState() == TaskStates.IN_PROGRESS.getIdentifier()) {
                 inProgressUsersList.put(mentry.getValue().getResponsible().getId(), mentry.getValue().getResponsible());
-            } else if (mentry.getValue().getState() == TaskStates.TODO.getIdentifier()) {
+            } else if ((mentry.getValue().getState() == TaskStates.TODO.getIdentifier()) && !(mentry.getValue().getResponsible() == null)) {
                 usersList.put(mentry.getValue().getResponsible().getId(), mentry.getValue().getResponsible());
             }
         }

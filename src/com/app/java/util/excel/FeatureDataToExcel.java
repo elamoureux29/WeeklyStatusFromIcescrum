@@ -14,7 +14,11 @@ import org.apache.poi.ss.util.PropertyTemplate;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import static com.app.java.MainForm.*;
 
@@ -78,7 +82,12 @@ public class FeatureDataToExcel {
         float sprintTotalPoints = 0;
         int completedStories = 0;
         int sprintTotalStories = 0;
-        Map<Integer, Story> doneStories = new HashMap<>();
+        Map<Integer, Story> doneStoriesWeek1 = new HashMap<>();
+        Map<Integer, Story> doneStoriesWeek2 = new HashMap<>();
+        Map<Integer, Story> doneStoriesWeek3 = new HashMap<>();
+        LocalDateTime endWeek1 = DateFormat.DateParse(allSprintInCurrentRelease.get(currentSprintId).getStartDate()).plusWeeks(1);
+        LocalDateTime endWeek2 = DateFormat.DateParse(allSprintInCurrentRelease.get(currentSprintId).getStartDate()).plusWeeks(2);
+
         for (Id storyId : feature.getStories_ids()) {
             if (allStoriesInCurrentSprint.containsKey(storyId.getId())) {
                 Story story = allStoriesInCurrentSprint.get(storyId.getId());
@@ -87,7 +96,7 @@ public class FeatureDataToExcel {
                 int tasksInProgress = 0;
                 Boolean missingUpdate = false;
                 String tasksTeam = "";
-                Date latestUpdate = DateFormat.DateParse(allReleases.get(currentReleaseId).getStartDate());
+                LocalDateTime latestUpdate = DateFormat.DateParse(allReleases.get(currentReleaseId).getStartDate());
                 HashMap<Integer, String> teamHashMap = new HashMap<>();
 
                 sprintTotalPoints += story.getEffort();
@@ -95,7 +104,13 @@ public class FeatureDataToExcel {
                 if (story.getState() == StoryStates.DONE.getIdentifier()) {
                     completedPoints += story.getEffort();
                     completedStories++;
-                    doneStories.put(story.getId(), story);
+                    if (DateFormat.DateParse(story.getDoneDate()).isBefore(endWeek1)) {
+                        doneStoriesWeek1.put(story.getId(), story);
+                    } else if (DateFormat.DateParse(story.getDoneDate()).isBefore(endWeek2)) {
+                        doneStoriesWeek2.put(story.getId(), story);
+                    } else {
+                        doneStoriesWeek3.put(story.getId(), story);
+                    }
                 } else {
                     for (Map.Entry<Integer, TaskItem> me : allTasksInCurrentSprint.entrySet()) {
                         if (me.getValue().getParentStory() != null) {
@@ -169,7 +184,7 @@ public class FeatureDataToExcel {
                     storyRow2CellG.setCellValue(story.getCountDoneTasks());
                     CellUtil.setAlignment(storyRow2CellG, HorizontalAlignment.CENTER);
                     Cell storyRow2CellI = storyRow2.createCell(8);
-                    storyRow2CellI.setCellValue(latestUpdate);
+                    storyRow2CellI.setCellValue(latestUpdate.toString());
                     storyRow2CellI.setCellStyle(
                             DateFormat.ExcelDateColorCellStyle(workbook, latestUpdate, missingUpdate));
 
@@ -213,31 +228,6 @@ public class FeatureDataToExcel {
             }
         }
 
-        for (Map.Entry<Integer, Story> me : doneStories.entrySet()) {
-            Row storyRow = sheet.createRow(rowStartPoint);
-            Cell storyRowCellA = storyRow.createCell(0);
-            storyRowCellA.setCellValue(me.getValue().getName());
-            sheet.addMergedRegion(new CellRangeAddress(rowStartPoint, rowStartPoint, firstCol, 6));
-            Cell storyRowCellH = storyRow.createCell(7);
-            storyRowCellH.setCellValue("Points:");
-            Cell storyRowCellI = storyRow.createCell(8);
-            storyRowCellI.setCellValue(me.getValue().getEffort());
-
-            PropertyTemplate pt = new PropertyTemplate();
-            // these cells will have medium outside borders and thin inside borders
-            pt.drawBorders(new CellRangeAddress(
-                    storiesBordersRowStartPoint, rowStartPoint,
-                    firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
-            pt.drawBorders(new CellRangeAddress(
-                    storiesBordersRowStartPoint, rowStartPoint,
-                    firstCol, lastCol), BorderStyle.THIN, BorderExtent.INSIDE);
-
-            // apply borders to sheet
-            pt.applyBorders(sheet);
-
-            rowStartPoint += 1;
-        }
-
         Row sprintDetailsValueRow = sheet.createRow(sprintBordersRowStartPoint + 1);
         Cell sprintDetailsValueRowCellC = sprintDetailsValueRow.createCell(2);
         sprintDetailsValueRowCellC.setCellValue(completedStories);
@@ -266,6 +256,12 @@ public class FeatureDataToExcel {
                 firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
         // apply borders to sheet
         pt1.applyBorders(sheet);
+
+        new FeatureWeeksDataToExcel("Week 1", doneStoriesWeek1, sheet, rowStartPoint, firstCol, lastCol, storiesBordersRowStartPoint);
+
+//        new FeatureWeeksDataToExcel("Week 2", doneStoriesWeek2, sheet, rowStartPoint, firstCol, lastCol, storiesBordersRowStartPoint);
+
+//        new FeatureWeeksDataToExcel("Week 3", doneStoriesWeek3, sheet, rowStartPoint, firstCol, lastCol, storiesBordersRowStartPoint);
 
         // Auto size the column widths
         for (int columnIndex = 0; columnIndex < 10; columnIndex++) {

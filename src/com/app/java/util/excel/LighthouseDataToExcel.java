@@ -39,28 +39,34 @@ public class LighthouseDataToExcel {
         Row numSprintRow = sheet.createRow(rowStartPoint);
         Cell numSprintRowCellA = numSprintRow.createCell(0);
         numSprintRowCellA.setCellValue("Number of Sprints");
-        Cell numSprintRowCellB = numSprintRow.createCell(1);
-        numSprintRowCellB.setCellValue(allReleases.get(currentReleaseId).getSprints_count());
+        if (currentReleaseId > 0) {
+            Cell numSprintRowCellB = numSprintRow.createCell(1);
+            numSprintRowCellB.setCellValue(allReleases.get(currentReleaseId).getSprints_count());
+        }
 
         rowStartPoint += 1;
 
         Row firstSprintStartDateRow = sheet.createRow(rowStartPoint);
         Cell firstSprintStartDateRowCellA = firstSprintStartDateRow.createCell(0);
         firstSprintStartDateRowCellA.setCellValue("First Sprint Start Date");
-        Cell firstSprintStartDateRowCellB = firstSprintStartDateRow.createCell(1);
-        firstSprintStartDateRowCellB.setCellValue(DateFormat.ExcelDateFormat(
-                allSprintInCurrentRelease.get(firstSprintId).getStartDate()));
-        firstSprintStartDateRowCellB.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
+        if (firstSprintId > 0) {
+            Cell firstSprintStartDateRowCellB = firstSprintStartDateRow.createCell(1);
+            firstSprintStartDateRowCellB.setCellValue(DateFormat.ExcelDateFormat(
+                    allSprintInCurrentRelease.get(firstSprintId).getStartDate()));
+            firstSprintStartDateRowCellB.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
+        }
 
         rowStartPoint += 1;
 
         Row firstSprintEndDateRow = sheet.createRow(rowStartPoint);
         Cell firstSprintEndDateRowCellA = firstSprintEndDateRow.createCell(0);
         firstSprintEndDateRowCellA.setCellValue("First Sprint End Date");
-        Cell firstSprintEndDateRowCellB = firstSprintEndDateRow.createCell(1);
-        firstSprintEndDateRowCellB.setCellValue(DateFormat.ExcelDateFormat(
-                allSprintInCurrentRelease.get(firstSprintId).getEndDate()));
-        firstSprintEndDateRowCellB.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
+        if (firstSprintId > 0) {
+            Cell firstSprintEndDateRowCellB = firstSprintEndDateRow.createCell(1);
+            firstSprintEndDateRowCellB.setCellValue(DateFormat.ExcelDateFormat(
+                    allSprintInCurrentRelease.get(firstSprintId).getEndDate()));
+            firstSprintEndDateRowCellB.setCellStyle(DateFormat.ExcelDateCellStyle(workbook));
+        }
 
         rowStartPoint += 2;
 

@@ -18,13 +18,16 @@ import java.util.Locale;
  * Created by elamoureux on 2/16/2017.
  */
 public class DateFormat {
-    public static Date DateParse(String dateString) {
-        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-        Date date = null;
+    public static LocalDateTime DateParse(String dateString) {
+//        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+//        Date date = null;
+        LocalDateTime date = null;
 
         try {
-            date = parser.parse(dateString.replaceAll("Z$", "+0000"));
-        } catch (ParseException e) {
+//            date = parser.parse(dateString.replaceAll("Z$", "+0000"));
+            date = LocalDateTime.parse(dateString.replaceAll("Z$", "+0000"), parser);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -81,21 +84,22 @@ public class DateFormat {
         return cellStyle;
     }
 
-    public static CellStyle ExcelDateColorCellStyle(XSSFWorkbook workbook, Date latestUpdate, Boolean missingUpdate) {
+    public static CellStyle ExcelDateColorCellStyle(XSSFWorkbook workbook, LocalDateTime latestUpdate, Boolean missingUpdate) {
         CellStyle cellStyle = workbook.createCellStyle();
         CreationHelper createHelper = workbook.getCreationHelper();
         cellStyle.setDataFormat(
                 createHelper.createDataFormat().getFormat("d-mmm-yy"));
 
         if (missingUpdate) {
-            Date d = new Date();
-            long diff = d.getTime() - latestUpdate.getTime();
-            long diffDays = diff / (24 * 60 * 60 * 1000);
+//            Date d = new Date();
+//            long diff = d.getTime() - latestUpdate.getTime();
+//            long diffDays = diff / (24 * 60 * 60 * 1000);
 
-            if (diffDays > 2) {
+//            if (diffDays > 2) {
+            if (latestUpdate.isBefore(LocalDateTime.now().minusDays(3))) {
                 cellStyle.setFillForegroundColor(IndexedColors.RED.getIndex());
                 cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            } else if (diffDays > 1) {
+            } else if (latestUpdate.isBefore(LocalDateTime.now().minusDays(1))) {
                 cellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
                 cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             }
