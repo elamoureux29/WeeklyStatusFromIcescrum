@@ -13,7 +13,9 @@ import com.app.java.util.customJsonDeserializer.SprintDeserializer;
 import com.app.java.util.customJsonDeserializer.StoryDeserializer;
 import com.app.java.util.excel.ExcelUtil;
 import com.app.java.util.task.AllData;
+import com.app.java.util.task.AllDataAllProjects;
 import com.app.java.util.task.TaskWorker;
+import com.app.java.util.task.TaskWorkerAllProjects;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -75,9 +77,9 @@ public class MainForm {
     private JButton populateButton;
     private JButton getDataButton;
     private JPanel getButtonPanel;
-    private JPanel testPanel;
+    private JPanel getAllProjectsPanel;
     private JPanel createButtonPanel;
-    private JButton testButton;
+    private JButton getAllProjectsButton;
     private JButton createDefaultTasksButton;
     private JButton createDefaultTasksInSprintButton;
     private JRadioButton noneRadioButton;
@@ -88,6 +90,7 @@ public class MainForm {
     private JLabel currentSprintLabel;
     private JComboBox comboBox2;
     private JButton getAllFeaturesButton;
+    private JLabel getAllProjectsLabel;
 
 
     public MainForm() {
@@ -97,7 +100,7 @@ public class MainForm {
         }
         getButtonPanel.setVisible(false);
         createButtonPanel.setVisible(false);
-        testPanel.setVisible(false);
+//        getAllProjectsPanel.setVisible(false);
         noneRadioButton.setSelected(true);
 
         getAllReleasesButton.addActionListener(new ActionListener() {
@@ -432,7 +435,7 @@ public class MainForm {
                     }
                     getButtonPanel.setVisible(true);
                     createButtonPanel.setVisible(true);
-                    testPanel.setVisible(true);
+//                    getAllProjectsPanel.setVisible(true);
                     currentSprintLabel.setText("");
                     comboBox2.removeAllItems();
                     createDefaultTasksButton.setEnabled(false);
@@ -441,7 +444,7 @@ public class MainForm {
                 } else {
                     getButtonPanel.setVisible(false);
                     createButtonPanel.setVisible(false);
-                    testPanel.setVisible(false);
+//                    getAllProjectsPanel.setVisible(false);
                 }
             }
         });
@@ -516,15 +519,14 @@ public class MainForm {
                 }
             }
         });
-        testButton.addActionListener(new ActionListener() {
+        getAllProjectsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    ArrayList<CreateTaskItem> defaultTasks = DefaultTasksCreator.getUrgentDefaultTasks(
-                            currentSprintId);
-                    for (CreateTaskItem defaultTaskItem : defaultTasks) {
-                        icescrumTask.createTask(defaultTaskItem);
-                    }
+                    //Instances of javax.swing.SwingWorker are not reusable, so
+                    //we create new instances as needed.
+                    TaskWorkerAllProjects allDataAllProjectsTW = new AllDataAllProjects(progressBar1, getAllProjectsLabel);
+                    allDataAllProjectsTW.execute();
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
