@@ -50,6 +50,15 @@ public class DateFormat {
         return returnDate;
     }
 
+    public static String MediumDateFormat(LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+        String returnDate;
+
+        returnDate = formatter.format(localDateTime);
+
+        return returnDate;
+    }
+
     public static String ExcelDateFormat(String dateString) {
 //        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
@@ -71,6 +80,15 @@ public class DateFormat {
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
+
+        return returnDate;
+    }
+
+    public static String ExcelDateFormat(LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+        String returnDate;
+
+        returnDate = formatter.format(localDateTime);
 
         return returnDate;
     }

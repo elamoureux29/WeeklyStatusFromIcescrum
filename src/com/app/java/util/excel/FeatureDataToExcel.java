@@ -25,10 +25,10 @@ import static com.app.java.MainForm.*;
 public class FeatureDataToExcel {
     public FeatureDataToExcel(XSSFWorkbook workbook, Feature feature) {
         XSSFSheet sheet;
-        if (feature.getName().length() < 10) {
+        if (feature.getName().length() < 15) {
             sheet = workbook.createSheet(feature.getName());
         } else {
-            sheet = workbook.createSheet(feature.getName().substring(0, 9) + "...");
+            sheet = workbook.createSheet(feature.getName().substring(0, 14) + "...");
         }
         int rowStartPoint = 0;
         int sprintBordersRowStartPoint = 0;

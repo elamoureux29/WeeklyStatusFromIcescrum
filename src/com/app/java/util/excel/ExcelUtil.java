@@ -318,7 +318,9 @@ public class ExcelUtil {
                 storyRow2CellG.setCellValue(tasksDone);
                 CellUtil.setAlignment(storyRow2CellG, HorizontalAlignment.CENTER);
                 Cell storyRow2CellI = storyRow2.createCell(8);
-                storyRow2CellI.setCellValue(latestUpdate.toString());
+//                storyRow2CellI.setCellValue(latestUpdate.toString());
+//                storyRow2CellI.setCellValue(DateFormat.ExcelDateFormat(latestUpdate));
+                storyRow2CellI.setCellValue(DateFormat.MediumDateFormat(latestUpdate));
                 storyRow2CellI.setCellStyle(DateFormat.ExcelDateColorCellStyle(workbook, latestUpdate, missingUpdate));
 
                 rowStartPoint += 1;
