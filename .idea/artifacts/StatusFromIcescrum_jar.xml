@@ -1,11 +1,11 @@
 <component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="WeeklyStatusFromIcescrum:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/WeeklyStatusFromIcescrum_jar</output-path>
+  <artifact type="jar" build-on-make="true" name="StatusFromIcescrum:jar">
+    <output-path>$PROJECT_DIR$/../StatusFromIcescrum/out/artifacts/StatusFromIcescrum_jar</output-path>
     <root id="archive" name="WeeklyStatusFromIcescrum.jar">
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
       </element>
-      <element id="module-output" name="WeeklyStatusFromIcescrum" />
+      <element id="module-output" name="StatusFromIcescrum" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/gson-2.8.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/poi-ooxml-3.17.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/poi-3.17.jar" path-in-jar="/" />

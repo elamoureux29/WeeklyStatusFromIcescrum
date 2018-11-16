@@ -81,7 +81,7 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
             origin = jsonObject.get("origin").getAsString();
         }
         // Delegate the deserialization to the context
-        Sprint parentSprint = context.deserialize(jsonObject.get("parentSprint"), Sprint.class);
+        StorySprint parentSprint = context.deserialize(jsonObject.get("parentSprint"), StorySprint.class);
         String plannedDate = "";
         if (!jsonObject.get("plannedDate").isJsonNull()) {
             plannedDate = jsonObject.get("plannedDate").getAsString();

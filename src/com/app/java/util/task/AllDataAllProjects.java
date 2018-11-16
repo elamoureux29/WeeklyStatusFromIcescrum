@@ -1,9 +1,11 @@
 package com.app.java.util.task;
 
 import com.app.java.MainForm;
+import com.app.java.model.SafeStatus.*;
 import com.app.java.model.enums.Projects;
 import com.app.java.model.enums.ReleaseStates;
 import com.app.java.model.enums.SprintStates;
+import com.app.java.model.enums.TeamNames;
 import com.app.java.model.json.*;
 import com.app.java.util.TaktTimeStories;
 import com.app.java.util.customJsonDeserializer.SprintDeserializer;
@@ -32,6 +34,11 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
     public Void doInBackground() {
         int count = 0;
         int total = Projects.values().length;
+        PiOrcaTeamStatus piOrcaTeamStatus = new PiOrcaTeamStatus();
+        PiGameOfThreadsTeamStatus piGameOfThronesTeamStatus = new PiGameOfThreadsTeamStatus();
+        PiStarbugsTeamStatus piStarbugsTeamStatus = new PiStarbugsTeamStatus();
+        PiVoltigeursTeamStatus piVoltigeursTeamStatus = new PiVoltigeursTeamStatus();
+        PiProgramStatus piProgramStatus = new PiProgramStatus();
 
         jLabel.setText(count + " / " + total);
 
@@ -76,7 +83,7 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                 e.printStackTrace();
             }
 
-            jProgressBar.setValue(15);
+            jProgressBar.setValue(10);
 
             try {
                 MainForm.allSprintInCurrentRelease.clear();
@@ -99,13 +106,65 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                         if (sprint.getState() == SprintStates.IN_PROGRESS.getIdentifier()) {
                             MainForm.currentSprintId = sprint.getId();
                         }
+
+                        switch (sprint.getOrderNumber()) {
+                            case 1:
+                                piOrcaTeamStatus.setSprint1StartDate(sprint.getStartDate());
+                                piOrcaTeamStatus.setSprint1InProgressDate(sprint.getInProgressDate());
+                                piGameOfThronesTeamStatus.setSprint1StartDate(sprint.getStartDate());
+                                piGameOfThronesTeamStatus.setSprint1InProgressDate(sprint.getInProgressDate());
+                                piStarbugsTeamStatus.setSprint1StartDate(sprint.getStartDate());
+                                piStarbugsTeamStatus.setSprint1InProgressDate(sprint.getInProgressDate());
+                                piVoltigeursTeamStatus.setSprint1StartDate(sprint.getStartDate());
+                                piVoltigeursTeamStatus.setSprint1InProgressDate(sprint.getInProgressDate());
+                                piProgramStatus.setSprint1StartDate(sprint.getStartDate());
+                                piProgramStatus.setSprint1InProgressDate(sprint.getInProgressDate());
+                                break;
+                            case 2:
+                                piOrcaTeamStatus.setSprint2StartDate(sprint.getStartDate());
+                                piGameOfThronesTeamStatus.setSprint2StartDate(sprint.getStartDate());
+                                piStarbugsTeamStatus.setSprint2StartDate(sprint.getStartDate());
+                                piVoltigeursTeamStatus.setSprint2StartDate(sprint.getStartDate());
+                                piProgramStatus.setSprint2StartDate(sprint.getStartDate());
+                                break;
+                            case 3:
+                                piOrcaTeamStatus.setSprint3StartDate(sprint.getStartDate());
+                                piGameOfThronesTeamStatus.setSprint3StartDate(sprint.getStartDate());
+                                piStarbugsTeamStatus.setSprint3StartDate(sprint.getStartDate());
+                                piVoltigeursTeamStatus.setSprint3StartDate(sprint.getStartDate());
+                                piProgramStatus.setSprint3StartDate(sprint.getStartDate());
+                                break;
+                            case 4:
+                                piOrcaTeamStatus.setSprint4StartDate(sprint.getStartDate());
+                                piGameOfThronesTeamStatus.setSprint4StartDate(sprint.getStartDate());
+                                piStarbugsTeamStatus.setSprint4StartDate(sprint.getStartDate());
+                                piVoltigeursTeamStatus.setSprint4StartDate(sprint.getStartDate());
+                                piProgramStatus.setSprint4StartDate(sprint.getStartDate());
+                                break;
+                            case 5:
+                                piOrcaTeamStatus.setSprint5StartDate(sprint.getStartDate());
+                                piGameOfThronesTeamStatus.setSprint5StartDate(sprint.getStartDate());
+                                piStarbugsTeamStatus.setSprint5StartDate(sprint.getStartDate());
+                                piVoltigeursTeamStatus.setSprint5StartDate(sprint.getStartDate());
+                                piProgramStatus.setSprint5StartDate(sprint.getStartDate());
+                                break;
+                            case 6:
+                                piOrcaTeamStatus.setSprint6StartDate(sprint.getStartDate());
+                                piGameOfThronesTeamStatus.setSprint6StartDate(sprint.getStartDate());
+                                piStarbugsTeamStatus.setSprint6StartDate(sprint.getStartDate());
+                                piVoltigeursTeamStatus.setSprint6StartDate(sprint.getStartDate());
+                                piProgramStatus.setSprint6StartDate(sprint.getStartDate());
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            jProgressBar.setValue(25);
+            jProgressBar.setValue(20);
 
             try {
                 MainForm.allStoriesInCurrentSprint.clear();
@@ -120,8 +179,27 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                 if (MainForm.currentSprintId != 0) {
                     for (Story story : MainForm.stories) {
                         if (story.getParentSprint() != null) {
-                            if (story.getParentSprint().getId() == MainForm.currentSprintId) {
-                                MainForm.allStoriesInCurrentSprint.put(story.getId(), story);
+                            if (story.getParentSprint().getParentReleaseId() != 0) {
+                                if (story.getParentSprint().getParentReleaseId() == MainForm.currentReleaseId) {
+                                    for (String tag : story.getTags()) {
+                                        if (tag.equalsIgnoreCase(TeamNames.ORCA.getIdentifier())) {
+                                            piOrcaTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                            piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                        } else if (tag.equalsIgnoreCase(TeamNames.GAMEOFTHREADS.getIdentifier())) {
+                                            piGameOfThronesTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                            piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                        } else if (tag.equalsIgnoreCase(TeamNames.STARBUGS.getIdentifier())) {
+                                            piStarbugsTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                            piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                        } else if (tag.equalsIgnoreCase(TeamNames.VOLTIGEURS.getIdentifier())) {
+                                            piVoltigeursTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                            piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                        }
+                                    }
+                                    if (story.getParentSprint().getId() == MainForm.currentSprintId) {
+                                        MainForm.allStoriesInCurrentSprint.put(story.getId(), story);
+                                    }
+                                }
                             }
                         }
                     }
@@ -130,7 +208,7 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                 e.printStackTrace();
             }
 
-            jProgressBar.setValue(45);
+            jProgressBar.setValue(40);
 
             try {
                 MainForm.allTasksInCurrentSprint.clear();
@@ -159,7 +237,7 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                 e.printStackTrace();
             }
 
-            jProgressBar.setValue(75);
+            jProgressBar.setValue(60);
 
             try {
                 StringBuffer stringBuffer = MainForm.icescrumFeature.getAll();
@@ -170,7 +248,7 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                 e.printStackTrace();
             }
 
-            jProgressBar.setValue(85);
+            jProgressBar.setValue(70);
 
             try {
                 TaktTimeStories taktTimeStories = new TaktTimeStories(MainForm.sprints);
@@ -185,12 +263,15 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
 
             jProgressBar.setValue(100);
 
+//            Added delay between project requests to prevent server from rejecting because of too many request
             try {
                 TimeUnit.SECONDS.sleep(5);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
+        ExcelUtil.ExportPiToFile(piProgramStatus, piOrcaTeamStatus, piGameOfThronesTeamStatus, piStarbugsTeamStatus, piVoltigeursTeamStatus);
 
         return null;
     }

@@ -576,7 +576,7 @@ public class MainForm {
 //    }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("MainForm");
+        JFrame frame = new JFrame("Status From Icescrum");
         frame.setContentPane(new MainForm().tabbedPane1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

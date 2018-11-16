@@ -25,7 +25,7 @@ public class Story {
     private String name;
     private String notes;
     private String origin;
-    private Sprint parentSprint;
+    private StorySprint parentSprint;
     private String plannedDate;
     private int rank;
     private int state;
@@ -232,11 +232,11 @@ public class Story {
         this.origin = origin;
     }
 
-    public Sprint getParentSprint() {
+    public StorySprint getParentSprint() {
         return parentSprint;
     }
 
-    public void setParentSprint(Sprint parentSprint) {
+    public void setParentSprint(StorySprint parentSprint) {
         this.parentSprint = parentSprint;
     }
 
