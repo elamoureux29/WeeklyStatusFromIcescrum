@@ -92,7 +92,7 @@ public abstract class PiStatus {
                 }
 
                 if (storyState == StoryStates.DONE.getIdentifier()) {
-                    for (int i = 1; i < parentSprintOrderNumber - 1; i++) {
+                    for (int i = 2; i < parentSprintOrderNumber - 1; i++) {
                         piSprints[i].addToTotalStoriesRemaining();
                         piSprints[i].addToTotalStoryPointsRemaining(storyPoints);
                     }
@@ -109,7 +109,7 @@ public abstract class PiStatus {
                 }
 
                 if (storyState == StoryStates.DONE.getIdentifier()) {
-                    for (int i = 1; i < parentSprintOrderNumber - 1; i++) {
+                    for (int i = 3; i < parentSprintOrderNumber - 1; i++) {
                         piSprints[i].addToTotalStoriesRemaining();
                         piSprints[i].addToTotalStoryPointsRemaining(storyPoints);
                     }
@@ -126,7 +126,7 @@ public abstract class PiStatus {
                 }
 
                 if (storyState == StoryStates.DONE.getIdentifier()) {
-                    for (int i = 1; i < parentSprintOrderNumber - 1; i++) {
+                    for (int i = 4; i < parentSprintOrderNumber - 1; i++) {
                         piSprints[i].addToTotalStoriesRemaining();
                         piSprints[i].addToTotalStoryPointsRemaining(storyPoints);
                     }
@@ -143,7 +143,7 @@ public abstract class PiStatus {
                 }
 
                 if (storyState == StoryStates.DONE.getIdentifier()) {
-                    for (int i = 1; i < parentSprintOrderNumber - 1; i++) {
+                    for (int i = 5; i < parentSprintOrderNumber - 1; i++) {
                         piSprints[i].addToTotalStoriesRemaining();
                         piSprints[i].addToTotalStoryPointsRemaining(storyPoints);
                     }
@@ -160,7 +160,7 @@ public abstract class PiStatus {
                 }
 
                 if (storyState == StoryStates.DONE.getIdentifier()) {
-                    for (int i = 1; i < parentSprintOrderNumber - 1; i++) {
+                    for (int i = 0; i < parentSprintOrderNumber - 1; i++) {
                         piSprints[i].addToTotalStoriesRemaining();
                         piSprints[i].addToTotalStoryPointsRemaining(storyPoints);
                     }
@@ -173,6 +173,108 @@ public abstract class PiStatus {
             } else {
                 piSprints[parentSprintOrderNumber - 1].addToStoriesOpen();
                 piSprints[parentSprintOrderNumber - 1].addToStoryPointsOpen(storyPoints);
+            }
+        }
+    }
+
+    public void addObjectiveData(int parentSprintOrderNumber, String dateCreated, int storyState) {
+        if (parentSprintOrderNumber <= 6) {
+//            Temporary change from sprint1InProgressDate to sprintsStartDate[1]
+            if (DateFormat.DateParse(dateCreated).isBefore(DateFormat.DateParse(sprintsStartDate[1]))) {
+                piSprints[parentSprintOrderNumber - 1].addToInitialObjectivesPlanned();
+            }
+
+            if (DateFormat.DateParse(dateCreated).isAfter(DateFormat.DateParse(sprint1InProgressDate))) {
+//            Temporary change from i = 1 to i = 0
+                for (int i = 0; i < 6; i++) {
+                    piSprints[i].addToTotalObjectives();
+
+                    if (storyState != StoryStates.DONE.getIdentifier()) {
+                        piSprints[i].addToTotalObjectivesRemaining();
+                    }
+                }
+
+                if (storyState == StoryStates.DONE.getIdentifier()) {
+                    for (int i = 1; i < parentSprintOrderNumber - 1; i++) {
+                        piSprints[i].addToTotalObjectivesRemaining();
+                    }
+                }
+            } else if (DateFormat.DateParse(dateCreated).isAfter(DateFormat.DateParse(sprintsStartDate[1]))) {
+                for (int i = 2; i < 6; i++) {
+                    piSprints[i].addToTotalObjectives();
+
+                    if (storyState != StoryStates.DONE.getIdentifier()) {
+                        piSprints[i].addToTotalObjectivesRemaining();
+                    }
+                }
+
+                if (storyState == StoryStates.DONE.getIdentifier()) {
+                    for (int i = 2; i < parentSprintOrderNumber - 1; i++) {
+                        piSprints[i].addToTotalObjectivesRemaining();
+                    }
+                }
+            } else if (DateFormat.DateParse(dateCreated).isAfter(DateFormat.DateParse(sprintsStartDate[2]))) {
+                for (int i = 3; i < 6; i++) {
+                    piSprints[i].addToTotalObjectives();
+
+                    if (storyState != StoryStates.DONE.getIdentifier()) {
+                        piSprints[i].addToTotalObjectivesRemaining();
+                    }
+                }
+
+                if (storyState == StoryStates.DONE.getIdentifier()) {
+                    for (int i = 3; i < parentSprintOrderNumber - 1; i++) {
+                        piSprints[i].addToTotalObjectivesRemaining();
+                    }
+                }
+            } else if (DateFormat.DateParse(dateCreated).isAfter(DateFormat.DateParse(sprintsStartDate[3]))) {
+                for (int i = 4; i < 6; i++) {
+                    piSprints[i].addToTotalObjectives();
+
+                    if (storyState != StoryStates.DONE.getIdentifier()) {
+                        piSprints[i].addToTotalObjectivesRemaining();
+                    }
+                }
+
+                if (storyState == StoryStates.DONE.getIdentifier()) {
+                    for (int i = 4; i < parentSprintOrderNumber - 1; i++) {
+                        piSprints[i].addToTotalObjectivesRemaining();
+                    }
+                }
+            } else if (DateFormat.DateParse(dateCreated).isAfter(DateFormat.DateParse(sprintsStartDate[4]))) {
+                for (int i = 5; i < 6; i++) {
+                    piSprints[i].addToTotalObjectives();
+
+                    if (storyState != StoryStates.DONE.getIdentifier()) {
+                        piSprints[i].addToTotalObjectivesRemaining();
+                    }
+                }
+
+                if (storyState == StoryStates.DONE.getIdentifier()) {
+                    for (int i = 5; i < parentSprintOrderNumber - 1; i++) {
+                        piSprints[i].addToTotalObjectivesRemaining();
+                    }
+                }
+            } else {
+                for (int i = 0; i < 6; i++) {
+                    piSprints[i].addToTotalObjectives();
+
+                    if (storyState != StoryStates.DONE.getIdentifier()) {
+                        piSprints[i].addToTotalObjectivesRemaining();
+                    }
+                }
+
+                if (storyState == StoryStates.DONE.getIdentifier()) {
+                    for (int i = 0; i < parentSprintOrderNumber - 1; i++) {
+                        piSprints[i].addToTotalObjectivesRemaining();
+                    }
+                }
+            }
+
+            if (storyState == StoryStates.DONE.getIdentifier()) {
+                piSprints[parentSprintOrderNumber - 1].addToObjectivesClosed();
+            } else {
+                piSprints[parentSprintOrderNumber - 1].addToObjectivesOpen();
             }
         }
     }

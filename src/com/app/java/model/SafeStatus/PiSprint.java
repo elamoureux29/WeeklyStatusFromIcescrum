@@ -18,9 +18,10 @@ public class PiSprint {
 
     //For Burnup based on Objectives
     private int totalObjectives;
-    private int initialTotalObjectives;
-    private int initialplannedObjectives;
-    private int actualCompletedObjectives;
+    private int totalObjectivesRemaining;
+    private int initialObjectivesPlanned;
+    private int objectivesOpen;
+    private int objectivesClosed;
 
     public int getTotalStories() {
         return totalStories;
@@ -110,27 +111,35 @@ public class PiSprint {
         this.totalObjectives++;
     }
 
-    public int getInitialTotalObjectives() {
-        return initialTotalObjectives;
+    public int getTotalObjectivesRemaining() {
+        return totalObjectivesRemaining;
     }
 
-    public void addToInitialTotalObjectives() {
-        this.initialTotalObjectives++;
+    public void addToTotalObjectivesRemaining() {
+        this.totalObjectivesRemaining++;
     }
 
-    public int getInitialPlannedObjectives() {
-        return initialplannedObjectives;
+    public int getInitialObjectivesPlanned() {
+        return initialObjectivesPlanned;
     }
 
-    public void addToInitialPlannedObjectives() {
-        this.initialplannedObjectives++;
+    public void addToInitialObjectivesPlanned() {
+        this.initialObjectivesPlanned++;
     }
 
-    public int getActualCompletedObjectives() {
-        return actualCompletedObjectives;
+    public int getObjectivesOpen() {
+        return objectivesOpen;
     }
 
-    public void addToActualCompletedObjectives() {
-        this.actualCompletedObjectives++;
+    public void addToObjectivesOpen() {
+        this.objectivesOpen++;
+    }
+
+    public int getObjectivesClosed() {
+        return objectivesClosed;
+    }
+
+    public void addToObjectivesClosed() {
+        this.objectivesClosed++;
     }
 }

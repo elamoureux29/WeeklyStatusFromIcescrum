@@ -17,6 +17,8 @@ import com.google.gson.GsonBuilder;
 import javax.swing.*;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,6 +40,7 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
         PiGameOfThreadsTeamStatus piGameOfThronesTeamStatus = new PiGameOfThreadsTeamStatus();
         PiStarbugsTeamStatus piStarbugsTeamStatus = new PiStarbugsTeamStatus();
         PiVoltigeursTeamStatus piVoltigeursTeamStatus = new PiVoltigeursTeamStatus();
+        PiAcdcTeamStatus piAcdcTeamStatus = new PiAcdcTeamStatus();
         PiProgramStatus piProgramStatus = new PiProgramStatus();
 
         jLabel.setText(count + " / " + total);
@@ -117,6 +120,8 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                                 piStarbugsTeamStatus.setSprint1InProgressDate(sprint.getInProgressDate());
                                 piVoltigeursTeamStatus.setSprint1StartDate(sprint.getStartDate());
                                 piVoltigeursTeamStatus.setSprint1InProgressDate(sprint.getInProgressDate());
+                                piAcdcTeamStatus.setSprint1StartDate(sprint.getStartDate());
+                                piAcdcTeamStatus.setSprint1InProgressDate(sprint.getInProgressDate());
                                 piProgramStatus.setSprint1StartDate(sprint.getStartDate());
                                 piProgramStatus.setSprint1InProgressDate(sprint.getInProgressDate());
                                 break;
@@ -125,6 +130,7 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                                 piGameOfThronesTeamStatus.setSprint2StartDate(sprint.getStartDate());
                                 piStarbugsTeamStatus.setSprint2StartDate(sprint.getStartDate());
                                 piVoltigeursTeamStatus.setSprint2StartDate(sprint.getStartDate());
+                                piAcdcTeamStatus.setSprint2StartDate(sprint.getStartDate());
                                 piProgramStatus.setSprint2StartDate(sprint.getStartDate());
                                 break;
                             case 3:
@@ -132,6 +138,7 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                                 piGameOfThronesTeamStatus.setSprint3StartDate(sprint.getStartDate());
                                 piStarbugsTeamStatus.setSprint3StartDate(sprint.getStartDate());
                                 piVoltigeursTeamStatus.setSprint3StartDate(sprint.getStartDate());
+                                piAcdcTeamStatus.setSprint3StartDate(sprint.getStartDate());
                                 piProgramStatus.setSprint3StartDate(sprint.getStartDate());
                                 break;
                             case 4:
@@ -139,6 +146,7 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                                 piGameOfThronesTeamStatus.setSprint4StartDate(sprint.getStartDate());
                                 piStarbugsTeamStatus.setSprint4StartDate(sprint.getStartDate());
                                 piVoltigeursTeamStatus.setSprint4StartDate(sprint.getStartDate());
+                                piAcdcTeamStatus.setSprint4StartDate(sprint.getStartDate());
                                 piProgramStatus.setSprint4StartDate(sprint.getStartDate());
                                 break;
                             case 5:
@@ -146,6 +154,7 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                                 piGameOfThronesTeamStatus.setSprint5StartDate(sprint.getStartDate());
                                 piStarbugsTeamStatus.setSprint5StartDate(sprint.getStartDate());
                                 piVoltigeursTeamStatus.setSprint5StartDate(sprint.getStartDate());
+                                piAcdcTeamStatus.setSprint5StartDate(sprint.getStartDate());
                                 piProgramStatus.setSprint5StartDate(sprint.getStartDate());
                                 break;
                             case 6:
@@ -153,6 +162,7 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                                 piGameOfThronesTeamStatus.setSprint6StartDate(sprint.getStartDate());
                                 piStarbugsTeamStatus.setSprint6StartDate(sprint.getStartDate());
                                 piVoltigeursTeamStatus.setSprint6StartDate(sprint.getStartDate());
+                                piAcdcTeamStatus.setSprint6StartDate(sprint.getStartDate());
                                 piProgramStatus.setSprint6StartDate(sprint.getStartDate());
                                 break;
                             default:
@@ -181,21 +191,47 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                         if (story.getParentSprint() != null) {
                             if (story.getParentSprint().getParentReleaseId() != 0) {
                                 if (story.getParentSprint().getParentReleaseId() == MainForm.currentReleaseId) {
-                                    for (String tag : story.getTags()) {
-                                        if (tag.equalsIgnoreCase(TeamNames.ORCA.getIdentifier())) {
-                                            piOrcaTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-                                            piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-                                        } else if (tag.equalsIgnoreCase(TeamNames.GAMEOFTHREADS.getIdentifier())) {
-                                            piGameOfThronesTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-                                            piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-                                        } else if (tag.equalsIgnoreCase(TeamNames.STARBUGS.getIdentifier())) {
-                                            piStarbugsTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-                                            piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-                                        } else if (tag.equalsIgnoreCase(TeamNames.VOLTIGEURS.getIdentifier())) {
-                                            piVoltigeursTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-                                            piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                    List<String> tagList = Arrays.asList(story.getTags());
+                                    if (tagList.contains("Objective")) {
+                                        for (String tag : story.getTags()) {
+                                            if (tag.equalsIgnoreCase(TeamNames.ORCA.getIdentifier())) {
+                                                piOrcaTeamStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piProgramStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                            } else if (tag.equalsIgnoreCase(TeamNames.GAMEOFTHREADS.getIdentifier())) {
+                                                piGameOfThronesTeamStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piProgramStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                            } else if (tag.equalsIgnoreCase(TeamNames.STARBUGS.getIdentifier())) {
+                                                piStarbugsTeamStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piProgramStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                            } else if (tag.equalsIgnoreCase(TeamNames.VOLTIGEURS.getIdentifier())) {
+                                                piVoltigeursTeamStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piProgramStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                            } else if (tag.equalsIgnoreCase(TeamNames.ACDC.getIdentifier())) {
+                                                piAcdcTeamStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+//                                            piProgramStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                            }
+                                        }
+                                    } else {
+                                        for (String tag : story.getTags()) {
+                                            if (tag.equalsIgnoreCase(TeamNames.ORCA.getIdentifier())) {
+                                                piOrcaTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                            } else if (tag.equalsIgnoreCase(TeamNames.GAMEOFTHREADS.getIdentifier())) {
+                                                piGameOfThronesTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                            } else if (tag.equalsIgnoreCase(TeamNames.STARBUGS.getIdentifier())) {
+                                                piStarbugsTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                            } else if (tag.equalsIgnoreCase(TeamNames.VOLTIGEURS.getIdentifier())) {
+                                                piVoltigeursTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                            } else if (tag.equalsIgnoreCase(TeamNames.ACDC.getIdentifier())) {
+                                                piAcdcTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+//                                            piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                            }
                                         }
                                     }
+
                                     if (story.getParentSprint().getId() == MainForm.currentSprintId) {
                                         MainForm.allStoriesInCurrentSprint.put(story.getId(), story);
                                     }
@@ -271,7 +307,11 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
             }
         }
 
-        ExcelUtil.ExportPiToFile(piProgramStatus, piOrcaTeamStatus, piGameOfThronesTeamStatus, piStarbugsTeamStatus, piVoltigeursTeamStatus);
+        try {
+            ExcelUtil.ExportPiToFile(piProgramStatus, piOrcaTeamStatus, piGameOfThronesTeamStatus, piStarbugsTeamStatus, piVoltigeursTeamStatus, piAcdcTeamStatus);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return null;
     }

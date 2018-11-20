@@ -4,7 +4,8 @@ public enum TeamNames {
     ORCA("Orca", "Orca"),
     GAMEOFTHREADS("Game Of Threads", "GameOfThreads"),
     STARBUGS("Starbugs", "Starbugs"),
-    VOLTIGEURS("Voltigeurs", "Volts");
+    VOLTIGEURS("Voltigeurs", "Volts"),
+    ACDC("ACDC", "AC/DC");
 
     private final String teamName;
     private final String identifier;

@@ -67,7 +67,7 @@ public class PiTeamDataToExcel {
 
         Row totalStoriesRemainingRow = sheet.createRow(rowStartPoint);
         Cell totalStoriesRemainingRowCellA = totalStoriesRemainingRow.createCell(0);
-        totalStoriesRemainingRowCellA.setCellValue("Total Remaining Stories");
+        totalStoriesRemainingRowCellA.setCellValue("Total Stories Remaining");
         Cell totalStoriesRemainingRowCellC = totalStoriesRemainingRow.createCell(2);
         totalStoriesRemainingRowCellC.setCellValue(piStatus.getPiSprints()[0].getTotalStoriesRemaining());
         Cell totalStoriesRemainingRowCellD = totalStoriesRemainingRow.createCell(3);
@@ -212,7 +212,7 @@ public class PiTeamDataToExcel {
 
         Row storyPointsClosedRow = sheet.createRow(rowStartPoint);
         Cell storyPointsClosedRowCellA = storyPointsClosedRow.createCell(0);
-        storyPointsClosedRowCellA.setCellValue("Story Points Closed ");
+        storyPointsClosedRowCellA.setCellValue("Story Points Closed");
         Cell storyPointsClosedRowCellC = storyPointsClosedRow.createCell(2);
         storyPointsClosedRowCellC.setCellValue(piStatus.getPiSprints()[0].getStoryPointsClosed());
         Cell storyPointsClosedRowCellD = storyPointsClosedRow.createCell(3);
@@ -249,61 +249,79 @@ public class PiTeamDataToExcel {
 
         Row initialTotalObjectivesRow = sheet.createRow(rowStartPoint);
         Cell initialTotalObjectivesRowCellA = initialTotalObjectivesRow.createCell(0);
-        initialTotalObjectivesRowCellA.setCellValue("Initial Total Objectives");
+        initialTotalObjectivesRowCellA.setCellValue("Total Objectives Remaining");
         Cell initialTotalObjectivesRowCellC = initialTotalObjectivesRow.createCell(2);
-        initialTotalObjectivesRowCellC.setCellValue(piStatus.getPiSprints()[0].getInitialTotalObjectives());
+        initialTotalObjectivesRowCellC.setCellValue(piStatus.getPiSprints()[0].getTotalObjectivesRemaining());
         Cell initialTotalObjectivesRowCellD = initialTotalObjectivesRow.createCell(3);
-        initialTotalObjectivesRowCellD.setCellValue(piStatus.getPiSprints()[1].getInitialTotalObjectives());
+        initialTotalObjectivesRowCellD.setCellValue(piStatus.getPiSprints()[1].getTotalObjectivesRemaining());
         Cell initialTotalObjectivesRowCellE = initialTotalObjectivesRow.createCell(4);
-        initialTotalObjectivesRowCellE.setCellValue(piStatus.getPiSprints()[2].getInitialTotalObjectives());
+        initialTotalObjectivesRowCellE.setCellValue(piStatus.getPiSprints()[2].getTotalObjectivesRemaining());
         Cell initialTotalObjectivesRowCellF = initialTotalObjectivesRow.createCell(5);
-        initialTotalObjectivesRowCellF.setCellValue(piStatus.getPiSprints()[3].getInitialTotalObjectives());
+        initialTotalObjectivesRowCellF.setCellValue(piStatus.getPiSprints()[3].getTotalObjectivesRemaining());
         Cell initialTotalObjectivesRowCellG = initialTotalObjectivesRow.createCell(6);
-        initialTotalObjectivesRowCellG.setCellValue(piStatus.getPiSprints()[4].getInitialTotalObjectives());
+        initialTotalObjectivesRowCellG.setCellValue(piStatus.getPiSprints()[4].getTotalObjectivesRemaining());
         Cell initialTotalObjectivesRowCellH = initialTotalObjectivesRow.createCell(7);
-        initialTotalObjectivesRowCellH.setCellValue(piStatus.getPiSprints()[5].getInitialTotalObjectives());
+        initialTotalObjectivesRowCellH.setCellValue(piStatus.getPiSprints()[5].getTotalObjectivesRemaining());
 
         rowStartPoint += 1;
 
         Row plannedObjectivesRow = sheet.createRow(rowStartPoint);
         Cell plannedObjectivesRowCellA = plannedObjectivesRow.createCell(0);
-        plannedObjectivesRowCellA.setCellValue("Initial Planned Objectives");
+        plannedObjectivesRowCellA.setCellValue("Initial Objectives Planned");
         Cell plannedObjectivesRowCellC = plannedObjectivesRow.createCell(2);
-        plannedObjectivesRowCellC.setCellValue(piStatus.getPiSprints()[0].getInitialPlannedObjectives());
+        plannedObjectivesRowCellC.setCellValue(piStatus.getPiSprints()[0].getInitialObjectivesPlanned());
         Cell plannedObjectivesRowCellD = plannedObjectivesRow.createCell(3);
-        plannedObjectivesRowCellD.setCellValue(piStatus.getPiSprints()[1].getInitialPlannedObjectives());
+        plannedObjectivesRowCellD.setCellValue(piStatus.getPiSprints()[1].getInitialObjectivesPlanned());
         Cell plannedObjectivesRowCellE = plannedObjectivesRow.createCell(4);
-        plannedObjectivesRowCellE.setCellValue(piStatus.getPiSprints()[2].getInitialPlannedObjectives());
+        plannedObjectivesRowCellE.setCellValue(piStatus.getPiSprints()[2].getInitialObjectivesPlanned());
         Cell plannedObjectivesRowCellF = plannedObjectivesRow.createCell(5);
-        plannedObjectivesRowCellF.setCellValue(piStatus.getPiSprints()[3].getInitialPlannedObjectives());
+        plannedObjectivesRowCellF.setCellValue(piStatus.getPiSprints()[3].getInitialObjectivesPlanned());
         Cell plannedObjectivesRowCellG = plannedObjectivesRow.createCell(6);
-        plannedObjectivesRowCellG.setCellValue(piStatus.getPiSprints()[4].getInitialPlannedObjectives());
+        plannedObjectivesRowCellG.setCellValue(piStatus.getPiSprints()[4].getInitialObjectivesPlanned());
         Cell plannedObjectivesRowCellH = plannedObjectivesRow.createCell(7);
-        plannedObjectivesRowCellH.setCellValue(piStatus.getPiSprints()[5].getInitialPlannedObjectives());
+        plannedObjectivesRowCellH.setCellValue(piStatus.getPiSprints()[5].getInitialObjectivesPlanned());
 
         rowStartPoint += 1;
 
         Row actualCompleteObjectivesRow = sheet.createRow(rowStartPoint);
         Cell actualCompleteObjectivesRowCellA = actualCompleteObjectivesRow.createCell(0);
-        actualCompleteObjectivesRowCellA.setCellValue("Actual Completed Objectives");
+        actualCompleteObjectivesRowCellA.setCellValue("Objectives Open");
         Cell actualCompleteObjectivesRowCellC = actualCompleteObjectivesRow.createCell(2);
-        actualCompleteObjectivesRowCellC.setCellValue(piStatus.getPiSprints()[0].getActualCompletedObjectives());
+        actualCompleteObjectivesRowCellC.setCellValue(piStatus.getPiSprints()[0].getObjectivesOpen());
         Cell actualCompleteObjectivesRowCellD = actualCompleteObjectivesRow.createCell(3);
-        actualCompleteObjectivesRowCellD.setCellValue(piStatus.getPiSprints()[1].getActualCompletedObjectives());
+        actualCompleteObjectivesRowCellD.setCellValue(piStatus.getPiSprints()[1].getObjectivesOpen());
         Cell actualCompleteObjectivesRowCellE = actualCompleteObjectivesRow.createCell(4);
-        actualCompleteObjectivesRowCellE.setCellValue(piStatus.getPiSprints()[2].getActualCompletedObjectives());
+        actualCompleteObjectivesRowCellE.setCellValue(piStatus.getPiSprints()[2].getObjectivesOpen());
         Cell actualCompleteObjectivesRowCellF = actualCompleteObjectivesRow.createCell(5);
-        actualCompleteObjectivesRowCellF.setCellValue(piStatus.getPiSprints()[3].getActualCompletedObjectives());
+        actualCompleteObjectivesRowCellF.setCellValue(piStatus.getPiSprints()[3].getObjectivesOpen());
         Cell actualCompleteObjectivesRowCellG = actualCompleteObjectivesRow.createCell(6);
-        actualCompleteObjectivesRowCellG.setCellValue(piStatus.getPiSprints()[4].getActualCompletedObjectives());
+        actualCompleteObjectivesRowCellG.setCellValue(piStatus.getPiSprints()[4].getObjectivesOpen());
         Cell actualCompleteObjectivesRowCellH = actualCompleteObjectivesRow.createCell(7);
-        actualCompleteObjectivesRowCellH.setCellValue(piStatus.getPiSprints()[5].getActualCompletedObjectives());
+        actualCompleteObjectivesRowCellH.setCellValue(piStatus.getPiSprints()[5].getObjectivesOpen());
+
+        rowStartPoint += 1;
+
+        Row closedObjectivesRow = sheet.createRow(rowStartPoint);
+        Cell closedObjectivesRowCellA = closedObjectivesRow.createCell(0);
+        closedObjectivesRowCellA.setCellValue("Objectives Closed");
+        Cell closedObjectivesRowCellC = closedObjectivesRow.createCell(2);
+        closedObjectivesRowCellC.setCellValue(piStatus.getPiSprints()[0].getObjectivesClosed());
+        Cell closedObjectivesRowCellD = closedObjectivesRow.createCell(3);
+        closedObjectivesRowCellD.setCellValue(piStatus.getPiSprints()[1].getObjectivesClosed());
+        Cell closedObjectivesRowCellE = closedObjectivesRow.createCell(4);
+        closedObjectivesRowCellE.setCellValue(piStatus.getPiSprints()[2].getObjectivesClosed());
+        Cell closedObjectivesRowCellF = closedObjectivesRow.createCell(5);
+        closedObjectivesRowCellF.setCellValue(piStatus.getPiSprints()[3].getObjectivesClosed());
+        Cell closedObjectivesRowCellG = closedObjectivesRow.createCell(6);
+        closedObjectivesRowCellG.setCellValue(piStatus.getPiSprints()[4].getObjectivesClosed());
+        Cell closedObjectivesRowCellH = closedObjectivesRow.createCell(7);
+        closedObjectivesRowCellH.setCellValue(piStatus.getPiSprints()[5].getObjectivesClosed());
 
         PropertyTemplate pt = new PropertyTemplate();
         // these cells will have medium outside borders
         pt.drawBorders(new CellRangeAddress(storiesBordersRowStartPoint, storiesBordersRowStartPoint,
                 firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
-        pt.drawBorders(new CellRangeAddress(storiesBordersRowStartPoint + 1, storiesBordersRowStartPoint + 18,
+        pt.drawBorders(new CellRangeAddress(storiesBordersRowStartPoint + 1, rowStartPoint,
                 firstCol, lastCol), BorderStyle.MEDIUM, BorderExtent.OUTSIDE);
         // apply borders to sheet
         pt.applyBorders(sheet);
