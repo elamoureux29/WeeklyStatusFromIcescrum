@@ -1,6 +1,8 @@
 package com.app.java.util.excel;
 
+import com.app.java.model.SafeStatus.PiSprint;
 import com.app.java.model.SafeStatus.PiStatus;
+import javafx.util.Pair;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
@@ -19,6 +21,10 @@ public class PiTeamDataToExcel {
         int storiesBordersRowStartPoint = 0;
         int storyPointsBordersRowStartPoint = 0;
         int objectivesBordersRowStartPoint = 0;
+        int storiesListBordersRowStartPoint = 0;
+        int storiesListBordersRowEndPoint = 0;
+        int objectivesListBordersRowStartPoint = 0;
+        int objectivesListBordersRowEndPoint = 0;
         int firstCol = 0;
         int lastCol = 8;
 
@@ -329,6 +335,97 @@ public class PiTeamDataToExcel {
         // Auto size the column widths
         for (int columnIndex = 0; columnIndex < 10; columnIndex++) {
             sheet.autoSizeColumn(columnIndex);
+        }
+
+        rowStartPoint += 3;
+
+        Row storiesRow = sheet.createRow(rowStartPoint);
+        Cell storiesRowCellA = storiesRow.createCell(0);
+        storiesRowCellA.setCellValue("Stories:");
+
+        rowStartPoint += 2;
+        storiesListBordersRowStartPoint = rowStartPoint;
+
+        int storiesSprintNumber = 0;
+        for (PiSprint piSprint : piStatus.getPiSprints()) {
+            if (sheet.getRow(rowStartPoint) != null) {
+                Cell storyNumberRowCellA = sheet.getRow(rowStartPoint).createCell(storiesSprintNumber * 5);
+                storyNumberRowCellA.setCellValue("Sprint " + (storiesSprintNumber + 1));
+            } else {
+                Row storyNumberRow = sheet.createRow(rowStartPoint);
+                Cell storyNumberRowCellA = storyNumberRow.createCell(storiesSprintNumber * 5);
+                storyNumberRowCellA.setCellValue("Sprint " + (storiesSprintNumber + 1));
+            }
+
+            rowStartPoint++;
+
+            for (Pair pair : piSprint.getStoryList()) {
+                if (sheet.getRow(rowStartPoint) != null) {
+                    Cell rowCellA = sheet.getRow(rowStartPoint).createCell(storiesSprintNumber * 5);
+                    rowCellA.setCellValue(pair.getValue().toString());
+                    Cell rowCellB = sheet.getRow(rowStartPoint).createCell((storiesSprintNumber * 5) + 1);
+                    rowCellB.setCellValue(pair.getKey().toString());
+                } else {
+                    Row row = sheet.createRow(rowStartPoint);
+                    Cell rowCellA = row.createCell(storiesSprintNumber * 5);
+                    rowCellA.setCellValue(pair.getValue().toString());
+                    Cell rowCellB = row.createCell((storiesSprintNumber * 5) + 1);
+                    rowCellB.setCellValue(pair.getKey().toString());
+                }
+                rowStartPoint++;
+            }
+
+            if (storiesListBordersRowEndPoint < rowStartPoint) {
+                storiesListBordersRowEndPoint = rowStartPoint;
+            }
+            rowStartPoint = storiesListBordersRowStartPoint;
+            storiesSprintNumber++;
+        }
+
+        rowStartPoint = storiesListBordersRowEndPoint;
+        rowStartPoint += 3;
+
+        Row objectivesRow = sheet.createRow(rowStartPoint);
+        Cell objectivesRowCellA = objectivesRow.createCell(0);
+        objectivesRowCellA.setCellValue("Objectives:");
+
+        rowStartPoint += 2;
+        objectivesListBordersRowStartPoint = rowStartPoint;
+
+        int objectivesSprintNumber = 0;
+        for (PiSprint piSprint : piStatus.getPiSprints()) {
+            if (sheet.getRow(rowStartPoint) != null) {
+                Cell objectiveNumberRowCellA = sheet.getRow(rowStartPoint).createCell(objectivesSprintNumber * 5);
+                objectiveNumberRowCellA.setCellValue("Sprint " + (objectivesSprintNumber + 1));
+            } else {
+                Row objectiveNumberRow = sheet.createRow(rowStartPoint);
+                Cell objectiveNumberRowCellA = objectiveNumberRow.createCell(objectivesSprintNumber * 5);
+                objectiveNumberRowCellA.setCellValue("Sprint " + (objectivesSprintNumber + 1));
+            }
+
+            rowStartPoint++;
+
+            for (Pair pair : piSprint.getObjectiveList()) {
+                if (sheet.getRow(rowStartPoint) != null) {
+                    Cell rowCellA = sheet.getRow(rowStartPoint).createCell(objectivesSprintNumber * 5);
+                    rowCellA.setCellValue(pair.getValue().toString());
+                    Cell rowCellB = sheet.getRow(rowStartPoint).createCell((objectivesSprintNumber * 5) + 1);
+                    rowCellB.setCellValue(pair.getKey().toString());
+                } else {
+                    Row row = sheet.createRow(rowStartPoint);
+                    Cell rowCellA = row.createCell(objectivesSprintNumber * 5);
+                    rowCellA.setCellValue(pair.getValue().toString());
+                    Cell rowCellB = row.createCell((objectivesSprintNumber * 5) + 1);
+                    rowCellB.setCellValue(pair.getKey().toString());
+                }
+                rowStartPoint++;
+            }
+
+            if (objectivesListBordersRowEndPoint < rowStartPoint) {
+                objectivesListBordersRowEndPoint = rowStartPoint;
+            }
+            rowStartPoint = objectivesListBordersRowStartPoint;
+            objectivesSprintNumber++;
         }
     }
 }

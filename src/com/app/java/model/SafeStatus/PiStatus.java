@@ -2,6 +2,7 @@ package com.app.java.model.SafeStatus;
 
 import com.app.java.model.enums.StoryStates;
 import com.app.java.util.DateFormat;
+import javafx.util.Pair;
 
 public abstract class PiStatus {
     protected String name;
@@ -56,7 +57,7 @@ public abstract class PiStatus {
         this.sprint1InProgressDate = sprint1InProgressDate;
     }
 
-    public void addStoryData(int parentSprintOrderNumber, String dateCreated, int storyState, float storyPoints) {
+    public void addStoryData(String storyName, int parentSprintOrderNumber, String dateCreated, int storyState, float storyPoints) {
         if (parentSprintOrderNumber <= 6) {
             if (DateFormat.DateParse(dateCreated).isBefore(DateFormat.DateParse(sprint1InProgressDate))) {
                 piSprints[parentSprintOrderNumber - 1].addToStoriesPlanned();
@@ -174,10 +175,13 @@ public abstract class PiStatus {
                 piSprints[parentSprintOrderNumber - 1].addToStoriesOpen();
                 piSprints[parentSprintOrderNumber - 1].addToStoryPointsOpen(storyPoints);
             }
+
+            Pair<String, String> myPair = new Pair<>(storyName, StoryStates.getKey(storyState).toString());
+            piSprints[parentSprintOrderNumber - 1].getStoryList().add(myPair);
         }
     }
 
-    public void addObjectiveData(int parentSprintOrderNumber, String dateCreated, int storyState) {
+    public void addObjectiveData(String objectiveName, int parentSprintOrderNumber, String dateCreated, int storyState) {
         if (parentSprintOrderNumber <= 6) {
 //            Temporary change from sprint1InProgressDate to sprintsStartDate[1]
             if (DateFormat.DateParse(dateCreated).isBefore(DateFormat.DateParse(sprintsStartDate[1]))) {
@@ -276,6 +280,9 @@ public abstract class PiStatus {
             } else {
                 piSprints[parentSprintOrderNumber - 1].addToObjectivesOpen();
             }
+
+            Pair<String, String> myPair = new Pair<>(objectiveName, StoryStates.getKey(storyState).toString());
+            piSprints[parentSprintOrderNumber - 1].getObjectiveList().add(myPair);
         }
     }
 }

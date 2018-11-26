@@ -195,39 +195,39 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                                     if (tagList.contains("Objective")) {
                                         for (String tag : story.getTags()) {
                                             if (tag.equalsIgnoreCase(TeamNames.ORCA.getIdentifier())) {
-                                                piOrcaTeamStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
-                                                piProgramStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piOrcaTeamStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piProgramStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
                                             } else if (tag.equalsIgnoreCase(TeamNames.GAMEOFTHREADS.getIdentifier())) {
-                                                piGameOfThronesTeamStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
-                                                piProgramStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piGameOfThronesTeamStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piProgramStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
                                             } else if (tag.equalsIgnoreCase(TeamNames.STARBUGS.getIdentifier())) {
-                                                piStarbugsTeamStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
-                                                piProgramStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piStarbugsTeamStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piProgramStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
                                             } else if (tag.equalsIgnoreCase(TeamNames.VOLTIGEURS.getIdentifier())) {
-                                                piVoltigeursTeamStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
-                                                piProgramStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piVoltigeursTeamStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piProgramStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
                                             } else if (tag.equalsIgnoreCase(TeamNames.ACDC.getIdentifier())) {
-                                                piAcdcTeamStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
-//                                            piProgramStatus.addObjectiveData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piAcdcTeamStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+//                                            piProgramStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
                                             }
                                         }
                                     } else {
                                         for (String tag : story.getTags()) {
                                             if (tag.equalsIgnoreCase(TeamNames.ORCA.getIdentifier())) {
-                                                piOrcaTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-                                                piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piOrcaTeamStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piProgramStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
                                             } else if (tag.equalsIgnoreCase(TeamNames.GAMEOFTHREADS.getIdentifier())) {
-                                                piGameOfThronesTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-                                                piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piGameOfThronesTeamStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piProgramStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
                                             } else if (tag.equalsIgnoreCase(TeamNames.STARBUGS.getIdentifier())) {
-                                                piStarbugsTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-                                                piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piStarbugsTeamStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piProgramStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
                                             } else if (tag.equalsIgnoreCase(TeamNames.VOLTIGEURS.getIdentifier())) {
-                                                piVoltigeursTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-                                                piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piVoltigeursTeamStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piProgramStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
                                             } else if (tag.equalsIgnoreCase(TeamNames.ACDC.getIdentifier())) {
-                                                piAcdcTeamStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-//                                            piProgramStatus.addStoryData(story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piAcdcTeamStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+//                                            piProgramStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
                                             }
                                         }
                                     }

@@ -1,6 +1,14 @@
 package com.app.java.model.SafeStatus;
 
+import javafx.util.Pair;
+
+import java.util.ArrayList;
+
 public class PiSprint {
+
+    //For listing the item names
+    private ArrayList<Pair> storyList = new ArrayList<>();
+    private ArrayList<Pair> objectiveList = new ArrayList<>();
 
     //For Burnup based on Stories
     private int totalStories;
@@ -22,6 +30,14 @@ public class PiSprint {
     private int initialObjectivesPlanned;
     private int objectivesOpen;
     private int objectivesClosed;
+
+    public ArrayList<Pair> getStoryList() {
+        return storyList;
+    }
+
+    public ArrayList<Pair> getObjectiveList() {
+        return objectiveList;
+    }
 
     public int getTotalStories() {
         return totalStories;
