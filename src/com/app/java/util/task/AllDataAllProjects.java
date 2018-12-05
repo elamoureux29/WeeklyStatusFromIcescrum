@@ -295,7 +295,11 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
 
             jProgressBar.setValue(90);
 
-            ExcelUtil.ExportToFile();
+            try {
+                ExcelUtil.ExportToFile();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             jProgressBar.setValue(100);
 

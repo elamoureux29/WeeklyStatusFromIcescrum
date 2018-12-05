@@ -25,10 +25,12 @@ import static com.app.java.MainForm.*;
 public class FeatureDataToExcel {
     public FeatureDataToExcel(XSSFWorkbook workbook, Feature feature) {
         XSSFSheet sheet;
-        if (feature.getName().length() < 15) {
-            sheet = workbook.createSheet(feature.getName());
+        //Need to add replacement to remove / character from name to prevent Excel error
+        //Need to have smaller tab name but cannot have duplicate to prevent Excel error
+        if (feature.getName().length() < 30) {
+            sheet = workbook.createSheet(feature.getName().replaceAll("[^\\\\dA-Za-z0-9 ]", "_"));
         } else {
-            sheet = workbook.createSheet(feature.getName().substring(0, 14) + "...");
+            sheet = workbook.createSheet(feature.getName().substring(0, 25).replaceAll("[^\\\\dA-Za-z0-9 ]", "_") + "...");
         }
         int rowStartPoint = 0;
         int sprintBordersRowStartPoint = 0;
