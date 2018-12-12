@@ -208,7 +208,7 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                                                 piProgramStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
                                             } else if (tag.equalsIgnoreCase(TeamNames.ACDC.getIdentifier())) {
                                                 piAcdcTeamStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
-//                                            piProgramStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
+                                                piProgramStatus.addObjectiveData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState());
                                             }
                                         }
                                     } else {
@@ -227,7 +227,7 @@ public class AllDataAllProjects extends TaskWorkerAllProjects {
                                                 piProgramStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
                                             } else if (tag.equalsIgnoreCase(TeamNames.ACDC.getIdentifier())) {
                                                 piAcdcTeamStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
-//                                            piProgramStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
+                                                piProgramStatus.addStoryData(story.getName(), story.getParentSprint().getOrderNumber(), story.getDateCreated(), story.getState(), story.getEffort());
                                             }
                                         }
                                     }
