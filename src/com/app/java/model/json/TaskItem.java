@@ -28,7 +28,7 @@ public class TaskItem {
     private int type;
     private int uid;
     private String[] tags;
-    private Sprint sprint;
+    private TaskItemSprint sprint;
     //    private String[] commits;
 //    private String[] builds;
     private String notes_html;
@@ -244,11 +244,11 @@ public class TaskItem {
         this.tags = tags;
     }
 
-    public Sprint getSprint() {
+    public TaskItemSprint getSprint() {
         return sprint;
     }
 
-    public void setSprint(Sprint sprint) {
+    public void setSprint(TaskItemSprint sprint) {
         this.sprint = sprint;
     }
 

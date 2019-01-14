@@ -324,7 +324,7 @@ public class MainForm {
 
                     // Configure Gson
                     GsonBuilder gsonBuilder = new GsonBuilder();
-                    gsonBuilder.registerTypeAdapter(Sprint.class, new SprintDeserializer());
+//                    gsonBuilder.registerTypeAdapter(Sprint.class, new SprintDeserializer());
                     Gson gson = gsonBuilder.create();
                     taskItems = gson.fromJson(reader, TaskItem[].class);
 
