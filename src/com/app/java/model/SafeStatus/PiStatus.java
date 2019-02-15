@@ -183,14 +183,12 @@ public abstract class PiStatus {
 
     public void addObjectiveData(String objectiveName, int parentSprintOrderNumber, String dateCreated, int storyState) {
         if (parentSprintOrderNumber <= 6) {
-//            Temporary change from sprint1InProgressDate to sprintsStartDate[1]
-            if (DateFormat.DateParse(dateCreated).isBefore(DateFormat.DateParse(sprintsStartDate[1]))) {
+            if (DateFormat.DateParse(dateCreated).isBefore(DateFormat.DateParse(sprint1InProgressDate))) {
                 piSprints[parentSprintOrderNumber - 1].addToInitialObjectivesPlanned();
             }
 
             if (DateFormat.DateParse(dateCreated).isAfter(DateFormat.DateParse(sprint1InProgressDate))) {
-//            Temporary change from i = 1 to i = 0
-                for (int i = 0; i < 6; i++) {
+                for (int i = 1; i < 6; i++) {
                     piSprints[i].addToTotalObjectives();
 
                     if (storyState != StoryStates.DONE.getIdentifier()) {

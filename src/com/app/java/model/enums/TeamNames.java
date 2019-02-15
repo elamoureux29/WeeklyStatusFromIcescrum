@@ -5,7 +5,9 @@ public enum TeamNames {
     GAMEOFTHREADS("Game Of Threads", "GameOfThreads"),
     STARBUGS("Starbugs", "Starbugs"),
     VOLTIGEURS("Voltigeurs", "Volts"),
-    ACDC("ACDC", "AC/DC");
+    ACDC("ACDC", "AC/DC"),
+    HEISENBERG("Heisenberg", "Heisenberg"),
+    OLYMPIANS("Olympians", "Olympians");
 
     private final String teamName;
     private final String identifier;
