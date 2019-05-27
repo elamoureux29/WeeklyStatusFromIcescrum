@@ -3,11 +3,17 @@ package com.app.java.model.enums;
 public enum TeamNames {
     ORCA("Orca", "Orca"),
     GAMEOFTHREADS("Game Of Threads", "GameOfThreads"),
+    ACDC("ACDC", "AC/DC"),
+    JAWS("Jaws", "Jaws"),
     STARBUGS("Starbugs", "Starbugs"),
     VOLTIGEURS("Voltigeurs", "Volts"),
-    ACDC("ACDC", "AC/DC"),
-    HEISENBERG("Heisenberg", "Heisenberg"),
-    OLYMPIANS("Olympians", "Olympians");
+    //    HEISENBERG("Heisenberg", "Heisenberg"),
+    ABHYUDAY("Abhyuday", "Abhyuday"),
+    DRONA("Drona", "Drona"),
+    OLYMPIANS("Olympians", "Olympians"),
+    BRAHMOS("Brahmos", "Brahmos"),
+    PIKE("Pike", "Pike"),
+    SMARTVUE("Smartvue", "Smartvue");
 
     private final String teamName;
     private final String identifier;

@@ -493,7 +493,10 @@ public class ExcelUtil {
 
     }
 
-    public static void ExportPiToFile(PiStatus piStatus, PiStatus piStatus1, PiStatus piStatus2, PiStatus piStatus3, PiStatus piStatus4, PiStatus piStatus5, PiStatus piStatus6, PiStatus piStatus7) {
+    public static void ExportPiToFile(PiStatus piStatus, PiStatus piStatus1, PiStatus piStatus2, PiStatus piStatus3,
+                                      PiStatus piStatus4, PiStatus piStatus5, PiStatus piStatus6, PiStatus piStatus7,
+                                      PiStatus piStatus8, PiStatus piStatus9, PiStatus piStatus10, PiStatus piStatus11,
+                                      PiStatus piStatus12) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Program Status");
 
@@ -940,6 +943,16 @@ public class ExcelUtil {
         new PiTeamDataToExcel(workbook, piStatus6);
 
         new PiTeamDataToExcel(workbook, piStatus7);
+
+        new PiTeamDataToExcel(workbook, piStatus8);
+
+        new PiTeamDataToExcel(workbook, piStatus9);
+
+        new PiTeamDataToExcel(workbook, piStatus10);
+
+        new PiTeamDataToExcel(workbook, piStatus11);
+
+        new PiTeamDataToExcel(workbook, piStatus12);
 
         try {
             File file;
